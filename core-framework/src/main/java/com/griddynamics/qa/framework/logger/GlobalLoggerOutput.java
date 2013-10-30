@@ -12,10 +12,11 @@ import static com.griddynamics.qa.logger.LoggerFactory.getGlobalFileStream;
 import static com.griddynamics.qa.logger.LoggerFactory.getLogger;
 
 /**
+ * This custom output format was created to forward Jbehave core logs to logger to
+ * implement per-story logging feature in multi-thread environment and convert all output to common format.
+ *
  * @author ybaturina
- *         <p/>
- *         This custom output format was created to forward Jbehave core logs to logger to
- *         implement per-story logging feature in multi-thread environment and convert all output to common format.
+ * @author yhraichonak
  */
 public class GlobalLoggerOutput extends TxtOutput {
 
@@ -54,7 +55,7 @@ public class GlobalLoggerOutput extends TxtOutput {
     private static class GlobalLoggerOutputFormat extends org.jbehave.core.reporters.Format {
 
         public GlobalLoggerOutputFormat() {
-            super("GlobalLoggerOutput");
+            super(GlobalLoggerOutput.class.getName());
         }
 
         public StoryReporter createStoryReporter(FilePrintStreamFactory factory, StoryReporterBuilder storyReporterBuilder) {

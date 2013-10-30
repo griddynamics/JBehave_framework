@@ -136,7 +136,6 @@ public class CommonPageSteps {
                 + currentAttrValue, currentAttrValue, containsString(attrValue));
     }
 
-    //added for wipro
     @When("customer hovers and holds mouse over $elementName")
     public void hoverOverAndClick(String elementName) {
         ElementBlock elBlock = pages.getCurrentPage().findBlockWithElement(elementName);

@@ -35,7 +35,10 @@ import static org.jbehave.core.io.CodeLocations.codeLocationFromClass;
 import static org.jbehave.core.reporters.Format.*;
 
 /**
+ * Main JBehave tests runner configuration
+ *
  * @author ybaturina
+ * @author mlykosova
  */
 public abstract class BaseStoriesRunner extends JUnitStories {
 
@@ -80,6 +83,12 @@ public abstract class BaseStoriesRunner extends JUnitStories {
         return getConfiguration();
     }
 
+    /**
+     * Method gathers JBehave steps from Spring context and adds catching screenshots functionality
+     * in case when {@link #SCREENSHOT_BEAN} is present in the context
+     *
+     * @return
+     */
     @Override
     public SpringStepsFactory stepsFactory() {
         SpringStepsFactory stepsFactory = new SpringStepsFactory(configuration(), createContext());

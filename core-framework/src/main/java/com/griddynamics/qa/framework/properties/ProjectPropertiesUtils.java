@@ -10,10 +10,20 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.Assert.assertTrue;
 
+/**
+ * Class contains methods for setting properties needed by JBehave configs from properties files
+ *
+ * @author ybaturina
+ * @author mlykosova
+ */
 public class ProjectPropertiesUtils extends PropertiesUtils {
     private static Properties allProperties;
     private static final AtomicBoolean isPropertiesLoaded = new AtomicBoolean(false);
 
+    /**
+     * Method initializes properties in case they are not set yet
+     * @return Properties object
+     */
     public static Properties getAllProperties() {
         if ( !isPropertiesLoaded.get() )
             try {
@@ -29,6 +39,11 @@ public class ProjectPropertiesUtils extends PropertiesUtils {
         allProperties = newProperties;
     }
 
+    /**
+     *
+     * @return
+     * @throws IOException
+     */
     synchronized static boolean initAllProperties() throws IOException {
         if (System.getProperty(ProjectProperties.JRUNNER_CONFIG_FILENAME) == null) {
             throw new IllegalArgumentException("System property '" + ProjectProperties.JRUNNER_CONFIG_FILENAME +"' was not set");

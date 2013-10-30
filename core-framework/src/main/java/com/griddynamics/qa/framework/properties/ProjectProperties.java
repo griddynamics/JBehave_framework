@@ -7,6 +7,11 @@ import java.util.Properties;
 
 import static java.util.Arrays.asList;
 
+/**
+ * Class contains properties names which are required for JBehave configuration
+ *
+ * @author ybaturina
+ */
 public class ProjectProperties {
 
     public static final String JRUNNER_CONFIG_FILENAME = "runner.config.file.location";
