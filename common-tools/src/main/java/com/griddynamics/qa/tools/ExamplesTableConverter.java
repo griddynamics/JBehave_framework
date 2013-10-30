@@ -9,9 +9,6 @@ import java.util.Map;
 /**
  * Created with IntelliJ IDEA.
  * User: ybaturina
- * Date: 10/8/13
- * Time: 2:24 PM
- * To change this template use File | Settings | File Templates.
  */
 public class ExamplesTableConverter {
     /**

@@ -2,15 +2,11 @@ package com.griddynamics.qa.ui;
 
 import org.jbehave.web.selenium.WebDriverProvider;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import static com.griddynamics.qa.logger.LoggerFactory.getLogger;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -19,9 +15,10 @@ import static org.junit.Assert.assertTrue;
  *         <p/>
  *         Base block class containing common block methods
  */
-public class ElementBlock extends CommonElementMethods implements Cloneable{
+public class ElementBlock extends CommonElementMethods implements Cloneable {
 
-    private final static int WAIT_BLOCK_LOAD_TIMEOUT_IN_MS = 1000;
+    private final static int WAIT_BLOCK_LOAD_TIMEOUT_IN_MS = 500;
+    private final static int WAIT_FOR_BLOCK_LOAD_TIMEOUT_IN_MS = 5000;
 
     private String blockName;
     private By locator;
@@ -82,15 +79,17 @@ public class ElementBlock extends CommonElementMethods implements Cloneable{
     }
 
     public void waitForBlockToLoad() {
-        long second = 0;
-        while (!isBlockDisplayed() && second < 10 * WAIT_BLOCK_LOAD_TIMEOUT_IN_MS) {
-            second = second + WAIT_BLOCK_LOAD_TIMEOUT_IN_MS;
+        long currentSleepCount = 0;
+        long totalSleepCount = WAIT_FOR_BLOCK_LOAD_TIMEOUT_IN_MS / WAIT_BLOCK_LOAD_TIMEOUT_IN_MS;
+        while (!isBlockDisplayed() && currentSleepCount < totalSleepCount) {
+            currentSleepCount++;
             try {
                 Thread.sleep(WAIT_BLOCK_LOAD_TIMEOUT_IN_MS);
             } catch (InterruptedException e) {
                 throw new RuntimeException("[ERROR] Block " + getName() + " was not loaded, reason: " + e.getMessage());
             }
         }
+
     }
 
 
@@ -105,14 +104,14 @@ public class ElementBlock extends CommonElementMethods implements Cloneable{
     }
 
     public boolean equals(Object obj) {
-	if (obj == this) {
-	    return true;
-	}
-	if (!(obj instanceof ElementBlock)) {
-	    return false;
-	}
-	ElementBlock other = (ElementBlock) obj;
-	return this.getName().equals(other.getName()) && this.getLocator().equals(other.getLocator());
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof ElementBlock)) {
+            return false;
+        }
+        ElementBlock other = (ElementBlock) obj;
+        return this.getName().equals(other.getName()) && this.getLocator().equals(other.getLocator());
     }
 
     public static ElementBlock getRandomElementBlock(List<ElementBlock> elementBlocks) {
@@ -122,13 +121,22 @@ public class ElementBlock extends CommonElementMethods implements Cloneable{
         return elementBlocks.get(randomGenerator.nextInt(size));
     }
 
-    public void clear(){
+    /**
+     * Clear all blocks and all elements in current block
+     */
+    public void clear() {
         getElementsMap().clear();
         getBlockList().clear();
     }
 
+    /**
+     * Check that block not empty and does contain other blocks
+     *
+     * @param elementBlock
+     * @return
+     */
     public static boolean isEmptyBlock(ElementBlock elementBlock) {
-        if (elementBlock == null || elementBlock.getBlockList().size() == 0)  {
+        if (elementBlock == null || elementBlock.getBlockList().size() == 0) {
             return true;
         }
         return false;
@@ -137,8 +145,8 @@ public class ElementBlock extends CommonElementMethods implements Cloneable{
     public static boolean hasBlockWithName(List<ElementBlock> blockList, String blockName) {
         boolean result = false;
         for (ElementBlock elementBlock : blockList) {
-            if (elementBlock.getName().contains(blockName))
-            result = true;
+            if (elementBlock.getName().equals(blockName))
+                result = true;
         }
         return result;
     }
@@ -148,7 +156,7 @@ public class ElementBlock extends CommonElementMethods implements Cloneable{
         try {
             block = (ElementBlock) super.clone();
 
-            for (Map.Entry<String, By> elementInfo: getElementsMap().entrySet()) {
+            for (Map.Entry<String, By> elementInfo : getElementsMap().entrySet()) {
                 block.addElement(elementInfo.getKey(), elementInfo.getValue());
             }
 

@@ -12,6 +12,7 @@ import static org.junit.Assert.*;
 
 /**
  * @author ybaturina
+ * @author aluchin
  *         <p/>
  *         This is the abstract class which contains common page methods
  */
@@ -20,7 +21,7 @@ public abstract class AbstractPage extends CommonElementMethods {
     public final static int PAGE_OPEN_ATTEMPTS_NUMBER = 3;
     private final static int WAIT_WINDOW_OPEN_TIMEOUT_IN_MS = 10000;
     private final static int WAIT_PAGE_LOAD_TIMEOUT_IN_MS = 500;
-    private final static int WAIT_FOR_PAGE_LOAD_TIMEOUT_IN_MS = 5000;
+    private final static int WAIT_FOR_PAGE_LOAD_TIMEOUT_IN_MS = 10000;
 
     protected String pageURL;
     protected String pageTitle;
@@ -29,7 +30,6 @@ public abstract class AbstractPage extends CommonElementMethods {
 
     public AbstractPage(WebDriverProvider driverProvider) {
         super(driverProvider);
-
         setPageURLSecurity();
     }
 
@@ -92,14 +92,9 @@ public abstract class AbstractPage extends CommonElementMethods {
         return pageTitle.equals(getTitle());
     }
 
-
     public void assertTitle() {
         assertEquals("Expected title is wrong. Expected title [" + pageTitle + "" + getTitle()
                 + "], was [" + getTitle() + "].\n", pageTitle, getTitle());
-    }
-
-    public void open() {
-        open(1);
     }
 
     protected void open(int i) {
@@ -108,11 +103,56 @@ public abstract class AbstractPage extends CommonElementMethods {
         waitForPageToLoad();
     }
 
+    public void openPage() {
+        if (!checkCurrentPage()) {
+            for (int i = 1; i <= PAGE_OPEN_ATTEMPTS_NUMBER; i++) {
+                open(i);
+                if (checkCurrentPage()) {
+                    break;
+                }
+            }
+            assertCurrentPage();
+        }
+    }
+
     public void openURL(String url) {
         getLogger().info("Opening page " + url);
         get(url);
     }
 
+
+    /**
+     * Get Url and Title for new hadle and close it.
+     *
+     * @param baseWindowHandle
+     * @param handles
+     * @return String[]. String[0] - New page title; String[1] - New page url;
+     */
+    private String[] getUrlAndTitleFromWindowHandleAndCloseIt(String baseWindowHandle, Set<String> handles) {
+
+        String urlAndTitle[] = new String[2];
+        urlAndTitle[0] = "";
+        urlAndTitle[1] = "";
+
+        for (String handle : handles) {
+            if (!handle.equals(baseWindowHandle)) {
+                switchTo().window(handle);
+                urlAndTitle[0] = getTitle();
+                urlAndTitle[1] = getCurrentUrl();
+                switchTo().window(handle).close();
+                break;
+            }
+        }
+
+        return urlAndTitle;
+    }
+
+    /**
+     * Check that new page is opened in new window
+     * Then close new page
+     *
+     * @param baseWindowHandle previous page windowHandle
+     */
     public void checkNewWindowOpened(String baseWindowHandle) {
         try {
             sleep(WAIT_WINDOW_OPEN_TIMEOUT_IN_MS);
@@ -120,15 +160,7 @@ public abstract class AbstractPage extends CommonElementMethods {
             Set<String> handles = getWindowHandles();
 
             assertTrue("[Error] New window was not opened", getWindowHandles().size() == 2);
-
-            for (String handle : handles) {
-                if (!handle.equals(baseWindowHandle)) {
-                    switchTo().window(handle);
-                    switchTo().window(handle).close();
-                    break;
-                }
-            }
-
+            getUrlAndTitleFromWindowHandleAndCloseIt(baseWindowHandle, handles);
             switchTo().window(baseWindowHandle);
 
         } catch (Exception e) {
@@ -136,70 +168,65 @@ public abstract class AbstractPage extends CommonElementMethods {
         }
     }
 
+    /**
+     * Check that new page is opened in new window. Assert Url and Title
+     *
+     * @param baseWindowHandle
+     * @param pageURL
+     * @param pageTitle
+     * @see #getUrlAndTitleFromWindowHandleAndCloseIt
+     */
     public void checkNewWindowOpened(String baseWindowHandle, String pageURL, String pageTitle) {
         try {
             sleep(WAIT_WINDOW_OPEN_TIMEOUT_IN_MS);
             Set<String> handles = getWindowHandles();
-            assertTrue("[Error] New window was not opened",
-                    getWindowHandles().size() == 2);
+            assertTrue("[Error] New window was not opened", getWindowHandles().size() == 2);
 
-            String actualTitle = "";
-            String actualURL = "";
-
-            for (String handle : handles) {
-                if (!handle.equals(baseWindowHandle)) {
-                    switchTo().window(handle);
-                    actualTitle = getTitle();
-                    actualURL = getCurrentUrl();
-                    switchTo().window(handle).close();
-                    break;
-                }
-            }
-
+            String[] urlAndTitle = getUrlAndTitleFromWindowHandleAndCloseIt(baseWindowHandle, handles);
             switchTo().window(baseWindowHandle);
 
             assertEquals(
                     "[Error] Invalid window was opened. Actual popup page title: "
-                            + actualTitle + ". Expected popup page title: "
-                            + pageTitle, pageTitle, actualTitle);
+                            + urlAndTitle[0] + ". Expected popup page title: "
+                            + pageTitle, pageTitle, urlAndTitle[0]);
             assertTrue(
                     "[Error] Invalid window was opened. Actual popup page URL: "
-                            + actualURL + ". Expected popup page URL: "
-                            + pageURL, actualURL.startsWith(pageURL));
+                            + urlAndTitle[1] + ". Expected popup page URL: "
+                            + pageURL, urlAndTitle[1].startsWith(pageURL));
         } catch (Exception e) {
             assertTrue("Unexpected exception happened while checking new window opened: " + e.getMessage(), false);
         }
     }
 
+    /**
+     * Check that new page is opened in new window. Assert Url
+     *
+     * @param baseWindowHandle
+     * @see #getUrlAndTitleFromWindowHandleAndCloseIt
+     */
     public void checkNewWindowOpenedUrlOnly(String baseWindowHandle) {
 
         sleep(WAIT_WINDOW_OPEN_TIMEOUT_IN_MS);
         Set<String> handles = getWindowHandles();
-
         assertTrue("[Error]: New window was not opened.",
                 getWindowHandles().size() == 2);
-
-
-        String actualURL = "";
-
-        for (String handle : handles) {
-            if (!handle.equals(baseWindowHandle)) {
-                switchTo().window(handle);
-                actualURL = getCurrentUrl();
-                switchTo().window(handle).close();
-                break;
-            }
-        }
-
+        String[] urlAndTitle = getUrlAndTitleFromWindowHandleAndCloseIt(baseWindowHandle, handles);
         switchTo().window(baseWindowHandle);
 
         assertTrue(
                 "[Error]: Invalid window was opened. Actual popup page URL: "
-                        + actualURL + ". Expected popup page URL: "
-                        + getPageURL(), actualURL.contains(getPageURL()));
+                        + urlAndTitle[1] + ". Expected popup page URL: "
+                        + getPageURL(), urlAndTitle[1].contains(getPageURL()));
 
     }
 
+    /**
+     * Check that new page is opened in new window and Url contains text.
+     *
+     * @param baseWindowHandle
+     * @param text
+     * @see #getUrlAndTitleFromWindowHandleAndCloseIt
+     */
     public void checkNewWindowUrlContainsText(String baseWindowHandle, String text) {
         sleep(WAIT_WINDOW_OPEN_TIMEOUT_IN_MS);
         Set<String> handles = getWindowHandles();
@@ -207,23 +234,12 @@ public abstract class AbstractPage extends CommonElementMethods {
         assertTrue("[Error]: New window was not opened.",
                 getWindowHandles().size() == 2);
 
-
-        String actualURL = "";
-
-        for (String handle : handles) {
-            if (!handle.equals(baseWindowHandle)) {
-                switchTo().window(handle);
-                actualURL = getCurrentUrl();
-                switchTo().window(handle).close();
-                break;
-            }
-        }
-
+        String[] urlAndTitle = getUrlAndTitleFromWindowHandleAndCloseIt(baseWindowHandle, handles);
         switchTo().window(baseWindowHandle);
 
         assertTrue(
-                "[Error]: URL of new window " + actualURL + " does not contain text: "
-                        + text, actualURL.contains(text));
+                "[Error]: URL of new window " + urlAndTitle[1] + " does not contain text: "
+                        + text, urlAndTitle[1].contains(text));
     }
 
     public boolean checkCurrentPage() {
@@ -236,29 +252,30 @@ public abstract class AbstractPage extends CommonElementMethods {
     }
 
     /**
-     * Wait for page is opened
+     * Wait for page is opened {@value #WAIT_FOR_PAGE_LOAD_TIMEOUT_IN_MS} ms
      */
     public void waitForPageToLoad() {
-        long second = 0;
-        while (!checkCurrentPage() && second < 20 * WAIT_PAGE_LOAD_TIMEOUT_IN_MS) {
-            second = second + WAIT_PAGE_LOAD_TIMEOUT_IN_MS;
+        long currentSleepCount = 0;
+        long totalSleepCount = WAIT_FOR_PAGE_LOAD_TIMEOUT_IN_MS / WAIT_PAGE_LOAD_TIMEOUT_IN_MS;
+        while (!checkCurrentPage() && currentSleepCount < totalSleepCount) {
+            currentSleepCount++;
             sleep(WAIT_PAGE_LOAD_TIMEOUT_IN_MS);
         }
     }
 
     /**
-     * Wait for page is opened
+     * Wait for page is opened {@value #WAIT_FOR_PAGE_LOAD_TIMEOUT_IN_MS} ms
      */
     public void waitForPageToLoad(String oldURL) {
         String newURL = getDriverProvider().get().getCurrentUrl();
 
-        long msec = 0;
-        while (newURL.equals(oldURL) && msec <= WAIT_FOR_PAGE_LOAD_TIMEOUT_IN_MS) {
-            sleep(WAIT_FOR_PAGE_LOAD_TIMEOUT_IN_MS);
-            msec += 1000;
+        long currentSleepCount = 0;
+        long totalSleepCount = WAIT_FOR_PAGE_LOAD_TIMEOUT_IN_MS / WAIT_PAGE_LOAD_TIMEOUT_IN_MS;
+        while (newURL.equals(oldURL) && currentSleepCount < totalSleepCount) {
+            currentSleepCount++;
+            sleep(WAIT_PAGE_LOAD_TIMEOUT_IN_MS);
             newURL = getDriverProvider().get().getCurrentUrl();
         }
-
         assertThat("New page is not opened", newURL, not(equalTo(oldURL)));
     }
 
@@ -356,7 +373,7 @@ public abstract class AbstractPage extends CommonElementMethods {
      */
     public void sleep(int time) {
         try {
-            getLogger().info("Sleep for " + time + " miliseconds...");
+            getLogger().info("Sleep for " + time + " milliseconds...");
             Thread.sleep(time);
         } catch (InterruptedException e) {
             assertTrue("Interrupted exception was thrown during timeout: " + e.getMessage(), false);
@@ -364,16 +381,5 @@ public abstract class AbstractPage extends CommonElementMethods {
         }
     }
 
-    public void openPage() {
-        if (!checkCurrentPage()) {
-            for (int i = 1; i <= PAGE_OPEN_ATTEMPTS_NUMBER; i++) {
-                open(i);
-                if (checkCurrentPage()) {
-                    break;
-                }
-            }
-            assertCurrentPage();
-        }
-    }
 
 }
