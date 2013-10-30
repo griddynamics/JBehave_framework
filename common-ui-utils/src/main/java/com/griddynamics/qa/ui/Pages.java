@@ -54,6 +54,9 @@ public class Pages {
         this.baseWindowHandle = handle;
     }
 
+    /**
+     * @return pageName or empty string
+     */
     public String getCurrentPageName() {
         for (String pageName : pagesMap.keySet()) {
             if (pagesMap.get(pageName).equals(currentPage)) {
