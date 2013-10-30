@@ -1,0 +1,654 @@
+package com.griddynamics.qa.ui.steps;
+
+import com.griddynamics.qa.tools.rest.TestRequest;
+import com.griddynamics.qa.ui.ElementBlock;
+import com.griddynamics.qa.ui.Pages;
+import org.jbehave.core.annotations.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.interactions.Actions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import java.util.*;
+
+import static com.griddynamics.qa.logger.LoggerFactory.getLogger;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
+
+
+/**
+ * @author ybaturina
+ *         mlykosova
+ *         Entity class containing common steps implementation
+ */
+
+@Component
+@Scope("thread")
+public class CommonPageSteps {
+    
+    public static boolean allLocatorsValid = true;
+
+    @Autowired
+    public Pages pages;
+
+    private final static int WAIT_PAGE_LOAD_TIMEOUT_IN_MS = 500;
+    private final static int WAIT_ELEMENT_LOAD_TIMEOUT_IN_SEC = 120;
+    private final static int MS_IN_SECOND_CONVERT_DIVISOR = 500;
+
+	public CommonPageSteps() { // constructor
+    }
+
+    @Given("{running|Running} given stories")
+    public void givenRunGivenStories() {
+    }
+
+    /**
+     * Search every block on the current page for HTML element then click it
+     * priority=0
+     *
+     * @param elementName HTML element name from a Story
+     */
+    @When("customer clicks $elementName")
+    public void click(String elementName) {
+        pages.getCurrentPage().click(elementName);
+    }
+
+    @When(value = "customer clicks on $elementName", priority = 1)
+    public void clickOn(String elementName) {
+        pages.getCurrentPage().click(elementName);
+    }
+
+    /**
+     * Search every block on the current page for HTML element then hover over it
+     * and click on element which appears in drop-down menu
+     *
+     * @param elementName1 HTML element name from the Story (menu)
+     * @param elementName2 HTML element name from the Story (menu item)
+     */
+    /*@When(value = "customer hovers mouse over $elementName1 and clicks $elementName2", priority = 2)
+    public void hoverOverAndClick(String elementName1,
+                                  String elementName2) {
+        pages.getCurrentPage().hoverOverAndClick(elementName1, elementName2);
+    }
+
+    @When("customer hovers mouse over $elementName")
+    public void hoverOver(String elementName) {
+        pages.getCurrentPage().hoverOver(elementName);
+    }
+
+    @When("customer stops hovering mouse over $elementName")
+    public void stopHoverOver(String elementName) {
+        pages.getCurrentPage().stopHoverOver(elementName);
+    }*/
+
+    @Then("attribute $attrName of element $elementName contains $attrValue")
+    public void thenElementContainsStringInAttribute(String attrName,
+                                                     String elementName,
+                                                     String attrValue) {
+        String currentAttrValue = pages.getCurrentPage().getElementAttributeValue(elementName, attrName);
+        assertThat("[ERROR] Element " + elementName + " has attribute " + attrName + " with value "
+                + currentAttrValue, currentAttrValue, containsString(attrValue));
+    }
+
+    @Then("element $elementName doesn't contain attribute $attribute")
+    public void thenElementDoesNotContainAttribute(  String elementName,
+                                                     String attribute) {
+        String currentAttrValue = pages.getCurrentPage().getElementAttributeValue(elementName, attribute);
+        assertNull("Element " + elementName + "should not contain attribute " +
+                attribute + ", but it does", currentAttrValue);
+    }
+
+    @Then("attribute $attrName of element $elemName does not contain $attrValue")
+    public void thenElementDoesNotContainStringInAttribute(String attrName,
+                                                           String elementName,
+                                                           String attrValue) throws InterruptedException {
+        String currentAttrValue = pages.getCurrentPage().getElementAttributeValue(elementName, attrName);
+        assertThat("[ERROR] Element " + elementName + " has attribute " + attrName + " with value "
+                + currentAttrValue, currentAttrValue, not(containsString(attrValue)));
+    }
+
+    @Then("attribute $attrName of block $blockName locator does not contain $attrValue")
+    public void thenBlockDoesNotContainStringInAttribute(String attrName,
+                                                         String blockName,
+                                                         String attrValue) {
+        ElementBlock block = pages.getCurrentPage().getBlockByName(blockName);
+        if (block == null) {
+            throw new RuntimeException("[ERROR] Block with name " + blockName
+                    + " was not found in page class");
+        }
+        String currentAttrValue = pages.getCurrentPage().getLocatorAttributeValue(block.getLocator(), attrName);
+        assertThat("[ERROR] Block " + blockName + " locator has attribute " + attrName + " with value "
+                + currentAttrValue, currentAttrValue, not(containsString(attrValue)));
+    }
+
+    @Then("attribute $attrName of block $blockName locator contains $attrValue")
+    public void thenBlockContainsStringInAttribute(String attrName,
+                                                   String blockName,
+                                                   String attrValue) {
+        ElementBlock block = pages.getCurrentPage().getBlockByName(blockName);
+        if (block == null) {
+            throw new RuntimeException("[ERROR] Block with name " + blockName
+                    + " was not found in page class");
+        }
+        String currentAttrValue = pages.getCurrentPage().getLocatorAttributeValue(block.getLocator(), attrName);
+        assertThat("[ERROR] Block " + blockName + " locator has attribute " + attrName + " with value "
+                + currentAttrValue, currentAttrValue, containsString(attrValue));
+    }
+
+    //added for wipro
+    @When("customer hovers and holds mouse over $elementName")
+    public void hoverOverAndClick(String elementName) {
+        ElementBlock elBlock = pages.getCurrentPage().findBlockWithElement(elementName);
+        elBlock.hoverOverHold(elementName);
+    }
+
+    @Then("the links $links are displayed on page")
+    public void footerLinks(@Named("Links") String elements) {
+        String[] splits = elements.split(",");
+        for (String element : splits) {
+            assertTrue("Element " + element + " is not displayed",
+                    pages.getCurrentPage().isElementDisplayedOnPage(element));
+        }
+
+    }
+
+    /**
+     * Find HTML element in the single block on the current page then click on it
+     *
+     * @param elementName HTML element name from a Story
+     */
+    @When(value = "customer clicks on $elementName in the $blockName", priority = 2)
+    public void clickOnInTheBlock(String elementName, String blockName) {
+        pages.getCurrentPage().click(pages.getCurrentPage().findElementInBlock(blockName, elementName));
+    }
+
+    @When("customer types $text in $elementName")
+    @Alias("customer writes $text at $elementName")
+    public void whenTypeText(String text, String elementName) {
+        pages.getCurrentPage().typeText(elementName, text);
+    }
+
+    @When("customer clears $elementName")
+    public void whenClearField(String elementName) {
+        pages.getCurrentPage().clearField(elementName);
+    }
+
+    @When("customer submits $elementName")
+    public void submit(String elementName) {
+		pages.getCurrentPage().submit(elementName);
+
+    }
+
+    @When(value = "customer submits button $elementName", priority = 2)
+    public void submitButton(String elementName) {
+        pages.getCurrentPage().submitButton(elementName);
+    }
+
+    @When(value="customer selects $text in $elementName", priority = 2)
+    public void selectText(String text, String elementName) {
+        pages.getCurrentPage().selectText(elementName, text);
+    }
+
+    @When("customer sets $value in checkbox $elementName")
+    @Alias("customer sets $value in $elementName checkbox")
+    public void setCheckbox(Boolean value, String elementName) {
+        pages.getCurrentPage().setCheckbox(elementName, value);
+    }
+
+    /**
+     * Check if the page is opened then assert it
+     * Current page is set into this method
+     *
+     * @param pageName page name from a Story
+     */
+    @Then("$pageName Page is opened")
+    public void thenPageIsOpened(String pageName) {
+        pages.setCurrentPage(pageName);
+        pages.getCurrentPage().waitForPageToLoad();
+        pages.getCurrentPage().assertCurrentPage();
+    }
+
+    @Then("$pageName Page has secured url")
+    public void thenPageUrlSecured(String pageName) {
+        assertTrue("Page " + pageName + " has not secured url " + pages.getCurrentPage().getPageURL(),
+                pages.getCurrentPage().isPageUrlSecured());
+    }
+
+    /**
+     * Open the page with pageName, check if the page is opened then assert it
+     * Current page is set into this method
+     *
+     * @param pageName page name from a Story
+     */
+    @Given("anonymous customer is on $pageName Page")
+    @Alias("customer is on $pageName Page")
+    public void whenCustomerOpensPage(String pageName) {
+        pages.setCurrentPage(pageName);
+        pages.getCurrentPage().openPage();
+    }
+
+    @When("current page is refreshed")
+    public void currentPageIsRefreshed() {
+        assertNotNull("Current Page is not set", pages.getCurrentPage());
+        pages.getCurrentPage().navigate().refresh();             //  can be some problems in IE8
+    }
+
+    @Then(value = "checkbox $elementName has value $value", priority = 1)
+    public void thenCheckboxHasValue(String elementName, Boolean val) {
+        assertEquals("Checkbox " + elementName + " has another value: ",
+                val, pages.getCurrentPage().isChecked(elementName));
+    }
+
+    @Then("element $elementName has text $text")
+    @Aliases(values = {"\"$text\" $elementName is displayed"})
+    public void thenElementHasText(@Named("elementName") String elementName, @Named("text") String text) {
+		assertThat(pages.getCurrentPage().getElementText(elementName).replace("\n", " ").trim(), equalTo(text));
+    }
+
+    @Then("element $elementName has value $value")
+    public void thenElementHasValue(String elementName, String value) {
+        assertEquals("Element " + elementName + " has another value: ",
+                value, pages.getCurrentPage().getElementValue(elementName));
+    }
+
+    @Then("block $blockName is $value")
+    public void thenBlockIsDisplayed(String blockName, String value) {
+        assertThat("[ERROR] Invalid name of step: should be 'block " + blockName + " is present', 'block " + blockName
+                + " is displayed', 'block " + blockName + " is not present' or 'block "
+                + blockName + " is not displayed'", value, isOneOf("present", "not present", "displayed", "not displayed"));
+
+        ElementBlock block = pages.getCurrentPage().getBlockByName(blockName);
+        if (block == null) {
+            if (value.equals("present") || value.equals("displayed")) {
+                throw new RuntimeException("[ERROR] Block with name " + blockName
+                        + " was not found in page class");
+            }
+        } else {
+            if (value.equals("displayed")) {
+                assertTrue("Block " + blockName + " is not displayed though it should be",
+                        block.isBlockDisplayed());
+            } else if (value.equals("not displayed")) {
+                assertTrue("Block " + blockName + " is displayed though it shouldn't be",
+                        !block.isBlockDisplayed());
+            } else if (value.equals("not present")) {
+                assertTrue("Block " + blockName + " is present though it shouldn't be",
+                        !pages.getCurrentPage().isLocatorPresentOnPage(block.getLocator()));
+            } else if (value.equals("present")) {
+                assertTrue("Block " + blockName + " is not present though it should be",
+                        pages.getCurrentPage().isLocatorPresentOnPage(block.getLocator()));
+            }
+        }
+    }
+
+    @Then("block $blockName has $quantity blocks")
+    public void thenBlockHasBlocks(String blockName, int quantity) {
+        ElementBlock block = pages.getCurrentPage().getBlockByName(blockName);
+        if (block == null) {
+            throw new RuntimeException("[ERROR] Block with name " + blockName
+                    + " was not found in page class");
+        }
+        assertEquals("[ERROR] Block " + blockName + " has " + block.getBlockList().size() + " blocks instead of " + quantity,
+                quantity, block.getBlockList().size());
+    }
+
+    @Then("block $name has $quantity elements")
+    public void thenBlockHasElements(@Named("name") String name, int quantity) {
+        ElementBlock block = pages.getCurrentPage().getBlockByName(name);
+        if (block == null) {
+            throw new RuntimeException("[ERROR] Block with name " + name
+                    + " was not found in page class");
+        }
+        assertEquals("[ERROR] Block " + name + " has " + block.getElementsMap().size() + " elements instead of " + quantity,
+                quantity, block.getElementsMap().size());
+    }
+
+    @Then("block $blockName has $order elements $elements")
+    public void thenBlockHasOrderedElementsList(String blockName,
+                                                String order,
+                                                ArrayList<String> elements) {
+        assertThat("[ERROR] Invalid name of step: should be 'ordered' or 'not ordered'", order, isOneOf("ordered", "not ordered"));
+        ElementBlock block = pages.getCurrentPage().getBlockByName(blockName);
+        if (block == null) {
+            throw new RuntimeException("[ERROR] Block with name " + blockName
+                    + " was not found in page class");
+        }
+        if (order.equals("ordered")) {
+            List<String> expNames = new ArrayList<String>(elements);
+            List<String> actNames = new ArrayList<String>(block.getElementsMap().keySet());
+            assertEquals("[ERROR] Expected elements: " + expNames.toString() + "; actual elements " + actNames.toString(), expNames, actNames);
+        } else {
+            Set<String> expNames = new HashSet<String>(elements);
+            Set<String> actNames = block.getElementsMap().keySet();
+            assertEquals("[ERROR] Expected elements: " + expNames.toString() + "; actual elements " + actNames.toString(), expNames, actNames);
+        }
+    }
+
+    @Then("block $blockName has $order blocks $blocks")
+    public void thenBlockHasOrderedBlocksList(String blockName,
+                                              String order,
+                                              ArrayList<String> blocks) {
+        assertThat("[ERROR] Invalid name of step: should be 'ordered' or 'not ordered'", order, isOneOf("ordered", "not ordered"));
+        ElementBlock block = pages.getCurrentPage().getBlockByName(blockName);
+        if (block == null) {
+            throw new RuntimeException("[ERROR] Block with name " + blockName
+                    + " was not found in page class");
+        }
+        List<String> blNames = new ArrayList<String>();
+        List<ElementBlock> actBlocks = block.getBlockList();
+        for (ElementBlock bl : actBlocks) {
+            blNames.add(bl.getName());
+        }
+        if (order.equals("ordered")) {
+            assertEquals("[ERROR] Expected blocks: " + blocks.toString() + "; actual blocks " + blNames.toString(), blocks, blNames);
+        } else {
+            Set<String> expNames = new HashSet<String>(blocks);
+            Set<String> actNames = new HashSet<String>(blNames);
+            assertEquals("[ERROR] Expected blocks: " + expNames.toString() + "; actual blocks " + actNames.toString(), expNames, actNames);
+        }
+
+    }
+
+    @Then("$elementName is $value on page")
+    public void thenElementIsPresent(String elementName, String val) {
+        By loc = pages.getCurrentPage().getElementLocatorByName(elementName, true, false);
+
+        assertThat("[ERROR] Invalid name of step: should be '" + elementName + " is present on page', '" + elementName
+                + " is displayed on page', '" + elementName + " is not displayed on page' or '"
+                + elementName + " is not present on page'", val, isOneOf("present", "not present", "displayed", "not displayed"));
+
+        if (val.equals("present")) {
+            assertTrue("Element " + elementName + " with locator " + loc + " is not present on page",
+                    pages.getCurrentPage().isLocatorPresentOnPage(loc));
+        } else if (val.equals("not present")) {
+            assertFalse("Element " + elementName + " with locator " + loc + " is present on page",
+                    pages.getCurrentPage().isLocatorPresentOnPage(loc));
+        } else if (val.equals("displayed")) {
+            assertTrue("Element " + elementName + " with locator " + loc + " is not displayed",
+                    pages.getCurrentPage().isLocatorDisplayedOnPage(loc));
+        } else if (val.equals("not displayed")) {
+            assertFalse("Element " + elementName + " with locator " + loc + " is displayed",
+                    pages.getCurrentPage().isLocatorDisplayedOnPage(loc));
+        }
+    }
+
+    @Given("customer does nothing $n second{s|}")
+    @When("customer does nothing $n second{s|}")
+    @Then("customer does nothing $n second{s|}")
+    public void customerDoNothing(@Named("$n") Integer time) {
+		/*
+		customer does nothing n+1 seconds, n - session timeout.
+		convert seconds to milliseconds
+		*/
+			sleep((time + 1) * 1000);
+	}
+
+
+    @Then("check response code for $url")
+    public void anotherCheckResponseCodeForUrl(String url) throws Exception {
+        try {
+            TestRequest request = new TestRequest(url);
+            request.get();
+            int code = request.getResponse().getStatusCode();
+            getLogger().info("Status code is: " + code);
+        } catch (Exception e) {      //ToDO: don't forget to remove that, when jenkins would have connection to internet
+            throw new RuntimeException("<<< WARNING! Connection to host refused! >>> ", e);
+        }
+
+    }
+
+    /**
+     * WebDriver has a known issue: sometimes method click() causes tests to hang.
+     * As a workaround, the method uses javascript to click the element.
+     *
+     * @param elementName
+     */
+    @When(value = "customer clicks $elementName with javascript", priority = 2)
+    public void whenClickWithJs(String elementName) {
+        pages.getCurrentPage().clickElementWithScript(elementName);
+    }
+
+    /**
+     * If element is partially placed under other element, method element.click() may doesn't work.
+     * As a workaround the method uses Actions to click the element.
+     *
+     * @param elementName
+     */
+    @When(value = "customer clicks $elementName with actions", priority = 2)
+    public void whenClickWithActions(String elementName) {
+        new Actions(pages.getCurrentPage().getDriver()).moveToElement(pages.getCurrentPage().getElementByName(elementName)).click().perform();
+    }
+
+
+    @Then("element $elementName not contains $text")
+    public void elementNotContainsText(String elementName, String text) {
+        String currText = pages.getCurrentPage().getElementText(elementName);
+        assertTrue("[ERROR] Text of the element " + elementName + ": '" + currText + "' doesn't contain " +
+                "substring '" + text + "'.",
+                !currText.contains(text));
+    }
+
+    @Then("element $elementName contains $text")
+    public void elementContainsText(String elementName, String text) {
+        String currText = pages.getCurrentPage().getElementText(elementName);
+        assertTrue("[ERROR] Text of the element " + elementName + ": '" + currText + "' doesn't contain " +
+                "substring '" + text + "'.",
+                currText.contains(text));
+    }
+
+    @Then("current page URL contains $text")
+    public void currentPageUrlContainsText(String text) {
+        assertTrue("[ERROR] Current page URL does not contain text: " + text + ", " +
+                "actual url is " + pages.getCurrentPage().getCurrentUrl(),
+                pages.getCurrentPage().getCurrentUrl().contains(text));
+    }
+
+    /**
+     * Search every block on the current page for HTML element then click it
+     * priority=0
+     *
+     * @param elementName HTML element name from a Story
+     */
+    @When("customer press Enter on $elementName")
+    public void pressEnter(String elementName) {
+        pages.getCurrentPage().pressEnter(elementName);
+    }
+
+
+    @Then("customer sees number=$number of $elementName")
+    public void checkNumberOfElements(int number, String elementName) {
+        int curNumber = pages.getCurrentPage().getElementsSize(pages.getCurrentPage().getElementLocatorByName(elementName));
+        assertTrue("Expected number of elements is " + number + ", but current number is " + curNumber,
+                number == curNumber);
+    }
+
+
+    @Then("$elementName element is highlighted with $color")
+    public void checkColor(String elementName, String color) {
+	HashMap hmColorMap = new HashMap();
+
+        // Put more coloros to the map if nesessary
+        hmColorMap.put("Red", "rgba(255, 0, 0, 1)");
+        hmColorMap.put("Grey","rgba(95, 95, 95, 1)");
+
+        try{
+            String hColor = hmColorMap.get(color).toString();
+
+            assertTrue("[ERROR] Element "+elementName+" is not displayed on page", pages.getCurrentPage().isElementDisplayedOnPage(elementName));
+
+            String val = pages.getCurrentPage().getElementCssAttributeValue(elementName, "color");
+
+            assertTrue("Element color should be " + color + " but it have another color",  val.equals(hColor));
+        }catch (NullPointerException npe){
+
+            assertTrue("<<< WARNING! Unknown color <<" + color + ">>! Please, add it in hpColorMap >>>" + npe.getMessage(), false);
+        }
+    }
+
+    @Then("new page is opened in new window")
+    public void newPageIsOpenedInNewWindow() {
+        pages.getCurrentPage().checkNewWindowOpened(pages.getBaseWindowHandle());
+    }
+
+    @Then("new page is opened in new window and new page URL contains text $text")
+    public void newPageIsOpenedInNewWindowAndURLContainsText (String text) {
+        pages.getCurrentPage().checkNewWindowUrlContainsText(pages.getBaseWindowHandle(), text);
+    }
+
+    @Given("customer returns to Current Page")
+    public void returnsOnCurrentPage() {
+        getLogger().info("Return to current page: ");
+        pages.getCurrentPage().openPage();
+    }
+
+    //TODO: Rid of pageName parameter and rename step as "customer/administrator looks at Current Page"
+    @When("customer looks at $pageName Page")
+    public void whenCustomerLooksAtPage(String pageName) {
+        pages.getCurrentPage().gatherElements();
+    }
+
+    @Then("page title is $title")
+    public void pageTitle(String title) {
+        assertEquals("Page title is incorrect", title, pages.getCurrentPage().getTitle());
+    }
+
+    /**
+    * @param time
+    * Sleep time in millisecond
+    */
+    public void sleep(int time) {
+        try {
+            getLogger().info("Sleep for " + time + " miliseconds...");
+            Thread.sleep(time);
+        } catch (InterruptedException e) {
+            assertTrue("Interrupted exception was thrown during timeout: " + e.getMessage(), false);
+
+        }
+    }
+
+    @Then(value = "label $elementName has text $text", priority = 2)
+    public void labelHasText(@Named("elementName") String elementName, @Named("text") String text) {
+        String labelText = pages.getCurrentPage().getTextOfHiddenElement(elementName);
+        labelText=labelText.replace( "\n", "" ).replace("\t","").replaceAll("<!--.*-->","").trim();
+        assertThat("Label " + elementName + " has wrong label text", labelText, is(text));
+    }
+
+    @Then(value = "attribute $attrName of label element $elementName contains $attrValue", priority = 2)
+    public void hiddenElementHasAttributeWithValue(String attrName,
+                             String elementName,
+                             String attrValue) {
+        String currentAttrValue = pages.getCurrentPage().getAttrValueOfHiddenElement(elementName, attrName);
+        assertThat("[ERROR] Element " + elementName + " has wrong attribute " + attrName + " value",
+                currentAttrValue, containsString(attrValue));
+    }
+
+    @Then("Selector $elementName has element with text $text on $number place")
+    public void selectorOptionHasText(String elementName, String text, int number) {
+        String optionText = pages.getCurrentPage().getDropDownElementText(elementName, number);
+        assertThat("Options value in selector " + elementName + " located at " +
+                number + " place has wrong text", optionText, is(text));
+    }
+
+    @Then("first element of $elementName is selected")
+    public void firstElementIsSelected(String elementName) {
+        assertTrue("First element should be selected in " + elementName + ", but it is not",
+                pages.getCurrentPage().isFirstElementSelected(elementName));
+    }
+
+    @Then("Attribute $attribute of $number option in $elementName selector has text $text")
+    public void selectorAttrHasText(String attribute, int number, String elementName, String text) {
+        String optionText = pages.getCurrentPage().getAttributeValueFromDropDownElement(elementName, attribute, number);
+        assertThat("Options attribute " + attribute + " in selector " + elementName + " located at " +
+                number + " place has wrong text", optionText, is(text));
+    }
+
+    @Then("customer waits when block $blockName appears")
+    public void waitForBlock(String blockName) {
+        waitForBlockForTime(blockName, WAIT_ELEMENT_LOAD_TIMEOUT_IN_SEC);
+    }
+
+    @Then("customer waits when element $element appears")
+    public void waitForElement(String elementName) {
+        waitForElement(elementName, WAIT_ELEMENT_LOAD_TIMEOUT_IN_SEC);
+    }
+
+    @Then("customer waits when block $blockName appears for $timeout second{s|}")
+    public void waitForBlockForTime(String blockName, Integer timeout) {
+        long second = 0;
+        ElementBlock block = pages.getCurrentPage().getBlockByName(blockName);
+        assertNotNull("Can't find block " + blockName + " in Page Class", block);
+
+        while (!pages.getCurrentPage().isLocatorDisplayedOnPage(block.getLocator()) &&
+                second < timeout) {
+                second = second + WAIT_PAGE_LOAD_TIMEOUT_IN_MS / MS_IN_SECOND_CONVERT_DIVISOR;
+                sleep(WAIT_PAGE_LOAD_TIMEOUT_IN_MS);
+
+            }
+
+    }
+
+    @Then("customer waits when element $element appears for $timeout second{s|}")
+    public void waitForElement(String elementName, Integer timeout) {
+        long second = 0;
+        while (!pages.getCurrentPage().isElementDisplayedOnPage(elementName) &&
+                second < timeout) {
+                second = second + WAIT_PAGE_LOAD_TIMEOUT_IN_MS / MS_IN_SECOND_CONVERT_DIVISOR;
+                sleep(WAIT_PAGE_LOAD_TIMEOUT_IN_MS);
+        }
+    }
+
+
+    @Then("customer waits when element $element load and will be displayed")
+    public void waitWhileElementLoadAndDisplayed(String elementName){
+        boolean isDisplayed =  pages.getCurrentPage().isElementLoadedAndDisplayed(elementName);
+        assertTrue("Element was not loaded during timeout: " + elementName, isDisplayed);
+    }
+
+    @Then("customer waits while all ajax scripts will be completed")
+    public void waitAllAjaxWillFinished(){
+
+        long second = 0;
+        while (!pages.getCurrentPage().isAjaxJQueryCompleted() &&
+                second < WAIT_ELEMENT_LOAD_TIMEOUT_IN_SEC) {
+            second = second + WAIT_PAGE_LOAD_TIMEOUT_IN_MS / MS_IN_SECOND_CONVERT_DIVISOR;
+            sleep(WAIT_PAGE_LOAD_TIMEOUT_IN_MS);
+        }
+    }
+
+
+    @Then("customer waits when element $element will be clicable")
+    public void waitWhileElementIsClicable(String elementName){
+        boolean isClicable =  pages.getCurrentPage().isElementLoaded(elementName);
+        assertTrue("Element was not loaded during timeout: " + elementName, isClicable);
+    }
+
+
+    @Then("$elementName width equals to $sizeValue")
+    public void checkElementWidth(String elementName, int sizeValue) {
+        assertEquals("Element " + elementName + " width should be equal to " + sizeValue,
+                sizeValue, pages.getCurrentPage().getElementByName(elementName).getSize().getWidth());
+
+    }
+
+    @Then("$elementName width is more than $sizeValue")
+    public void checkElementWidthMoreThan(String elementName, int sizeValue) {
+        int actualWidth = pages.getCurrentPage().getElementByName(elementName).getSize().getWidth();
+        assertTrue("Element " + elementName + " width should be more than " + sizeValue +
+                "; Actual value " + actualWidth, actualWidth > sizeValue);
+    }
+
+    @Then("$elementName height equals to $sizeValue")
+    public void checkElementHeight(String elementName, int sizeValue) {
+        assertEquals("Element " + elementName + " height should be equal to " + sizeValue,
+                sizeValue, pages.getCurrentPage().getElementByName(elementName).getSize().getHeight());
+    }
+
+    @Then("$elementName height is more than $sizeValue")
+    public void checkElementHeightMoreThan(String elementName, int sizeValue) {
+        int actualHeight = pages.getCurrentPage().getElementByName(elementName).getSize().getHeight();
+        assertTrue("Element " + elementName + " height should be more than " + sizeValue +
+                "; Actual value " + actualHeight, actualHeight > sizeValue);
+    }
+
+}
+
