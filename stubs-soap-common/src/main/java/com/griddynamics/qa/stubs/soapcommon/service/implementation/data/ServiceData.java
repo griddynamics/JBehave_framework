@@ -29,6 +29,8 @@ public interface ServiceData {
 
     public static final String POPULATE_WITH_FILE_URL = "populateWithFile";
     public static final String POPULATE_WITH_FILE_RESPONSE = "Filled with data from file\n";
+    public static final String POPULATE_REQUEST_DATA_URL = "populateRequestData";
+    public static final String POPULATE_REQUEST_DATA_RESPONSE = "Request data filled with data from file\n";
 
     public static final String STUB_LOG_URL = "log";
     public static final String STUB_LOG_FILE = "stubs-soap-common.log";

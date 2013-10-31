@@ -163,6 +163,20 @@ public class SoapCommonServiceController implements ServiceData {
         return POPULATE_WITH_FILE_RESPONSE;
     }
 
+    @RequestMapping(value = POPULATE_REQUEST_DATA_URL, method = RequestMethod.POST)
+    @ResponseBody
+    public String populateRequestData(HttpServletRequest request) {
+        try {
+            String requestString = readBody(request.getReader());
+            service.fillRequestDataFromFile(new ByteArrayInputStream(requestString.getBytes()));
+            logger.info("Stub request types filled with data: " + requestString);
+
+        } catch (IOException e) {
+            logger.fatal("Cannot read input file, error happened: " + e.getMessage());
+        }
+        return POPULATE_REQUEST_DATA_RESPONSE;
+    }
+
     /**
      * Returns stub log file content
      * @param request

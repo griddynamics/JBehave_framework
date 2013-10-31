@@ -31,6 +31,12 @@ public interface SoapCommonService {
     void fillFromFile(InputStream inputStream);
 
     /**
+     * Fills request data from a file
+     * @param inputStream - a stream of the file
+     */
+    void fillRequestDataFromFile(InputStream inputStream);
+
+    /**
      * Adds pairs request/response
      * @param request
      * @param response
