@@ -2,7 +2,6 @@ package com.griddynamics.qa.stubs.soapcommon.service.implementation;
 
 import com.griddynamics.qa.stubs.soapcommon.service.SoapCommonService;
 import com.griddynamics.qa.stubs.soapcommon.service.implementation.data.HomePageData;
-import com.griddynamics.qa.stubs.soapcommon.service.implementation.data.RequestTypeData;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Element;
@@ -21,10 +20,11 @@ import static org.apache.commons.lang3.StringEscapeUtils.unescapeXml;
  * This class implements all methods from {@link com.griddynamics.qa.stubs.soapcommon.service.SoapCommonService}.
  *
  * @author ybaturina
+ * @author lzakharova
  */
 @Component
-public class SoapCommonServiceImpl implements SoapCommonService, HomePageData, RequestTypeData {
-    static Logger logger = Logger.getLogger(
+public class SoapCommonServiceImpl implements SoapCommonService, HomePageData {
+    public static Logger logger = Logger.getLogger(
             SoapCommonServiceImpl.class.getName());
     public final static String REQUEST_TAG = "request";
     public final static String RESPONSE_TAG = "response";
@@ -33,6 +33,8 @@ public class SoapCommonServiceImpl implements SoapCommonService, HomePageData, R
     private Map<String, Map<RequestData, ResponseData>> responses = new HashMap<String, Map<RequestData, ResponseData>>();
 
     private List history = new ArrayList();
+    /*Map containing possible stub request types and messages, which real services take such types */
+    private static Map<String, String> REQ_TYPES_MAP = new HashMap<String, String>();
 
     private boolean available = true;
     private int responseTime = 0;
@@ -53,20 +55,46 @@ public class SoapCommonServiceImpl implements SoapCommonService, HomePageData, R
 
     @Override
     public void fillFromFile(InputStream inputStream) {
+        Map<String, String> pairsMap = getRequestResponsePairs(inputStream);
+        for (Map.Entry<String, String> pair : pairsMap.entrySet()) {
+            addPair(pair.getKey(), pair.getValue());
+        }
+    }
+
+    @Override
+    public void fillRequestDataFromFile(InputStream inputStream) {
+        REQ_TYPES_MAP.putAll(getRequestResponsePairs(inputStream));
+    }
+
+    /**
+     * Get request-response pairs from the input stream
+     * @param inputStream
+     * @return
+     */
+    private Map<String, String> getRequestResponsePairs(InputStream inputStream) {
+        Map<String, String> pairsMap = new HashMap<String, String>();
         Element docElement = XmlUtils.getDocumentElement(inputStream);
         NodeList entries = docElement.getElementsByTagName(ENTRY_TAG);
         for (int i = 0; i < entries.getLength(); i++) {
             Element entryElement = (Element) entries.item(i);
             String requestText = getTextContentFromNode(entryElement, REQUEST_TAG);
             String responseText = getTextContentFromNode(entryElement, RESPONSE_TAG);
-            addPair(requestText, responseText);
+            pairsMap.put(requestText, responseText);
         }
+        return pairsMap;
     }
 
-    private String getTextContentFromNode(Element rootElement, String tagName){
+    /**
+     * Find content of the child node by it's tag in the XML element
+     *
+     * @param rootElement - root XML Element
+     * @param tagName     - tag of the node
+     * @return node content as String
+     */
+    private String getTextContentFromNode(Element rootElement, String tagName) {
         NodeList requests = rootElement.getElementsByTagName(tagName);
         if (requests.getLength() > 1) {
-            StringBuilder errorMessage = new StringBuilder("[ERROR] There is more than one "+tagName+" in the entry: ")
+            StringBuilder errorMessage = new StringBuilder("[ERROR] There is more than one " + tagName + " in the entry: ")
                     .append(rootElement.getTextContent());
             logger.error(errorMessage.toString());
             throw new RuntimeException(errorMessage.toString());
@@ -79,7 +107,7 @@ public class SoapCommonServiceImpl implements SoapCommonService, HomePageData, R
     public void addPair(String request, String response) {
         RequestData requestData = new RequestData(request);
         ResponseData responseData = new ResponseData(response);
-        if(!responses.containsKey(requestData.getRequestType())){
+        if (!responses.containsKey(requestData.getRequestType())) {
             responses.put(requestData.getRequestType(), new HashMap<RequestData, ResponseData>());
         }
         responses.get(requestData.getRequestType()).put(requestData, responseData);
@@ -116,11 +144,20 @@ public class SoapCommonServiceImpl implements SoapCommonService, HomePageData, R
         this.responseTime = delta;
     }
 
+    /**
+     * Method processes request sent to the stub and returns the response
+     * in case the request matched with loaded to the stub data
+     *
+     * @param request
+     * @return response content as String
+     * @throws ServiceUnavailableException
+     */
     private String getResponse(String request) throws ServiceUnavailableException {
         IncomingRequest incRequest = new IncomingRequest(request);
 
         logRequestType(incRequest.getRequestType(), request);
 
+        /*Delay sending the response in case if responseTime is positive*/
         if (responseTime != 0) {
             try {
                 Thread.sleep(responseTime);
@@ -130,11 +167,13 @@ public class SoapCommonServiceImpl implements SoapCommonService, HomePageData, R
             }
         }
 
+        /*Do not return response in case if the stub is unavailable*/
         if (!available) {
             addHistoryItem(request, "Service unavailable");
             throw new ServiceUnavailableException();
         }
 
+        /*Exception invocation in case when requestType is not matched with data loaded into stub*/
         if (!responses.containsKey(incRequest.getRequestType())) {
             addHistoryItem(request, "There is no request-response pairs for this xml type: " +
                     incRequest.getRequestType());
@@ -144,6 +183,7 @@ public class SoapCommonServiceImpl implements SoapCommonService, HomePageData, R
 
         String response = "";
 
+        /*Find the response for the matched request*/
         for (Map.Entry<RequestData, ResponseData> entry : responses.get(incRequest.getRequestType()).entrySet()) {
             if (entry.getKey().match(incRequest.getRequestBody())) {
                 response = entry.getValue().getResponseData();
@@ -158,6 +198,11 @@ public class SoapCommonServiceImpl implements SoapCommonService, HomePageData, R
         return response;
     }
 
+    /**
+     * Method adds request-response pairs to the stub history
+     * @param request
+     * @param response
+     */
     private void addHistoryItem(String request, String response) {
         logger.info("Response: " + response);
 
@@ -167,6 +212,12 @@ public class SoapCommonServiceImpl implements SoapCommonService, HomePageData, R
         history.add(historyEntity);
     }
 
+    /**
+     * Method is used to fill the log with messages which
+     * real service takes requests of the specified type
+     * @param type - type of the request sent to stub
+     * @param request - request content
+     */
     private void logRequestType(String type, String request) {
         String logMessage = REQ_TYPES_MAP.get(type);
         if (logMessage != null) {

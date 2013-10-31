@@ -4,8 +4,18 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Properties;
 
+/**
+ * The class contains methods for processing properties files
+ *
+ * @author ybaturina
+ */
 public class FilePropertiesUtils {
 
+    /**
+     * Reads and returns Properties located in the properties files
+     * @param fileNames - the names of the properties files
+     * @return Properties object
+     */
     public static Properties getPropertiesFromFile(String... fileNames) {
         Properties fileProperties = new Properties();
         for (String fileName : fileNames) {

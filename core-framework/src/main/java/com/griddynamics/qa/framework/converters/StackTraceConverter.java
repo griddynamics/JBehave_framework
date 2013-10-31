@@ -4,11 +4,9 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 /**
- * Created with IntelliJ IDEA.
- * User: ybaturina
- * Date: 10/16/13
- * Time: 1:45 PM
- * To change this template use File | Settings | File Templates.
+ * Class containing one method to get the stacktrace from exception as String object
+ *
+ * @author ybaturina
  */
 public class StackTraceConverter {
 

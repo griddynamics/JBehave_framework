@@ -3,11 +3,9 @@ package com.griddynamics.qa.stubs.tools.logic;
 import com.griddynamics.qa.stubs.tools.data.StubServiceData;
 
 /**
- * Created with IntelliJ IDEA.
- * User: ybaturina
- * Date: 10/11/13
- * Time: 2:58 PM
- * To change this template use File | Settings | File Templates.
+ * Class for stub parameters configuration
+ *
+ * @author ybaturina
  */
 public class SoapStub extends SoapStubCommonLogic{
 

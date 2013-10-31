@@ -10,9 +10,10 @@ import static com.griddynamics.qa.logger.LoggerFactory.addThreadLogger;
 import static com.griddynamics.qa.logger.LoggerFactory.getLogger;
 
 /**
+ * The class is used to send output of all common jbehave logs in separate files
+ *
  * @author ybaturina
- * CustomPrintStreamEmbedderMonitor is used to send
- *         output of all common jbehave logs in separate file:
+ * @author abaranouski
  */
 public class CustomPrintStreamEmbedderMonitor extends PrintStreamEmbedderMonitor {
 

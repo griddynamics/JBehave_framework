@@ -16,11 +16,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Created with IntelliJ IDEA.
- * User: ybaturina
- * Date: 10/21/13
- * Time: 12:09 PM
- * To change this template use File | Settings | File Templates.
+ * Class with utils for working with XML documents
+ *
+ * @author ybaturina
  */
 public class XmlUtils {
 
@@ -29,6 +27,11 @@ public class XmlUtils {
     static Logger logger = Logger.getLogger(
             XmlUtils.class.getName());
 
+    /**
+     * Get root element of the XML document
+     * @param input - InputStream or String object containing XML doc
+     * @return  root element
+     */
     public static Element getDocumentElement(Object input) {
         Document doc;
         try {
@@ -58,6 +61,11 @@ public class XmlUtils {
         }
     }
 
+    /**
+     * Method checks whether XML Node has other child nodes besides text nodes
+     * @param node
+     * @return
+     */
     public static boolean hasNotTextChildren(Node node){
         NodeList nodeList = node.getChildNodes();
         for (int i=0; i<nodeList.getLength(); i++){

@@ -3,6 +3,7 @@ package com.griddynamics.qa.stubs.soapcommon.service.implementation;
 /**
  * The class containing response data set.
  * @author ybaturina
+ * @author lzakharova
  */
 public class ResponseData {
 

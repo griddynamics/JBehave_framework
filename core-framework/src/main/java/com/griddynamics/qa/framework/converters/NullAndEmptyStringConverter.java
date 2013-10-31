@@ -5,7 +5,8 @@ import org.jbehave.core.steps.ParameterConverters.ParameterConverter;
 import java.lang.reflect.Type;
 
 /**
- * Special parameter converter which treats String values in test tables properly
+ * Special parameter converter which treats specific String values in JBehave examples tables as
+ * nullable and empty Strings.
  *
  * @author ybaturina
  */
