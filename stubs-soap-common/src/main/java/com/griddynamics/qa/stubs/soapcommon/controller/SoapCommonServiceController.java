@@ -25,6 +25,7 @@ import java.util.Scanner;
  * GET requests and forwards this. The controller listens all SOAP requests on an used port.
  *
  * @author ybaturina
+ * @author lzakharova
  */
 @Controller
 @RequestMapping("/")
@@ -49,6 +50,16 @@ public class SoapCommonServiceController implements ServiceData {
         return service.getHomePage();
     }
 
+    /**
+     * Method processes the {@link HttpServletRequest} request and returns
+     * the response according to the data loaded into stub
+     *
+     * @param request - the {@link HttpServletRequest} request
+     * @param response - the {@link HttpServletResponse} response
+     * @return - the response, which was sending.
+     * @throws IOException
+     * @throws ServiceUnavailableException
+     */
     @RequestMapping(value = STUB_SERVICE_URL, method = RequestMethod.POST)
     @ResponseBody
     public String stubServiceEndpoint(HttpServletRequest request, HttpServletResponse response) throws IOException, ServiceUnavailableException {
@@ -57,7 +68,7 @@ public class SoapCommonServiceController implements ServiceData {
     }
 
     /**
-     * This method provides working with trigger, which turning on/off availability for the stub. <br/>
+     * This method provides working with trigger, which turns on/off availability for the stub. <br/>
      *
      * @param available if that's false: the stub won't be working.
      * @return the string with a status: the stub's available or not.
@@ -152,7 +163,11 @@ public class SoapCommonServiceController implements ServiceData {
         return POPULATE_WITH_FILE_RESPONSE;
     }
 
-
+    /**
+     * Returns stub log file content
+     * @param request
+     * @return log file content as String
+     */
     @RequestMapping(STUB_LOG_URL)
     @ResponseBody
     public String log(HttpServletRequest request) {
@@ -170,7 +185,11 @@ public class SoapCommonServiceController implements ServiceData {
         return null;
     }
 
-
+    /**
+     * Clears stub log file content
+     *
+     * @return String message indicating whether the log was cleared
+     */
     @RequestMapping(CLEAR_LOG_URL)
     @ResponseBody
     public String clearLog() {
@@ -202,7 +221,10 @@ public class SoapCommonServiceController implements ServiceData {
         return CLEAR_LOG_RESPONSE;
     }
 
-
+    /**
+     *
+     * @return SOAP stub version
+     */
     @RequestMapping(VERSION_URL)
     @ResponseBody
     public String getVersion() {
@@ -216,6 +238,11 @@ public class SoapCommonServiceController implements ServiceData {
         return "Cannot get webapp version";
     }
 
+    /**
+     * Method processes content of stub request
+     * @param reader - BufferedReader from HttpServletRequest
+     * @return request content as String
+     */
     private String readBody(BufferedReader reader) {
         StringBuilder requestData;
         try {
@@ -231,6 +258,10 @@ public class SoapCommonServiceController implements ServiceData {
         return requestData.toString();
     }
 
+    /**
+     * Method for creating FileAppender used by stub logger
+     * @return FileAppender for {@link #STUB_LOG_FILE} log file
+     */
     private static FileAppender getFileAppender() {
         FileAppender fileAppender = new FileAppender();
         fileAppender.setFile(STUB_LOG_FILE);

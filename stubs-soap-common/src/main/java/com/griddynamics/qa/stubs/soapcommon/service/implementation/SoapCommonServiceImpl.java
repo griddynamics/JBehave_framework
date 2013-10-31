@@ -21,10 +21,11 @@ import static org.apache.commons.lang3.StringEscapeUtils.unescapeXml;
  * This class implements all methods from {@link com.griddynamics.qa.stubs.soapcommon.service.SoapCommonService}.
  *
  * @author ybaturina
+ * @author lzakharova
  */
 @Component
 public class SoapCommonServiceImpl implements SoapCommonService, HomePageData, RequestTypeData {
-    static Logger logger = Logger.getLogger(
+    public static Logger logger = Logger.getLogger(
             SoapCommonServiceImpl.class.getName());
     public final static String REQUEST_TAG = "request";
     public final static String RESPONSE_TAG = "response";
@@ -63,6 +64,12 @@ public class SoapCommonServiceImpl implements SoapCommonService, HomePageData, R
         }
     }
 
+    /**
+     * Find content of the child node by it's tag in the XML element
+     * @param rootElement - root XML Element
+     * @param tagName - tag of the node
+     * @return node content as String
+     */
     private String getTextContentFromNode(Element rootElement, String tagName){
         NodeList requests = rootElement.getElementsByTagName(tagName);
         if (requests.getLength() > 1) {
@@ -116,11 +123,20 @@ public class SoapCommonServiceImpl implements SoapCommonService, HomePageData, R
         this.responseTime = delta;
     }
 
+    /**
+     * Method processes request sent to the stub and returns the response
+     * in case the request matched with loaded to the stub data
+     *
+     * @param request
+     * @return response content as String
+     * @throws ServiceUnavailableException
+     */
     private String getResponse(String request) throws ServiceUnavailableException {
         IncomingRequest incRequest = new IncomingRequest(request);
 
         logRequestType(incRequest.getRequestType(), request);
 
+        /*Delay sending the response in case if responseTime is positive*/
         if (responseTime != 0) {
             try {
                 Thread.sleep(responseTime);
@@ -130,11 +146,13 @@ public class SoapCommonServiceImpl implements SoapCommonService, HomePageData, R
             }
         }
 
+        /*Do not return response in case if the stub is unavailable*/
         if (!available) {
             addHistoryItem(request, "Service unavailable");
             throw new ServiceUnavailableException();
         }
 
+        /*Exception invocation in case when requestType is not matched with data loaded into stub*/
         if (!responses.containsKey(incRequest.getRequestType())) {
             addHistoryItem(request, "There is no request-response pairs for this xml type: " +
                     incRequest.getRequestType());
@@ -144,6 +162,7 @@ public class SoapCommonServiceImpl implements SoapCommonService, HomePageData, R
 
         String response = "";
 
+        /*Find the response for the matched request*/
         for (Map.Entry<RequestData, ResponseData> entry : responses.get(incRequest.getRequestType()).entrySet()) {
             if (entry.getKey().match(incRequest.getRequestBody())) {
                 response = entry.getValue().getResponseData();
@@ -158,6 +177,11 @@ public class SoapCommonServiceImpl implements SoapCommonService, HomePageData, R
         return response;
     }
 
+    /**
+     * Method adds request-response pairs to the stub history
+     * @param request
+     * @param response
+     */
     private void addHistoryItem(String request, String response) {
         logger.info("Response: " + response);
 
@@ -167,6 +191,12 @@ public class SoapCommonServiceImpl implements SoapCommonService, HomePageData, R
         history.add(historyEntity);
     }
 
+    /**
+     * Method is used to fill the log with messages which
+     * real service takes requests of the specified type
+     * @param type - type of the request sent to stub
+     * @param request - request content
+     */
     private void logRequestType(String type, String request) {
         String logMessage = REQ_TYPES_MAP.get(type);
         if (logMessage != null) {

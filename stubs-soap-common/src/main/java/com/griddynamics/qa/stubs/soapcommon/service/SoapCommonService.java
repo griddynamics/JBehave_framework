@@ -5,13 +5,15 @@ import java.io.InputStream;
 import java.util.List;
 
 /**
- * This service provides the SOAP request/response
+ * This interface provides the SOAP stub common methods
+ *
  * @author ybaturina
+ * @author lzakharova
  */
 public interface SoapCommonService {
 
     /**
-     * Returns a response by the required request  (used by GigaSpace Order grid and GigaSpace Inventory Grid stub)
+     * Returns a response by the required request
      * @param request - the required request
      * @throws ServiceUnavailableException
      */
@@ -57,8 +59,14 @@ public interface SoapCommonService {
      */
     void setTimeout(int delta);
 
+    /**
+     * Clears stub history
+     */
     void clearHistory();
 
+    /**
+     * Clears loaded into the stub data
+     */
     void clearData();
 }
 

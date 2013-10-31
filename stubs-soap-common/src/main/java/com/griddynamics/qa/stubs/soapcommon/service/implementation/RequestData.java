@@ -8,7 +8,7 @@ import org.w3c.dom.NodeList;
  * The handler providing data set request.
  *
  * @author ybaturina
- * @since 4/1/13
+ * @author lzakharova
  */
 public class RequestData {
 
@@ -43,7 +43,7 @@ public class RequestData {
      * Method compares attributes, text content and child nodes of expected and actual DOM structure
      * @param expectedNodes
      * @param actualElement
-     * @return
+     * @return flag whether the nodes were matched
      */
     private boolean matchXml(NodeList expectedNodes, Element actualElement) {
         boolean matched;

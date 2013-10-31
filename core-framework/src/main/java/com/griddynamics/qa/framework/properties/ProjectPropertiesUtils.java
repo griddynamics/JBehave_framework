@@ -40,7 +40,8 @@ public class ProjectPropertiesUtils extends PropertiesUtils {
     }
 
     /**
-     *
+     * Method gathers properties from 2 files with paths provided in {@link com.griddynamics.qa.framework.properties.ProjectProperties#JRUNNER_CONFIG_FILENAME}
+     * and {@link com.griddynamics.qa.framework.properties.ProjectProperties#ATG_CONFIG_FILENAME} system properties
      * @return
      * @throws IOException
      */

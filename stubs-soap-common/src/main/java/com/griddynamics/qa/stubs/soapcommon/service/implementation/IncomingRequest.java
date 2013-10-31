@@ -11,7 +11,10 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
+ * Class contains methods for processing requests sent to the stub
+ *
  * @author ybaturina
+ * @author lzakharova
  */
 
 public class IncomingRequest {
@@ -33,6 +36,10 @@ public class IncomingRequest {
         return requestBody;
     }
 
+    /**
+     * Method determines request type and body according to it's String SOAP content
+     * @param request - request as String
+     */
     private void setRequestBodyAndType(String request) {
         InputStream is = new ByteArrayInputStream(request.getBytes());
         try {

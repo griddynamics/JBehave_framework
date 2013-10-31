@@ -10,11 +10,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Created with IntelliJ IDEA.
- * User: ybaturina
- * Date: 10/11/13
- * Time: 2:58 PM
- * To change this template use File | Settings | File Templates.
+ * Class containing methods for working with SOAP stub
+ *
+ * @author ybaturina
  */
 public abstract class SoapStubCommonLogic {
 
@@ -26,6 +24,11 @@ public abstract class SoapStubCommonLogic {
     protected String stubDataPath;
     protected String stubName;
 
+    /**
+     * Loads content of files into the SOAP stub
+     * The files should contain request and responses which can pe processed by stub
+     * @param filenames - list of file names divided by comma sign
+     */
     public void invokeLoadDataToStubMethod(String filenames) {
         String[] filePaths = getTestFilePaths(filenames.split(","));
 
@@ -44,6 +47,12 @@ public abstract class SoapStubCommonLogic {
 
     }
 
+    /**
+     * Returns real paths of files to be processed by stub,
+     * the files should be located in {@link #stubDataPath} folder
+     * @param fileNames - list of file names divided by comma sign
+     * @return
+     */
     private String[] getTestFilePaths(String[] fileNames) {
         String[] filePaths = new String[fileNames.length];
 
@@ -58,6 +67,9 @@ public abstract class SoapStubCommonLogic {
         return filePaths;
     }
 
+    /**
+     * Cleans all the data from the stub
+     */
     public void invokeCleanStubMethod() {
         TestRequest request = new TestRequest(stubResetUrl);
         String response = request.getResponseAsString();

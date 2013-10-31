@@ -1,7 +1,10 @@
 package com.griddynamics.qa.stubs.soapcommon.service.implementation.data;
 
 /**
+ * Class with String constants used for creating stub home page
+ *
  * @author ybaturina
+ * @author lzakharova
  */
 public interface HomePageData {
     public final static String RELATIVE_URL = "<a href=\"./%s\">%s</a>";

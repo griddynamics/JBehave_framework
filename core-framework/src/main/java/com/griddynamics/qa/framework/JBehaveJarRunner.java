@@ -17,6 +17,12 @@ import java.util.List;
 
 import static com.griddynamics.qa.framework.converters.StackTraceConverter.getStringFromStackTrace;
 
+/**
+ * Main class for executing tests from JAR file
+ *
+ * @author akirillov
+ * @author ybaturina
+ */
 public class JBehaveJarRunner {
     protected static final Logger logger = LoggerFactory.getLogger();
     private static final String CLASS_EXTENSION = ".class";
@@ -43,10 +49,18 @@ public class JBehaveJarRunner {
         excludes = Collections.unmodifiableList(Collections.<String>emptyList());
     }
 
+    /**
+     * Configures which suites should be run (suites path pattern should be provided in
+     * {@link com.griddynamics.qa.framework.properties.ProjectProperties#STORY_LIST_PROPERTY_NAME})
+     * @return
+     */
     protected List<String> getIncludedSuiteList(){
        return Collections.unmodifiableList(Arrays.asList(ProjectProperties.getSuiteAll().split(",")));
     }
 
+    /**
+     * Extracts JBehave reports CSS folders from the archive
+     */
     protected void copyCssReportsStyles() {
         try {
             for (String folderPath : CSS_STYLE_FOLDERS) {
@@ -65,7 +79,7 @@ public class JBehaveJarRunner {
     }
 
     /**
-     * Creates an instance of Embedder, either using
+     * Creates an instance of Embedder using
      * {@link #embedderClass}.
      *
      * @return An Embedder

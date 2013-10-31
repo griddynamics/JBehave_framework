@@ -17,7 +17,7 @@ public class ProjectProperties {
     public static final String JRUNNER_CONFIG_FILENAME = "runner.config.file.location";
     public static final String ATG_CONFIG_FILENAME = "execution.config.file.location";
     public static final String SUITE_ALL_PROPERTY_NAME = "suite.all";
-    private static final String SUITE_LIST_PROPERTY_NAME = "suite.list";
+    public static final String SUITE_LIST_PROPERTY_NAME = "suite.list";
     public static final String STORY_LIST_PROPERTY_NAME = "story.list";
     public static final String EXCLUDE_STORY_LIST_PROPERTY_NAME = "exclude.story.list";
     public static final String JBEHAVE_STORY_TIMEOUT_IN_SECS = "jbehave.storyTimeoutInSecs";
