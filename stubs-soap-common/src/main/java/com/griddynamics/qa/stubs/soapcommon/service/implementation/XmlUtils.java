@@ -15,6 +15,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static org.apache.commons.lang3.StringEscapeUtils.unescapeXml;
+
 /**
  * Class with utils for working with XML documents
  *
@@ -76,4 +78,22 @@ public class XmlUtils {
         return false;
     }
 
+    /**
+     * Find content of the child node by it's tag in the XML element
+     *
+     * @param rootElement - root XML Element
+     * @param tagName     - tag of the node
+     * @return node content as String
+     */
+    static String getTextContentFromNode(Element rootElement, String tagName) {
+        NodeList requests = rootElement.getElementsByTagName(tagName);
+        if (requests.getLength() > 1) {
+            StringBuilder errorMessage = new StringBuilder("[ERROR] There is more than one " + tagName + " in the entry: ")
+                    .append(rootElement.getTextContent());
+            logger.error(errorMessage.toString());
+            throw new RuntimeException(errorMessage.toString());
+        } else {
+            return unescapeXml(requests.item(0).getTextContent());
+        }
+    }
 }

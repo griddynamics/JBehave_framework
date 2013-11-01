@@ -136,6 +136,8 @@ public class RequestData {
 
     /**
      * Method compares count of nodes with equal names in expected and actual DOM structure
+     * Expected Request data in stub has specific {@link #COUNT_ATTRIBUTE} node attribute, which indicates
+     * the number of the nodes with the same tag which should present in actual request XML.
      * @param expectedNode
      * @param actualNodes
      * @return

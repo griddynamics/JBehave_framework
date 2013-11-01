@@ -14,8 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.apache.commons.lang3.StringEscapeUtils.unescapeXml;
-
 /**
  * This class implements all methods from {@link com.griddynamics.qa.stubs.soapcommon.service.SoapCommonService}.
  *
@@ -68,6 +66,23 @@ public class SoapCommonServiceImpl implements SoapCommonService, HomePageData {
 
     /**
      * Get request-response pairs from the input stream
+     *
+     * The XML with request-response pairs should have the following format:
+     * <CODE>
+     * <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+     * <stubbingData>
+     * <entry>
+     * <request><![CDATA[...]]></request>
+     * <response><![CDATA[...]]></response>
+     * </entry>
+     * ...
+     * </stubbingData>
+     * </CODE>
+     * <p/>
+     *
+     * Content of request node is XML, content of response node
+     * is SOAP message.
+     *
      * @param inputStream
      * @return
      */
@@ -77,30 +92,11 @@ public class SoapCommonServiceImpl implements SoapCommonService, HomePageData {
         NodeList entries = docElement.getElementsByTagName(ENTRY_TAG);
         for (int i = 0; i < entries.getLength(); i++) {
             Element entryElement = (Element) entries.item(i);
-            String requestText = getTextContentFromNode(entryElement, REQUEST_TAG);
-            String responseText = getTextContentFromNode(entryElement, RESPONSE_TAG);
+            String requestText = XmlUtils.getTextContentFromNode(entryElement, REQUEST_TAG);
+            String responseText = XmlUtils.getTextContentFromNode(entryElement, RESPONSE_TAG);
             pairsMap.put(requestText, responseText);
         }
         return pairsMap;
-    }
-
-    /**
-     * Find content of the child node by it's tag in the XML element
-     *
-     * @param rootElement - root XML Element
-     * @param tagName     - tag of the node
-     * @return node content as String
-     */
-    private String getTextContentFromNode(Element rootElement, String tagName) {
-        NodeList requests = rootElement.getElementsByTagName(tagName);
-        if (requests.getLength() > 1) {
-            StringBuilder errorMessage = new StringBuilder("[ERROR] There is more than one " + tagName + " in the entry: ")
-                    .append(rootElement.getTextContent());
-            logger.error(errorMessage.toString());
-            throw new RuntimeException(errorMessage.toString());
-        } else {
-            return unescapeXml(requests.item(0).getTextContent());
-        }
     }
 
     @Override

@@ -3,7 +3,7 @@ package com.griddynamics.qa.stubs.tools.data;
 import com.griddynamics.qa.stubs.tools.properties.StubsProperties;
 
 /**
- * Interface contains common String constants used by SOAP stub
+ * Interface containing common String constants used by SOAP stub
  *
  * @author ybaturina
  */

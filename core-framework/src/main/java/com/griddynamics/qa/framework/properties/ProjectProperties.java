@@ -14,17 +14,17 @@ import static java.util.Arrays.asList;
  */
 public class ProjectProperties {
 
-    public static final String JRUNNER_CONFIG_FILENAME = "runner.config.file.location";
-    public static final String ATG_CONFIG_FILENAME = "execution.config.file.location";
-    public static final String SUITE_ALL_PROPERTY_NAME = "suite.all";
-    public static final String SUITE_LIST_PROPERTY_NAME = "suite.list";
-    public static final String STORY_LIST_PROPERTY_NAME = "story.list";
-    public static final String EXCLUDE_STORY_LIST_PROPERTY_NAME = "exclude.story.list";
-    public static final String JBEHAVE_STORY_TIMEOUT_IN_SECS = "jbehave.storyTimeoutInSecs";
-    public static final String JBEHAVE_IGNORE_FAILURES_IN_STORIES = "jbehave.ignoreFailureInStories";
-    public static final String JBEHAVE_IGNORE_FAILURES_IN_VIEW = "jbehave.ignoreFailureInView";
-    public static final String JBEHAVE_THREADS = "threads";
-    public static final String PROPERTY_META_FILTERS = "meta.filters";
+    public static final String JRUNNER_CONFIG_FILENAME = "runner.config.file.location"; /*!< mandatory property */
+    public static final String ATG_CONFIG_FILENAME = "execution.config.file.location"; /*!< mandatory property */
+    public static final String SUITE_ALL_PROPERTY_NAME = "suite.all"; /*!< mandatory property */
+    public static final String SUITE_LIST_PROPERTY_NAME = "suite.list"; /*!< optional property */
+    public static final String STORY_LIST_PROPERTY_NAME = "story.list"; /*!< optional property */
+    public static final String EXCLUDE_STORY_LIST_PROPERTY_NAME = "exclude.story.list"; /*!< optional property */
+    public static final String JBEHAVE_STORY_TIMEOUT_IN_SECS = "jbehave.storyTimeoutInSecs"; /*!< mandatory property */
+    public static final String JBEHAVE_IGNORE_FAILURES_IN_STORIES = "jbehave.ignoreFailureInStories"; /*!< mandatory property */
+    public static final String JBEHAVE_IGNORE_FAILURES_IN_VIEW = "jbehave.ignoreFailureInView"; /*!< mandatory property */
+    public static final String JBEHAVE_THREADS = "threads"; /*!< mandatory property */
+    public static final String PROPERTY_META_FILTERS = "meta.filters"; /*!< mandatory property */
 
     private static Properties props = ProjectPropertiesUtils.getAllProperties();
 

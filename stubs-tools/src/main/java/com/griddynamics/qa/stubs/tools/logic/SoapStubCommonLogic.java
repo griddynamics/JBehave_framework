@@ -68,7 +68,7 @@ public abstract class SoapStubCommonLogic {
     }
 
     /**
-     * Cleans all the data from the stub
+     * Clears all the data out from the stub
      */
     public void invokeCleanStubMethod() {
         TestRequest request = new TestRequest(stubResetUrl);
