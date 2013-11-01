@@ -38,7 +38,7 @@ public class CustomPrintStreamEmbedderMonitor extends PrintStreamEmbedderMonitor
     }
 
     /**
-     * This method was overridden to initialize local-thread Logger to send output to story-specific log-file.
+     * This method was overridden to initialize local-thread Logger to send output to story-specific log file.
      */
     @Override
     public void runningStory(String path) {
