@@ -563,7 +563,7 @@ public class CommonPageSteps {
 
 
     /**
-     * Get elemetn's color {@link com.griddynamics.qa.ui.CommonElementMethods#getElementCssAttributeValue(java.lang.String, java.lang.String)}
+     * Get element's color {@link com.griddynamics.qa.ui.CommonElementMethods#getElementCssAttributeValue(java.lang.String, java.lang.String)}
      * Check that element's color is equal to expected from story
      * {@link com.griddynamics.qa.ui.CommonElementMethods#getElementCssAttributeValue    }
      *
@@ -806,48 +806,6 @@ public class CommonPageSteps {
         int actualHeight = pages.getCurrentPage().getElementByName(elementName).getSize().getHeight();
         assertTrue("Element " + elementName + " height should be more than " + sizeValue +
                 "; Actual value " + actualHeight, actualHeight > sizeValue);
-    }
-
-    @When("customer type text $text in field $field in iframe with name $name")
-    public void typeTextInIframeName(String text, String field, String frameName) throws NoSuchFrameException, InterruptedException {
-        ElementBlock block = pages.getCurrentPage().getBlockByName(frameName);
-        assertNotNull("There is no block " + frameName + " in page class", block);
-        block.assertBlockPresent();
-        pages.getCurrentPage().switchToIframeWithLoc(block.getLocator());
-        pages.getCurrentPage().typeText(field, text);
-        pages.getCurrentPage().switchTo().defaultContent();
-    }
-
-
-    @When("customer submit button $button in iframe with name $name")
-    public void submitButtonInIframeName(String button, String frameName) throws NoSuchFrameException, InterruptedException {
-        ElementBlock block = pages.getCurrentPage().getBlockByName(frameName);
-        assertNotNull("There is no block " + frameName + " in page class", block);
-
-        block.assertBlockPresent();
-        pages.getCurrentPage().switchToIframeWithLoc(block.getLocator());
-        pages.getCurrentPage().submit(button);
-        pages.getCurrentPage().switchTo().defaultContent();
-    }
-
-
-    @When("customer waits while iFrame $frameName will be loaded")
-    public void waitWhileIFrameLoad(String frameName) {
-
-        WebDriverWait wait = new WebDriverWait(pages.getDriverProvider().get(), WAIT_ELEMENT_LOAD_TIMEOUT_IN_SEC);
-        WebDriver present = wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(frameName));
-    }
-
-
-    @Then("customer waits when last element $element appears in iFrame $frameName")
-    public void waitForElementInIFrame(String elementName, String frameName) throws InterruptedException {
-        long second = 0;
-        ElementBlock block = pages.getCurrentPage().getBlockByName(frameName);
-        assertTrue("There is no block " + frameName + " in page class", block.isBlockDisplayed());
-
-        pages.getCurrentPage().switchToIframeWithLoc(block.getLocator());
-        pages.getCurrentPage().isElementLoaded(elementName);
-        pages.getCurrentPage().switchTo().defaultContent();
     }
 
 }

@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created with IntelliJ IDEA.
- * User: ybaturina
+ * @author ybaturina
+ * @author mlykosova
  */
 public class ExamplesTableConverter {
     /**
