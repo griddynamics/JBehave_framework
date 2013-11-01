@@ -11,7 +11,12 @@ import java.util.Enumeration;
 import java.util.NoSuchElementException;
 
 /**
+ * This logger factory class was designed to provide the ability to create a separate
+ * log file for every JBehave story
+ *
  * @author ybaturina
+ * @author yhraichonak
+ * @author abaranouski
  */
 
 public class LoggerFactory {
@@ -25,6 +30,9 @@ public class LoggerFactory {
     private static String outputDirectory = System.getProperty(PROJECT_BUILD_DIRECTORY)== null ?
             new StringBuilder(System.getProperty(USER_DIRECTORY)).append(File.separator).append("jbehave").append(File.separator).toString() :
             new StringBuilder(System.getProperty(PROJECT_BUILD_DIRECTORY)).append(File.separator).append("jbehave").append(File.separator).toString();
+    /**
+     * The name of the log file which contains logs from all JBehave tests
+     */
     private static String globalLoggerFile = outputDirectory + "main_" + new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date()) + ".log";
     private static FileAppender globalFileAppender = getGlobalAppender();
 
@@ -32,6 +40,10 @@ public class LoggerFactory {
     private static PrintStream printStream = null;
 
 
+    /**
+     * Method returns PrintStream for the global log file
+     * @return
+     */
     public static PrintStream getGlobalFileStream() {
         if ((printStream) == null || (printStream.checkError())) {
             try {
@@ -43,10 +55,18 @@ public class LoggerFactory {
         return printStream;
     }
 
+    /**
+     *
+     * @return logger instance for the current thread
+     */
     public static Logger getLogger() {
         return logger.get();
     }
 
+    /**
+     * Creates logger instance for the thread
+     * @param fileName - name of the log file
+     */
     public static void addThreadLogger(String fileName) {
         FileAppender threadAppender;
         String threadFileName = outputDirectory + fileName;
@@ -74,6 +94,10 @@ public class LoggerFactory {
         }
     }
 
+    /**
+     *
+     * @return FileAppender for the global log file
+     */
     private static FileAppender getGlobalAppender() {
         try {
             FileAppender appender = new FileAppender(new PatternLayout(PATTERN),
@@ -101,6 +125,9 @@ public class LoggerFactory {
         };
     }
 
+    /**
+     * Sets logger properties from the file {@value #CONFIG_FILE_NAME}
+     */
     private static void configureLogger() {
         URL fileUrl = ResourceUtil.getResourceUrl(CONFIG_FILE_NAME);
         PropertyConfigurator.configure(fileUrl);

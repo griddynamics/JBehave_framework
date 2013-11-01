@@ -157,6 +157,11 @@ public class CommonPageSteps {
                 + currentAttrValue, currentAttrValue, containsString(attrValue));
     }
 
+    @When("customer hovers and holds mouse over $elementName")
+    public void hoverOverAndClick(String elementName) {
+        ElementBlock elBlock = pages.getCurrentPage().findBlockWithElement(elementName);
+        elBlock.hoverOverHold(elementName);
+    }
 
     /**
      * Check that list of links from story is displayed on page

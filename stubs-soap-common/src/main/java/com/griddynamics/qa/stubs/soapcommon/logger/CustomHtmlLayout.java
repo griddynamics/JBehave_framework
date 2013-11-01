@@ -11,15 +11,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Created with IntelliJ IDEA.
- * User: ybaturina
- * Date: 7/16/13
- * Time: 11:56 PM
- * To change this template use File | Settings | File Templates.
+ * Custom logger layout used by SOAP stub logger
+ *
+ * @author ybaturina
  */
 public class CustomHtmlLayout extends HTMLLayout {
     private StringBuffer sbuf = new StringBuffer(BUF_SIZE);
-    static String TRACE_PREFIX = "<br>&nbsp;&nbsp;&nbsp;&nbsp;";
+    private static String TRACE_PREFIX = "<br>&nbsp;&nbsp;&nbsp;&nbsp;";
 
     @Override
     public String format(LoggingEvent event) {

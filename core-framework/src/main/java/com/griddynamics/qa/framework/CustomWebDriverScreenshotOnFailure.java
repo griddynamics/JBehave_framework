@@ -14,6 +14,12 @@ import java.util.UUID;
 import static com.griddynamics.qa.framework.converters.StackTraceConverter.getStringFromStackTrace;
 import static com.griddynamics.qa.logger.LoggerFactory.getLogger;
 
+/**
+ * Class implements functionality of catching screenshots in case of test failure
+ *
+ * @author mlykosova
+ * @author ybaturina
+ */
 public class CustomWebDriverScreenshotOnFailure extends WebDriverSteps {
     public static final String DEFAULT_SCREENSHOT_PATH_PATTERN = "%s/screenshots/failed-scenario-%s.png";
 
@@ -43,6 +49,13 @@ public class CustomWebDriverScreenshotOnFailure extends WebDriverSteps {
     }
 
 
+    /**
+     * Method is triggered when the scenario failure happens;
+     * in this case the screenshot of current browser page is made
+     *
+     * @param uuidWrappedFailure
+     * @throws Exception
+     */
     @AfterScenario(uponOutcome = AfterScenario.Outcome.FAILURE)
     public void afterScenarioFailure(UUIDExceptionWrapper uuidWrappedFailure) throws Exception {
         if (uuidWrappedFailure instanceof PendingStepFound) {
@@ -55,7 +68,7 @@ public class CustomWebDriverScreenshotOnFailure extends WebDriverSteps {
         } catch (Exception e) {
             getLogger().error("Driver can't get URL of the current page");
         }
-        boolean savedIt = false;
+        boolean savedIt;
         try {
             savedIt = driverProvider.saveScreenshotTo(screenshotPath);
         } catch (RemoteWebDriverProvider.SauceLabsJobHasEnded e) {

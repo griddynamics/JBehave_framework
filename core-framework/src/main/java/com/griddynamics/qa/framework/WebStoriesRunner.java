@@ -16,7 +16,10 @@ import static org.jbehave.core.reporters.Format.XML;
 
 
 /**
+ * Main JBehave UI tests runner configuration
+ *
  * @author ybaturina
+ * @author mlykosova
  */
 public abstract class WebStoriesRunner extends BaseStoriesRunner {
 

@@ -35,7 +35,10 @@ import static org.jbehave.core.io.CodeLocations.codeLocationFromClass;
 import static org.jbehave.core.reporters.Format.*;
 
 /**
+ * Main JBehave tests runner configuration
+ *
  * @author ybaturina
+ * @author mlykosova
  */
 public abstract class BaseStoriesRunner extends JUnitStories {
 
@@ -80,6 +83,12 @@ public abstract class BaseStoriesRunner extends JUnitStories {
         return getConfiguration();
     }
 
+    /**
+     * Method gathers JBehave steps from Spring context and adds catching screenshots functionality
+     * in case when {@link #SCREENSHOT_BEAN} is present in the context
+     *
+     * @return
+     */
     @Override
     public SpringStepsFactory stepsFactory() {
         SpringStepsFactory stepsFactory = new SpringStepsFactory(configuration(), createContext());
@@ -91,6 +100,10 @@ public abstract class BaseStoriesRunner extends JUnitStories {
         return stepsFactory;
     }
 
+    /**
+     * Method for suite tests execution
+     * @throws Throwable
+     */
     @Test
     public void run() throws Throwable {
         beforeSuite();
@@ -98,9 +111,10 @@ public abstract class BaseStoriesRunner extends JUnitStories {
 
         suiteList = getSuiteList();
 
-        /** Two types of situation can happened:
-         1. suite list is empty or null, that's why we should run all list from the template
-         2. suite list contains the suite name, need to run stories from this suite
+        /**
+         1. suite.list property is empty or null, that's why we should run all list from the template
+         2. suite.list property contains the suite name, need to run stories from this suite
+         3. suite.list property value pattern doesn't contain current suite name, so we don't execute the tests from this suite
          */
 
         if (CollectionUtils.isEmpty(suiteList) || suiteList.contains(suiteName)) {
@@ -178,6 +192,12 @@ public abstract class BaseStoriesRunner extends JUnitStories {
         return storiesForRunning(includeStories(), excludeStories());
     }
 
+    /**
+     * Sets list of stories which should be run in suite
+     * @param includeStories - stories which must be run
+     * @param excludeStories - stories which must not be run
+     * @return
+     */
     protected List<String> storiesForRunning(List<String> includeStories, List<String> excludeStories) {
         if (!CollectionUtils.isEmpty(includeStories)) {
             List<String> storiesToRunFromProperties = getStoriesList();
@@ -244,6 +264,9 @@ public abstract class BaseStoriesRunner extends JUnitStories {
     protected void beforeSuite() {
     }
 
+    /**
+     * Sets list of stories suites which should be run
+     */
     private void setSuiteList() {
         String suitesFromProperty = ProjectProperties.getSuiteList();
         if (!StringUtils.isEmpty(suitesFromProperty)) {
@@ -253,6 +276,10 @@ public abstract class BaseStoriesRunner extends JUnitStories {
         }
     }
 
+    /**
+     * Sets list of stories which must be run in the suite,
+     * the list of stories should be provided in {@link com.griddynamics.qa.framework.properties.ProjectProperties#STORY_LIST_PROPERTY_NAME}
+     */
     private void setStoriesList() {
         String storyProperty = ProjectProperties.getStoryList();
         if (!StringUtils.isEmpty(storyProperty)) {
@@ -262,6 +289,11 @@ public abstract class BaseStoriesRunner extends JUnitStories {
         }
     }
 
+    /**
+     * Method constructs story paths pattern from story names
+     * @param paths
+     * @return
+     */
     private List<String> addPatternToStoryPaths(List<String> paths) {
         List<String> newPaths = new ArrayList<String>();
         for (String path : paths) {
@@ -270,6 +302,10 @@ public abstract class BaseStoriesRunner extends JUnitStories {
         return newPaths;
     }
 
+    /**
+     * Sets list of stories which must be run in the suite,
+     * the list of stories should be provided in {@link com.griddynamics.qa.framework.properties.ProjectProperties#EXCLUDE_STORY_LIST_PROPERTY_NAME}
+     */
     private void setExcludeStoriesList() {
         String storyProperty = ProjectProperties.getExcludeStoryList();
         if (!StringUtils.isEmpty(storyProperty)) {

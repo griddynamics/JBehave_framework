@@ -2,6 +2,12 @@ package com.griddynamics.qa.stubs.tools.properties;
 
 import com.griddynamics.qa.properties.utils.PropertiesUtils;
 
+/**
+ * Class contains injected by Spring properties which specify
+ * stub's ip, port and relative path
+ *
+ * @author ybaturina
+ */
 public class StubsProperties {
 
     private static String stubServiceIp;

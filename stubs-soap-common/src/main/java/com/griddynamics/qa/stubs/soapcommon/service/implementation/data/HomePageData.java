@@ -1,7 +1,10 @@
 package com.griddynamics.qa.stubs.soapcommon.service.implementation.data;
 
 /**
+ * Class with String constants used for creating stub home page
+ *
  * @author ybaturina
+ * @author lzakharova
  */
 public interface HomePageData {
     public final static String RELATIVE_URL = "<a href=\"./%s\">%s</a>";
@@ -27,6 +30,7 @@ public interface HomePageData {
             String.format(RELATIVE_URL_DESCRIPTION, ServiceData.HISTORY_URL, ServiceData.HISTORY_URL, "show history") +
             String.format(RELATIVE_URL_DESCRIPTION, SET_RESPONSE_TIME, SET_RESPONSE_TIME, "set response time to 0") +
             String.format(RELATIVE_URL_DESCRIPTION, ServiceData.POPULATE_WITH_FILE_URL, ServiceData.POPULATE_WITH_FILE_URL, "populate with file") +
+            String.format(RELATIVE_URL_DESCRIPTION, ServiceData.POPULATE_REQUEST_DATA_URL, ServiceData.POPULATE_REQUEST_DATA_URL, "populate request data with file") +
             String.format(RELATIVE_URL_DESCRIPTION, ServiceData.STUB_LOG_URL, ServiceData.STUB_LOG_URL, "stub log") +
             String.format(RELATIVE_URL_DESCRIPTION, ServiceData.CLEAR_LOG_URL, ServiceData.CLEAR_LOG_URL, "clear stub log") +
             String.format(RELATIVE_URL_DESCRIPTION, ServiceData.VERSION_URL, ServiceData.VERSION_URL, "stub version");
