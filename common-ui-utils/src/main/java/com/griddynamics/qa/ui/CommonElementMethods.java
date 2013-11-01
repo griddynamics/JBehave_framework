@@ -13,11 +13,10 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.*;
 
-import static com.griddynamics.qa.logger.LoggerFactory.getLogger;
-
 /**
  * @author ybaturina
  *         mlykosova
+ *         aluchin
  *         <p/>
  *         Entity class containing common methods that work with page elements
  */
@@ -30,7 +29,6 @@ public class CommonElementMethods extends WebDriverPage {
     /**
      * blocks is the container of blocks aggregated by block/page
      */
-
     private List<ElementBlock> blocks = new ArrayList<ElementBlock>();
 
     /**
@@ -40,7 +38,6 @@ public class CommonElementMethods extends WebDriverPage {
 
     public CommonElementMethods(WebDriverProvider driverProvider) {
         super(driverProvider);
-
     }
 
     public WebDriver getDriver() {
@@ -70,7 +67,7 @@ public class CommonElementMethods extends WebDriverPage {
     }
 
     /**
-     * Search for a block by its name
+     * Recursively search a block by its name
      *
      * @param blockName
      * @return block with blockName or null if it doesn't exist
@@ -87,12 +84,11 @@ public class CommonElementMethods extends WebDriverPage {
                 }
             }
         }
-
         return bl;
     }
 
     /**
-     * Searches for Fluent web element element by its name
+     * Searches web element by its name
      *
      * @param name
      * @return webElement
@@ -102,50 +98,61 @@ public class CommonElementMethods extends WebDriverPage {
         return initElement(name);
     }
 
-    public By getElementLocatorByName(String name, boolean isFound, boolean shouldPresent) {
-        Map<String, By> elementInfo = (isFound) ? getMandatoryElementInfoByName(name) : getElementInfoByName(name);
-        for (Map.Entry<String, By> entry : elementInfo.entrySet()) {
-            if (shouldPresent) {
-                Assert.assertTrue("[ERROR] Element " + name + " with locator " + entry.getValue() + " is not present on page", isLocatorPresentOnPage(entry.getValue()));
-            }
-            return entry.getValue();
-        }
-        return null;
+    public By getMandatoryElementLocatorByName(String name) {
+        By elLoc = getLocatorByName(name);
+        Assert.assertFalse("[ERROR] Element " + name + " was not found in the page and its block classes", elLoc.toString().isEmpty());
+        return elLoc;
     }
 
+    /**
+     * Get element locator by name
+     *
+     * @param name
+     * @param isFound
+     * @param shouldPresent {@value #} // this displays well
+     * @return By or null when can't find it
+     * @throws RuntimeException when unable to find the element
+     */
+    public By getElementLocatorByName(String name, boolean isFound, boolean shouldPresent) {
+        By elementLocator = (isFound) ? getMandatoryElementLocatorByName(name) : getLocatorByName(name);
+        if (shouldPresent) {
+            Assert.assertTrue("[ERROR] Element " + name + " with locator " + elementLocator + " is not present on page", isLocatorPresentOnPage(elementLocator));
+        }
+        return elementLocator;
+    }
+
+    /**
+     * Get Element locator by name for element which present on page or it blocks
+     *
+     * @param name
+     * @return
+     * @see CommonElementMethods#getElementLocatorByName(java.lang.String, boolean, boolean)
+     */
     public By getElementLocatorByName(String name) {
         return getElementLocatorByName(name, true, true);
     }
 
     /**
-     * Searches for HTML element by its name
+     * At first perform search Web Element on current page and if success return locator
+     * Else recursively search in all blocks on current page while first elementName will be found and returns it locator
      *
-     * @param name
-     * @return html element or null when can't find it
+     * @param elementName
+     * @return locator
      */
-    public Map<String, By> getElementInfoByName(String name){
-        Map<String, By> elementInfo = new HashMap<String, By>();
-        for (Map.Entry<String, By> entry : getElementsMap().entrySet()) {
-            if (entry.getKey().equals(name)) {
-                elementInfo.put(entry.getKey(), entry.getValue());
-                return elementInfo;
-            }
+    public By getLocatorByName(String elementName) {
+        Map<String, By> elementMap = getElementsMap();
+        By temp = elementMap.get(elementName);
+        if (!temp.toString().isEmpty()){
+            return elementMap.get(elementName);
+
         }
 
         for (ElementBlock block : getBlockList()) {
-            elementInfo = block.getElementInfoByName(name);
-            if (!elementInfo.isEmpty()) {
-                return elementInfo;
-            }
+            temp = block.getLocatorByName(elementName);
+            if (!temp.toString().isEmpty()) ;
+            return temp;
         }
-
-        return elementInfo;
-    }
-
-    public Map<String, By> getMandatoryElementInfoByName(String name) {
-        Map<String, By> elInfo = getElementInfoByName(name);
-        Assert.assertFalse("[ERROR] Element " + name + " was not found in the page and its block classes", elInfo.isEmpty());
-        return elInfo;
+        return temp;
     }
 
     /**
@@ -224,6 +231,11 @@ public class CommonElementMethods extends WebDriverPage {
         } else return "";
     }
 
+    /**
+     * @param by   - element locator
+     * @param attr - attribute name
+     * @return - list of attributes values
+     */
     public ArrayList<String> getAttributeValueForAllElements(By by, String attr) {
         List<WebElement> elements = findElements(by);
         Assert.assertTrue("Can not find any element with locator: " + by, elements.size() > 0);
@@ -251,7 +263,6 @@ public class CommonElementMethods extends WebDriverPage {
         }
 
         String elementText = findElementSuppressAlert(loc).getText();
-
         return elementText.equals("null") ? "" : elementText;
     }
 
@@ -276,6 +287,10 @@ public class CommonElementMethods extends WebDriverPage {
         Assert.assertNotSame("Field should be clear", "", el.getText());
     }
 
+    /**
+     * @param name
+     * @param text
+     */
     public void typeText(String name, String text) {
         clearField(name);
         WebElement el = getElementByName(name);
@@ -288,15 +303,6 @@ public class CommonElementMethods extends WebDriverPage {
 
     public void click(String name) {
         getElementByName(name).click();
-    }
-
-    public void clickAndSleep(String name, long timeout) {
-        click(name);
-        try {
-            Thread.sleep(timeout);
-        } catch (InterruptedException e) {
-            Assert.assertTrue("Unexpected exception happens into clickAndSleep() method: " + e.getMessage(), false);
-        }
     }
 
     public void submit(String name) {
@@ -313,21 +319,13 @@ public class CommonElementMethods extends WebDriverPage {
         el.submit();
     }
 
-    public void submitAndSleep(String name, int timeout) {
-        submit(name);
-        try {
-            Thread.sleep(timeout);
-        } catch (InterruptedException e) {
-            Assert.assertTrue("Unexpected exception happens into submitAndSleep() method: " + e.getMessage(), false);
-        }
-    }
 
     public Select select(By loc) {
         return (isLocatorPresentOnPage(loc)) ? new Select(findElementSuppressAlert(loc)) : null;
     }
 
-    public void selectText(String name, String text) {
-        Select sel = new Select(getElementByName(name));
+    public void selectText(String elementName, String text) {
+        Select sel = new Select(getElementByName(elementName));
         if (!text.isEmpty()) {
             sel.selectByVisibleText(text);
         } else {
@@ -335,8 +333,8 @@ public class CommonElementMethods extends WebDriverPage {
         }
     }
 
-    public void selectValue(String name, String value) {
-        Select sel = new Select(getElementByName(name));
+    public void selectValue(String elementName, String value) {
+        Select sel = new Select(getElementByName(elementName));
         if (!value.isEmpty()) {
             sel.selectByValue(value);
         } else {
@@ -344,8 +342,14 @@ public class CommonElementMethods extends WebDriverPage {
         }
     }
 
-    public void setCheckbox(String name, boolean val) {
-        WebElement el = getElementByName(name);
+    /**
+     * Check element isSelected and if it not equal to val then click on it
+     *
+     * @param elementName
+     * @param val
+     */
+    public void setCheckbox(String elementName, boolean val) {
+        WebElement el = getElementByName(elementName);
         if (val != el.isSelected()) {
             el.click();
         }
@@ -357,9 +361,7 @@ public class CommonElementMethods extends WebDriverPage {
 
     public boolean isElementDisplayedOnPage(String name) {
         By loc = getElementLocatorByName(name);
-
         return isLocatorPresentOnPage(loc) ? findElementSuppressAlert(loc).isDisplayed() : false;
-       // return findElementSuppressAlert(loc).isDisplayed();
     }
 
     public boolean isLocatorPresentOnPage(By loc) {
@@ -370,23 +372,38 @@ public class CommonElementMethods extends WebDriverPage {
         return isLocatorPresentOnPage(loc) ? findElementSuppressAlert(loc).isDisplayed() : false;
     }
 
-    public boolean isElementLoaded(String name) {
-        By loc = getElementLocatorByName(name,false,false);
 
+    /**
+     * Wait {@value #TIME_OUT_IN_SECONDS} seconds while element will be displayed
+     *
+     * @param name - element name
+     * @return
+     */
+    public boolean isElementLoaded(String name) {
+        By loc = getElementLocatorByName(name, false, false);
         WebDriverWait wait = new WebDriverWait(getDriverProvider().get(), TIME_OUT_IN_SECONDS);
-        WebElement element = wait.until(ExpectedConditions.elementToBeClickable(loc));
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(loc));
         return element.isEnabled();
     }
 
-    public boolean isElementLoadedAndDisplayed(String name) {
-        By loc = getElementLocatorByName(name,true,false);
+    /**
+     * Wait {@value #TIME_OUT_IN_SECONDS} seconds while element will be displayed and clicable
+     *
+     * @param name
+     * @return
+     */
+    public boolean isElementDisplayedAndClickable(String name) {
+        By loc = getElementLocatorByName(name, true, false);
         WebDriverWait wait = new WebDriverWait(getDriverProvider().get(), TIME_OUT_IN_SECONDS);
         WebElement element = wait.until(ExpectedConditions.elementToBeClickable(loc));
-
         return element.isDisplayed();
     }
 
-
+    /**
+     * Check that there is no active jQuery session
+     *
+     * @return true if jQuery.active == 0
+     */
     public boolean isAjaxJQueryCompleted() {
         JavascriptExecutor js = (JavascriptExecutor) getDriver();
         Boolean scriptResult = (Boolean) js.executeScript("return jQuery.active == 0");
@@ -394,9 +411,15 @@ public class CommonElementMethods extends WebDriverPage {
     }
 
 
-    public boolean isHiddenElementLoaded(By name) {
+    /**
+     * Wait {@value #TIME_OUT_IN_SECONDS} seconds while hidden element will be present
+     *
+     * @param loc - element locator
+     * @return WebElement.isEnabled
+     */
+    public boolean isHiddenElementLoaded(By loc) {
         WebDriverWait wait = new WebDriverWait(getDriverProvider().get(), TIME_OUT_IN_SECONDS);
-        WebElement present = wait.until(ExpectedConditions.presenceOfElementLocated(name));
+        WebElement present = wait.until(ExpectedConditions.presenceOfElementLocated(loc));
         return present.isEnabled();
     }
 
@@ -408,7 +431,6 @@ public class CommonElementMethods extends WebDriverPage {
     public List<WebElement> getElementsByLoc(By loc) {
         return findElements(loc);
     }
-
 
 
     /**
@@ -435,10 +457,9 @@ public class CommonElementMethods extends WebDriverPage {
         try {
             switchTo().alert();
             return true;
-        }   // try
-        catch (Exception Ex) {
+        } catch (Exception Ex) {
             return false;
-        }   // catch
+        }
     }
 
     public void closeAlert() {
@@ -584,7 +605,7 @@ public class CommonElementMethods extends WebDriverPage {
      */
     public ElementBlock findBlockWithElement(String elName) {
         for (ElementBlock block : getBlockList()) {
-            if (!block.getElementInfoByName(elName).isEmpty()) {
+            if (!block.getLocatorByName(elName).toString().isEmpty()) {
                 return block;
             }
         }
@@ -592,7 +613,6 @@ public class CommonElementMethods extends WebDriverPage {
         throw new RuntimeException("Element with name: " + elName
                 + " was not initialized in blocks");
     }
-
 
     /**
      * looking for HTML element with elName in the all blocks of the current page
@@ -616,9 +636,13 @@ public class CommonElementMethods extends WebDriverPage {
         }
     }
 
-    //new
-    public String getElementCssAttributeValue(String name, String attr) {
-        String val = getElementByName(name).getCssValue(attr).toString();
+    /**
+     * @param elementName
+     * @param attributeName
+     * @return
+     */
+    public String getElementCssAttributeValue(String elementName, String attributeName) {
+        String val = getElementByName(elementName).getCssValue(attributeName).toString();
         return val.equals("null") ? "" : val;
     }
 
@@ -643,6 +667,10 @@ public class CommonElementMethods extends WebDriverPage {
         }
     }
 
+    /**
+     * @param elements list of WebElements
+     * @return WebElement
+     */
     public static WebElement getRandomWebElement(List<WebElement> elements) {
         int size = elements.size();
         Assert.assertTrue("[ERROR] Cannot select random element from empty list.", size > 0);
@@ -650,12 +678,9 @@ public class CommonElementMethods extends WebDriverPage {
         return elements.get(randomGenerator.nextInt(size));
     }
 
-    public void applyPromoOnEnterPress() {
-        Actions builder = new Actions(getDriver());
-        builder.sendKeys(Keys.ENTER).perform();
-        builder.sendKeys(Keys.ENTER).release();
-    }
-
+    /**
+     * @param loc
+     */
     public void switchToIframeWithLoc(By loc) {
         try {
             WebElement element = findElementSuppressAlert(loc);
