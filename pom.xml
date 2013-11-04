@@ -116,6 +116,26 @@
                     <target>1.6</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>net.sf.doodleproject</groupId>
+                <artifactId>doxygen-maven-plugin</artifactId>
+                <configuration>
+                    <alphabeticalIndex>true</alphabeticalIndex>
+                    <generateHtml>true</generateHtml>
+                    <inputDirectory>${basedir}</inputDirectory>
+                    <outputDirectory>${build.directory}/doxygen/</outputDirectory>
+                    <configurationFile>doxygen.config</configurationFile>
+                    <filePatterns>*.java</filePatterns>
+                    <recursive>true</recursive>
+                    <executable>/usr/local/bin/doxygen</executable>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <goals><goal>report</goal></goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>
