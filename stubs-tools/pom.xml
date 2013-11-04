@@ -43,24 +43,6 @@
             <version>${spring.version}</version>
         </dependency>
     </dependencies>
-
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>net.sf.doodleproject</groupId>
-                <artifactId>doxygen-maven-plugin</artifactId>
-                <configuration>
-                    <alphabeticalIndex>true</alphabeticalIndex>
-                    <generateHtml>true</generateHtml>
-                    <inputDirectory>${basedir}/src/main/java</inputDirectory>
-                    <filePatterns>*.java</filePatterns>
-                    <recursive>true</recursive>
-                    <executable>${doxygen.path}</executable>
-                </configuration>
-            </plugin>
-        </plugins>
-    </reporting>
-
     <build>
         <plugins>
             <plugin>
