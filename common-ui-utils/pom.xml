@@ -64,11 +64,6 @@
             <artifactId>spring-context</artifactId>
             <version>${spring.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.soebes.maven.plugins.dmg</groupId>
-            <artifactId>doxygen-maven-plugin</artifactId>
-            <version>1.0.1</version>
-        </dependency>
     </dependencies>
     <build>
         <plugins>
