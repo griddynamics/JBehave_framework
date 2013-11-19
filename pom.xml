@@ -2,11 +2,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.griddynamics.qa.atg</groupId>
-    <artifactId>atg-store-parent</artifactId>
+    <groupId>com.griddynamics.qa</groupId>
+    <artifactId>jbehave-framework</artifactId>
     <packaging>pom</packaging>
     <version>1.0</version>
-    <name>ATG Tests Parent</name>
+    <name>JBehave Framework</name>
 
     <!--<distributionManagement>
         <repository>
