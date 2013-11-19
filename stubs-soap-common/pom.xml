@@ -6,7 +6,6 @@
         <groupId>com.griddynamics.qa.atg</groupId>
         <artifactId>atg-store-parent</artifactId>
         <version>1.0</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <groupId>com.griddynamics.qa</groupId>

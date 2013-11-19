@@ -3,30 +3,35 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>com.griddynamics.qa.atg</groupId>
         <artifactId>atg-store-parent</artifactId>
+        <groupId>com.griddynamics.qa.atg</groupId>
         <version>1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.griddynamics.qa</groupId>
-    <artifactId>common-logger</artifactId>
-    <name>Common Logger</name>
+    <groupId>com.griddynamics.qa.atg</groupId>
+    <artifactId>common-atg-utils</artifactId>
+    <name>Common ATG Utils</name>
     <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
             <groupId>com.griddynamics.qa</groupId>
-            <artifactId>common-resources-utils</artifactId>
+            <artifactId>common-properties-utils</artifactId>
             <version>${project.version}</version>
         </dependency>
-
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.17</version>
+            <groupId>com.griddynamics.qa</groupId>
+            <artifactId>common-tools</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.griddynamics.qa</groupId>
+            <artifactId>common-logger</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
+
     <build>
         <plugins>
             <plugin>
@@ -40,4 +45,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>

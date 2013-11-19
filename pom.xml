@@ -30,6 +30,8 @@
         <module>common-ui-utils</module>
         <module>stubs-soap-common</module>
         <module>stubs-tools</module>
+        <module>common-atg-utils</module>
+        <module>common-hybris-utils</module>
     </modules>
 
     <properties>
@@ -44,6 +46,7 @@
         <junit.version>4.11</junit.version>
         <spring.version>3.2.4.RELEASE</spring.version>
         <log4j.version>1.2.17</log4j.version>
+        <doxygen.path>/usr/local/bin/doxygen</doxygen.path>
     </properties>
 
     <!--<profiles>
@@ -123,7 +126,7 @@
                     <alphabeticalIndex>true</alphabeticalIndex>
                     <generateHtml>true</generateHtml>
                     <inputDirectory>${basedir}</inputDirectory>
-                    <outputDirectory>${build.directory}/doxygen/</outputDirectory>
+                    <outputDirectory>${project.build.directory}/doxygen/</outputDirectory>
                     <configurationFile>doxygen.config</configurationFile>
                     <filePatterns>*.java</filePatterns>
                     <recursive>true</recursive>

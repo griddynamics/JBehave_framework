@@ -1,0 +1,2 @@
+* Copyright (c) 2013, Grid Dynamics International and/or its affiliates. All rights reserved.
+* Grid Dynamics International PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
