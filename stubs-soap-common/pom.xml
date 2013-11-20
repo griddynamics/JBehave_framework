@@ -5,10 +5,9 @@
     <parent>
         <artifactId>jbehave-framework</artifactId>
         <groupId>com.griddynamics.qa</groupId>
-        <version>1.0</version>
+        <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.griddynamics.qa</groupId>
     <artifactId>stubs-soap-common</artifactId>
     <name>Common SOAP stub</name>
     <packaging>jar</packaging>

@@ -5,11 +5,10 @@
     <parent>
         <artifactId>jbehave-framework</artifactId>
         <groupId>com.griddynamics.qa</groupId>
-        <version>1.0</version>
+        <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.griddynamics.qa</groupId>
     <artifactId>common-logger</artifactId>
     <name>Common Logger</name>
     <packaging>jar</packaging>

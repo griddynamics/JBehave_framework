@@ -5,11 +5,10 @@
     <parent>
         <artifactId>jbehave-framework</artifactId>
         <groupId>com.griddynamics.qa</groupId>
-        <version>1.0</version>
+        <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.griddynamics.qa.atg</groupId>
     <artifactId>common-atg-utils</artifactId>
     <name>Common ATG Utils</name>
     <packaging>jar</packaging>

@@ -5,21 +5,21 @@
     <groupId>com.griddynamics.qa</groupId>
     <artifactId>jbehave-framework</artifactId>
     <packaging>pom</packaging>
-    <version>1.0</version>
+    <version>1.0-SNAPSHOT</version>
     <name>JBehave Framework</name>
 
-    <!--<distributionManagement>
+    <distributionManagement>
         <repository>
-            <id>jcp-nexus</id>
+            <id>gd_jbehave_framework</id>
             <name>Release repository</name>
-            <url>http://nexus.vm.griddynamics.net:8081/nexus/content/repositories/jcp</url>
+            <url>http://nexus.vm.griddynamics.net:8081/nexus/content/repositories/gd_jbehave_framework</url>
         </repository>
         <snapshotRepository>
-            <id>jcp-nexus</id>
+            <id>gd_jbehave_framework</id>
             <name>Snapshot Repository</name>
-            <url>http://nexus.vm.griddynamics.net:8081/nexus/content/repositories/jcp-snapshots</url>
+            <url>http://nexus.vm.griddynamics.net:8081/nexus/content/repositories/gd_jbehave_framework-snapshots/</url>
         </snapshotRepository>
-    </distributionManagement>-->
+    </distributionManagement>
 
     <modules>
         <module>common-resources-utils</module>
@@ -126,6 +126,7 @@
                     <alphabeticalIndex>true</alphabeticalIndex>
                     <generateHtml>true</generateHtml>
                     <inputDirectory>${basedir}</inputDirectory>
+                    <projectNumber>${version}</projectNumber>
                     <outputDirectory>${project.build.directory}/doxygen/</outputDirectory>
                     <configurationFile>doxygen.config</configurationFile>
                     <filePatterns>*.java</filePatterns>
@@ -141,4 +142,9 @@
             </plugin>
         </plugins>
     </build>
+    <scm>
+        <connection>scm:git:git@github.com:griddynamics/JBehave_framework.git</connection>
+        <developerConnection>scm:git:git@github.com:griddynamics/JBehave_framework.git</developerConnection>
+        <url>scm:git:git@github.com:griddynamics/JBehave_framework.git</url>
+    </scm>
 </project>
