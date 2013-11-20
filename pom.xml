@@ -20,6 +20,11 @@
             <url>http://nexus.vm.griddynamics.net:8081/nexus/content/repositories/gd_jbehave_framework-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
+    <scm>
+        <connection>scm:git:git@github.com:griddynamics/JBehave_framework.git</connection>
+        <developerConnection>scm:git:git@github.com:griddynamics/JBehave_framework.git</developerConnection>
+        <url>scm:git:git@github.com:griddynamics/JBehave_framework.git</url>
+    </scm>
 
     <modules>
         <module>common-resources-utils</module>
@@ -142,9 +147,4 @@
             </plugin>
         </plugins>
     </build>
-    <scm>
-        <connection>scm:git:git@github.com:griddynamics/JBehave_framework.git</connection>
-        <developerConnection>scm:git:git@github.com:griddynamics/JBehave_framework.git</developerConnection>
-        <url>scm:git:git@github.com:griddynamics/JBehave_framework.git</url>
-    </scm>
 </project>
