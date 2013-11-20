@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Class containing method for convertation from JBehave Examples table format
+ * to the Map object
+ *
  * @author ybaturina
  * @author mlykosova
  */
