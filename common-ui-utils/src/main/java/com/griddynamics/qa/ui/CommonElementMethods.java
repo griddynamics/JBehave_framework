@@ -32,7 +32,7 @@ public class CommonElementMethods extends WebDriverPage {
     private List<ElementBlock> blocks = new ArrayList<ElementBlock>();
 
     /**
-     * html elements is the container of elements aggregated by block or page
+     * elementsMap is the container of elements aggregated by block or page
      */
     private Map<String, By> elementsMap = new HashMap<String, By>();
 
@@ -178,7 +178,7 @@ public class CommonElementMethods extends WebDriverPage {
     }
 
     /**
-     * Get element locator and type by its name then initialize element based on its type
+     * Get element locator and type by its name then initialize element
      *
      * @param name
      * @return
@@ -467,8 +467,11 @@ public class CommonElementMethods extends WebDriverPage {
     }
 
     /**
-     * <p/>
-     * Method used to get data from mini shopping bag
+     * Method is used to get the data from HTML table
+     * @param name
+     * @param rowNum
+     * @param columnNum
+     * @return
      */
     public String getTableData(String name, int rowNum, int columnNum) {
         WebElement table = getElementByName(name);

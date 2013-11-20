@@ -5,11 +5,17 @@ import org.junit.Assert;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Class containing utils for working with String objects
+ *
+ * @author ybaturina
+ */
 public class StringParser {
 
     /**
-     * @param source
-     * @param regexp
+     * Method returns string which is matched for the provided regexp
+     * @param source - original string
+     * @param regexp - regular expression which should be matched
      * @return
      */
     public static String getMatchString(String source, String regexp) {
