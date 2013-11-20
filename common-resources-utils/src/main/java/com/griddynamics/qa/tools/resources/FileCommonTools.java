@@ -41,7 +41,7 @@ public class FileCommonTools {
     /**
      * Try to find resource in 2 places:
      * <ol>
-     * <li>Near by JAR file or in Maven target dir</li>
+     * <li>Near JAR file or in Maven target dir</li>
      * <li>In classpath</li>
      * </ol>
      *
@@ -68,6 +68,12 @@ public class FileCommonTools {
         return resource.getInputStream();
     }
 
+    /**
+     * Returns URL of the resource
+     * @param path to resource: either on classpath, or near JAR file/ Maven target dir
+     * @return
+     * @throws IOException
+     */
     public static URL getURL(String path) throws IOException {
         if (StringUtils.isEmpty(path)) {
             throw new IllegalArgumentException("Argument path is empty or null");
@@ -87,10 +93,24 @@ public class FileCommonTools {
         return resource.getURL();
     }
 
+    /**
+     * Returns array of Resource objects which have specified extension
+     * and are located in the specified folder
+     * @param dirName - path to directory on classpath
+     * @param ext - files extension
+     * @return
+     * @throws IOException
+     */
     public static Resource[] getFileList(String dirName, final String ext) throws IOException {
         return resourcePatternResolver.getResources("classpath:" + dirName + "/*." + ext);
     }
 
+    /**
+     * Returns names of files which are located in the directory
+     * @param dirName - path to the directory located on classpath
+     * @return
+     * @throws IOException
+     */
     public static String[] getFileNames(String dirName) throws IOException {
         String normalizedDirName = dirName.endsWith("/") ? dirName.concat("/") : dirName;
         Resource[] resources = resourcePatternResolver.getResources("classpath:" + normalizedDirName + "*");
@@ -106,8 +126,8 @@ public class FileCommonTools {
     /**
      * Method writes string to file
      *
-     * @param file
-     * @param content
+     * @param file - name of the file on classpath
+     * @param content - String which should be stored in the file
      */
     public static void writeToFile(File file, String content) {
         FileWriter fileWriter = null;
@@ -126,6 +146,13 @@ public class FileCommonTools {
         }
     }
 
+    /**
+     * Replaces file content according to the regex pattern
+     * @param pathToFile - path to file
+     * @param regEx - reqular expression
+     * @param stringToReplace - string to replace
+     * @throws IOException
+     */
     public static void replaceFileContent(String pathToFile, String regEx, String stringToReplace) throws IOException {
         String fileContent = IOUtils.toString(getResource(pathToFile));
         fileContent = fileContent.replaceAll(regEx, stringToReplace);

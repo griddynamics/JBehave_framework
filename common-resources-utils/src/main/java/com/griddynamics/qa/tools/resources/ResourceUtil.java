@@ -14,30 +14,62 @@ import java.security.CodeSource;
 
 import static org.apache.commons.io.FilenameUtils.separatorsToUnix;
 
-
+/**
+ * Class contains methods for working with resources used in framework
+ *
+ * @author sbashkyrtsev
+ */
 public class ResourceUtil {
 
+    /**
+     * Method returns full path of the resource
+     * @param resourcePath - relative path to the resource located on classpath
+     * @return
+     */
     public static String getResourceFullPath(String resourcePath) {
 
         return getResourceUrl(resourcePath).getPath();
     }
 
+    /**
+     * Method returns full path of resource in local system
+     * @param relativePath - relative path to the resource
+     * @return
+     * @throws UnsupportedEncodingException
+     */
     public static String getLocalFileSystemFullPath(String relativePath) throws UnsupportedEncodingException {
         return getBasePath() + File.separatorChar + relativePath;
     }
 
+    /**
+     * Method converts content of the resource into String object
+     * @param resourcePath - path to the resource
+     * @return
+     * @throws IOException
+     */
     public static String getResourceAsString(String resourcePath)
             throws IOException {
 
         return IOUtils.toString(getResourceAsStream(resourcePath));
     }
 
+    /**
+     * Method returns content of the resource as InputStream object
+     * @param resourcePath - path to the resource
+     * @return
+     * @throws IOException
+     */
     public static InputStream getResourceAsStream(String resourcePath)
             throws IOException {
 
         return getResourceUrl(resourcePath).openStream();
     }
 
+    /**
+     * Method returns URL of the resource
+     * @param relativeResourcePath - relative path to the resource located on classpath
+     * @return
+     */
     public static URL getResourceUrl(String relativeResourcePath) {
 
         Validate.notEmpty(relativeResourcePath);
@@ -57,7 +89,11 @@ public class ResourceUtil {
         return resource;
     }
 
-
+    /**
+     * Method checks if the resource with specified path exists
+     * @param relativeResourcePath - relative path to the resource located on classpath
+     * @return
+     */
     public static boolean isResource(String relativeResourcePath) {
 
         if (StringUtils.isEmpty(relativeResourcePath)) {
@@ -83,6 +119,11 @@ public class ResourceUtil {
         return true;
     }
 
+    /**
+     * Method returns base path of the Maven project location
+     * @return
+     * @throws UnsupportedEncodingException
+     */
     public static String getBasePath() throws UnsupportedEncodingException {
         CodeSource codeSource = ResourceUtil.class.getProtectionDomain().getCodeSource();
         File jarFile = new File(codeSource.getLocation().getPath());
