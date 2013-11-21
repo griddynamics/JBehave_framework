@@ -132,9 +132,7 @@
                     <configurationFile>doxygen.config</configurationFile>
                     <filePatterns>*.java</filePatterns>
                     <recursive>true</recursive>
-<!--
                     <executable>${doxygen.path}</executable>
--->
                 </configuration>
                 <executions>
                     <execution>
