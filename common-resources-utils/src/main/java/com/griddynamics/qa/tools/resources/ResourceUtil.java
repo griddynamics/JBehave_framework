@@ -1,7 +1,6 @@
 package com.griddynamics.qa.tools.resources;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.springframework.util.ClassUtils;
 
@@ -23,6 +22,7 @@ public class ResourceUtil {
 
     /**
      * Method returns full path of the resource
+     *
      * @param resourcePath - relative path to the resource located on classpath
      * @return
      */
@@ -33,6 +33,7 @@ public class ResourceUtil {
 
     /**
      * Method returns full path of resource in local system
+     *
      * @param relativePath - relative path to the resource
      * @return
      * @throws UnsupportedEncodingException
@@ -43,6 +44,7 @@ public class ResourceUtil {
 
     /**
      * Method converts content of the resource into String object
+     *
      * @param resourcePath - path to the resource
      * @return
      * @throws IOException
@@ -55,6 +57,7 @@ public class ResourceUtil {
 
     /**
      * Method returns content of the resource as InputStream object
+     *
      * @param resourcePath - path to the resource
      * @return
      * @throws IOException
@@ -67,6 +70,7 @@ public class ResourceUtil {
 
     /**
      * Method returns URL of the resource
+     *
      * @param relativeResourcePath - relative path to the resource located on classpath
      * @return
      */
@@ -91,36 +95,22 @@ public class ResourceUtil {
 
     /**
      * Method checks if the resource with specified path exists
+     *
      * @param relativeResourcePath - relative path to the resource located on classpath
      * @return
      */
     public static boolean isResource(String relativeResourcePath) {
-
-        if (StringUtils.isEmpty(relativeResourcePath)) {
-            return false;
-        }
-
-        relativeResourcePath = separatorsToUnix(relativeResourcePath);
-
-        URL resource = null;
         try {
-            resource = Thread.currentThread().getContextClassLoader().getResource(relativeResourcePath);
-        } catch (Exception ignored) {
-        }
-
-        if (resource == null)
-            resource = ClassUtils.class.getResource(relativeResourcePath);
-
-        if (resource == null) {
+            getResourceUrl(relativeResourcePath);
+        } catch (Exception e) {
             return false;
         }
-
-
         return true;
     }
 
     /**
      * Method returns base path of the Maven project location
+     *
      * @return
      * @throws UnsupportedEncodingException
      */

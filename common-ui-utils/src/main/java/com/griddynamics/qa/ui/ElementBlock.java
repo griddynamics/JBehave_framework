@@ -7,11 +7,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import static org.hamcrest.Matchers.greaterThan;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 /**
  * @author ybaturina
- *         mlykosova
+ * @author mlykosova
  *         <p/>
  *         Base block class containing common block methods
  */
@@ -86,6 +88,7 @@ public class ElementBlock extends CommonElementMethods implements Cloneable {
             try {
                 Thread.sleep(WAIT_BLOCK_LOAD_TIMEOUT_IN_MS);
             } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
                 throw new RuntimeException("[ERROR] Block " + getName() + " was not loaded, reason: " + e.getMessage());
             }
         }
@@ -116,7 +119,7 @@ public class ElementBlock extends CommonElementMethods implements Cloneable {
 
     public static ElementBlock getRandomElementBlock(List<ElementBlock> elementBlocks) {
         int size = elementBlocks.size();
-        assertTrue("[ERROR] Cannot select random block from empty list.", size > 0);
+        assertThat("[ERROR] Cannot select random block from empty list.", size, greaterThan(0));
         Random randomGenerator = new Random();
         return elementBlocks.get(randomGenerator.nextInt(size));
     }
@@ -136,19 +139,16 @@ public class ElementBlock extends CommonElementMethods implements Cloneable {
      * @return
      */
     public static boolean isEmptyBlock(ElementBlock elementBlock) {
-        if (elementBlock == null || elementBlock.getBlockList().size() == 0) {
-            return true;
-        }
-        return false;
+        return (elementBlock == null || elementBlock.getBlockList().size() == 0) ? true: false;
     }
 
     public static boolean hasBlockWithName(List<ElementBlock> blockList, String blockName) {
-        boolean result = false;
         for (ElementBlock elementBlock : blockList) {
-            if (elementBlock.getName().equals(blockName))
-                result = true;
+            if (elementBlock.getName().equals(blockName)){
+                return true;
+            }
         }
-        return result;
+        return false;
     }
 
     public ElementBlock clone() {

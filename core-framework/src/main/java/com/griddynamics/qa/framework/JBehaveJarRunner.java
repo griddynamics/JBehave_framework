@@ -2,9 +2,7 @@ package com.griddynamics.qa.framework;
 
 import com.griddynamics.qa.framework.logger.CustomPrintStreamEmbedderMonitor;
 import com.griddynamics.qa.framework.properties.ProjectProperties;
-import com.griddynamics.qa.logger.LoggerFactory;
 import com.griddynamics.qa.tools.resources.FileCommonTools;
-import org.apache.log4j.Logger;
 import org.jbehave.core.embedder.*;
 import org.jbehave.core.io.CodeLocations;
 import org.jbehave.core.io.StoryFinder;
@@ -16,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.griddynamics.qa.framework.converters.StackTraceConverter.getStringFromStackTrace;
+import static com.griddynamics.qa.logger.LoggerFactory.getLogger;
 
 /**
  * Main class for executing tests from JAR file
@@ -24,7 +23,6 @@ import static com.griddynamics.qa.framework.converters.StackTraceConverter.getSt
  * @author ybaturina
  */
 public class JBehaveJarRunner {
-    protected static final Logger logger = LoggerFactory.getLogger();
     private static final String CLASS_EXTENSION = ".class";
     private static final char PACKAGE_DELIMITER_CHAR = '.';
     private static final char PATH_SEPARATOR_CHAR = '/';
@@ -46,7 +44,7 @@ public class JBehaveJarRunner {
     public JBehaveJarRunner() {
         classLoader = new EmbedderClassLoader(Arrays.asList(searchDirectory()));
         includes = getIncludedSuiteList();
-        excludes = Collections.unmodifiableList(Collections.<String>emptyList());
+        excludes = Collections.emptyList();
     }
 
     /**
@@ -55,7 +53,7 @@ public class JBehaveJarRunner {
      * @return
      */
     protected List<String> getIncludedSuiteList(){
-       return Collections.unmodifiableList(Arrays.asList(ProjectProperties.getSuiteAll().split(",")));
+       return Arrays.asList(ProjectProperties.getSuiteAll().split(","));
     }
 
     /**
@@ -67,13 +65,13 @@ public class JBehaveJarRunner {
                 FileCommonTools.copyFolderToLocalFileSystem(CSS_REPORT_FOLDER, folderPath);
             }
         } catch (Exception e) {
-            logger.error("Couldn't copy css styles for JBehave reports, reason: " + getStringFromStackTrace(e));
+            getLogger().error("Couldn't copy css styles for JBehave reports, reason: " + getStringFromStackTrace(e));
         }
     }
 
     protected void execute() {
         Embedder embedder = newEmbedder();
-        logger.info("Running stories as embeddables using embedder " + embedder);
+        getLogger().info("Running stories as embeddables using embedder " + embedder);
         copyCssReportsStyles();
         embedder.runAsEmbeddables(classNames());
     }
@@ -119,7 +117,7 @@ public class JBehaveJarRunner {
      * @return A List of class names found
      */
     protected List<String> classNames() {
-        logger.debug("Searching for class names including " + includes + " and excluding " + excludes);
+        getLogger().debug("Searching for class names including " + includes + " and excluding " + excludes);
         String searchDirectory = searchDirectory();
         List<String> foundClassPaths = newStoryFinder().findClassNames(searchDirectory, includes, excludes);
 
@@ -128,7 +126,7 @@ public class JBehaveJarRunner {
             classNames.add(qualifiedClassFromPath(classPath));
         }
 
-        logger.info("Found class names: " + classNames);
+        getLogger().info("Found class names: " + classNames);
         return classNames;
     }
 

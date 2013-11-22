@@ -1,6 +1,6 @@
 package com.griddynamics.qa.framework;
 
-import com.griddynamics.qa.framework.converters.NullAndEmptyStringConverter;
+import com.griddynamics.qa.framework.converters.SpecialStringValuesConverter;
 import com.griddynamics.qa.framework.logger.CustomPrintStreamEmbedderMonitor;
 import com.griddynamics.qa.framework.logger.GlobalLoggerOutput;
 import com.griddynamics.qa.framework.properties.ProjectProperties;
@@ -27,6 +27,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.griddynamics.qa.logger.LoggerFactory.getLogger;
@@ -50,12 +51,12 @@ public abstract class BaseStoriesRunner extends JUnitStories {
 
     protected static final String PROPERTY_DO_DRY_RUN = "doDryRun";
     protected ApplicationContext applicationContext;
-    protected String applicationContextPath;
     protected Configuration configuration;
 
     private static final String SCREENSHOT_BEAN = "screenshots";
     private static List<String> suiteList;
     private StoryReporterBuilder storyReporterBuilder;
+    private String applicationContextPath;
     private Embedder embedder;
 
     public BaseStoriesRunner() {
@@ -212,7 +213,7 @@ public abstract class BaseStoriesRunner extends JUnitStories {
             storiesFromProperties.retainAll(storiesFromSuite);
             return storiesFromProperties;
         }
-        return new ArrayList<String>();
+        return Collections.emptyList();
     }
 
     protected Configuration getConfiguration() {
@@ -221,7 +222,7 @@ public abstract class BaseStoriesRunner extends JUnitStories {
             ExamplesTableFactory examplesTableFactory = new ExamplesTableFactory(new LocalizedKeywords(),
                     new LoadFromClasspath(this.getClass()), parameterConverters);
 
-            parameterConverters.addConverters(new NullAndEmptyStringConverter());
+            parameterConverters.addConverters(new SpecialStringValuesConverter());
             parameterConverters.addConverters(new ParameterConverters.StringListConverter());
             parameterConverters.addConverters(new ParameterConverters.ExamplesTableConverter(examplesTableFactory));
 
@@ -240,14 +241,9 @@ public abstract class BaseStoriesRunner extends JUnitStories {
         this.configuration = configuration;
     }
 
-
-    protected String getApplicationContextPath() {
-        return applicationContextPath;
-    }
-
     protected ApplicationContext createContext() {
         if (applicationContext == null) {
-            applicationContext = new SpringApplicationContextFactory(getApplicationContextPath()).createApplicationContext();
+            applicationContext = new SpringApplicationContextFactory(applicationContextPath).createApplicationContext();
         }
 
         return applicationContext;
@@ -269,10 +265,10 @@ public abstract class BaseStoriesRunner extends JUnitStories {
      */
     private void setSuiteList() {
         String suitesFromProperty = ProjectProperties.getSuiteList();
-        if (!StringUtils.isEmpty(suitesFromProperty)) {
+        if (StringUtils.isNotEmpty(suitesFromProperty)) {
             suiteList = asList(suitesFromProperty.split(","));
         } else {
-            suiteList = new ArrayList<String>();
+            suiteList = Collections.emptyList();
         }
     }
 
@@ -282,7 +278,7 @@ public abstract class BaseStoriesRunner extends JUnitStories {
      */
     private void setStoriesList() {
         String storyProperty = ProjectProperties.getStoryList();
-        if (!StringUtils.isEmpty(storyProperty)) {
+        if (StringUtils.isNotEmpty(storyProperty)) {
             storiesToIncludeList = addPatternToStoryPaths(asList(storyProperty.split(",")));
         } else {
             storiesToIncludeList = new ArrayList<String>();
@@ -308,10 +304,10 @@ public abstract class BaseStoriesRunner extends JUnitStories {
      */
     private void setExcludeStoriesList() {
         String storyProperty = ProjectProperties.getExcludeStoryList();
-        if (!StringUtils.isEmpty(storyProperty)) {
+        if (StringUtils.isNotEmpty(storyProperty)) {
             storiesToExcludeList = addPatternToStoryPaths(asList(storyProperty.split(",")));
         } else {
-            storiesToExcludeList = new ArrayList<String>();
+            storiesToExcludeList = Collections.emptyList();
         }
     }
 

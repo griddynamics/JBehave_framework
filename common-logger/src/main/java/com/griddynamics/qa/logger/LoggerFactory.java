@@ -27,13 +27,14 @@ public class LoggerFactory {
     private final static String PROJECT_BUILD_DIRECTORY = "project.build.directory";
     private final static String USER_DIRECTORY = "user.dir";
 
-    private static String outputDirectory = System.getProperty(PROJECT_BUILD_DIRECTORY)== null ?
+    private static String outputDirectory = System.getProperty(PROJECT_BUILD_DIRECTORY) == null ?
             new StringBuilder(System.getProperty(USER_DIRECTORY)).append(File.separator).append("jbehave").append(File.separator).toString() :
             new StringBuilder(System.getProperty(PROJECT_BUILD_DIRECTORY)).append(File.separator).append("jbehave").append(File.separator).toString();
     /**
      * The name of the log file which contains logs from all JBehave tests
      */
-    private static String globalLoggerFile = outputDirectory + "main_" + new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date()) + ".log";
+    private static String globalLoggerFile = new StringBuilder(outputDirectory).append("main_")
+            .append(new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date())).append(".log").toString();
     private static FileAppender globalFileAppender = getGlobalAppender();
 
     private static ThreadLocal<Logger> logger = newThreadLocalLogger();
@@ -42,6 +43,7 @@ public class LoggerFactory {
 
     /**
      * Method returns PrintStream for the global log file
+     *
      * @return
      */
     public static PrintStream getGlobalFileStream() {
@@ -56,7 +58,6 @@ public class LoggerFactory {
     }
 
     /**
-     *
      * @return logger instance for the current thread
      */
     public static Logger getLogger() {
@@ -65,6 +66,7 @@ public class LoggerFactory {
 
     /**
      * Creates logger instance for the thread
+     *
      * @param fileName - name of the log file
      */
     public static void addThreadLogger(String fileName) {
@@ -95,7 +97,6 @@ public class LoggerFactory {
     }
 
     /**
-     *
      * @return FileAppender for the global log file
      */
     private static FileAppender getGlobalAppender() {

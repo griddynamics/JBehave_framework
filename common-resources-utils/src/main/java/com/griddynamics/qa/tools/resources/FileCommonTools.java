@@ -50,19 +50,15 @@ public class FileCommonTools {
      * @throws IOException
      */
     public static InputStream getResource(String path) throws IOException {
-        if (StringUtils.isEmpty(path)) {
-            throw new IllegalArgumentException("Argument path is empty or null");
-        }
-
         // At the first search resource by path "JAR dir + path"
-        File file = new File(ResourceUtil.getLocalFileSystemFullPath(path));
-        if (file.exists()) {
+        File file = findFile(path);
+        if (file!=null) {
             return new FileInputStream(file);
         }
 
         // If no file found return resource stream from inside JAR file
-        Resource resource = resourcePatternResolver.getResource(path);
-        if (!resource.exists()) {
+        Resource resource = findResource(path);
+        if (resource == null) {
             throw new FileNotFoundException("Resource by path " + path + " was not found");
         }
         return resource.getInputStream();
@@ -70,24 +66,21 @@ public class FileCommonTools {
 
     /**
      * Returns URL of the resource
+     *
      * @param path to resource: either on classpath, or near JAR file/ Maven target dir
      * @return
      * @throws IOException
      */
     public static URL getURL(String path) throws IOException {
-        if (StringUtils.isEmpty(path)) {
-            throw new IllegalArgumentException("Argument path is empty or null");
-        }
-
         // At the first search resource by path "JAR dir + path"
-        File file = new File(ResourceUtil.getLocalFileSystemFullPath(path));
-        if (file.exists()) {
+        File file = findFile(path);
+        if (file!=null) {
             return file.toURI().toURL();
         }
 
         // If no file found return resource stream from inside JAR file
-        Resource resource = resourcePatternResolver.getResource(path);
-        if (!resource.exists()) {
+        Resource resource = findResource(path);
+        if (resource == null) {
             throw new FileNotFoundException("Resource by path " + path + " was not found");
         }
         return resource.getURL();
@@ -96,8 +89,9 @@ public class FileCommonTools {
     /**
      * Returns array of Resource objects which have specified extension
      * and are located in the specified folder
+     *
      * @param dirName - path to directory on classpath
-     * @param ext - files extension
+     * @param ext     - files extension
      * @return
      * @throws IOException
      */
@@ -107,6 +101,7 @@ public class FileCommonTools {
 
     /**
      * Returns names of files which are located in the directory
+     *
      * @param dirName - path to the directory located on classpath
      * @return
      * @throws IOException
@@ -126,7 +121,7 @@ public class FileCommonTools {
     /**
      * Method writes string to file
      *
-     * @param file - name of the file on classpath
+     * @param file    - name of the file on classpath
      * @param content - String which should be stored in the file
      */
     public static void writeToFile(File file, String content) {
@@ -148,8 +143,9 @@ public class FileCommonTools {
 
     /**
      * Replaces file content according to the regex pattern
-     * @param pathToFile - path to file
-     * @param regEx - reqular expression
+     *
+     * @param pathToFile      - path to file
+     * @param regEx           - reqular expression
      * @param stringToReplace - string to replace
      * @throws IOException
      */
@@ -296,4 +292,24 @@ public class FileCommonTools {
     private static boolean ensureDirectoryExists(final File f) {
         return f.exists() || f.mkdir();
     }
+
+    private static File findFile(String path) throws IOException {
+        isPathEmpty(path);
+        File file = new File(ResourceUtil.getLocalFileSystemFullPath(path));
+        return file.exists() ? file : null;
+    }
+
+    private static Resource findResource(String path) throws IOException {
+        isPathEmpty(path);
+        Resource resource = resourcePatternResolver.getResource(path);
+        return resource.exists() ? resource : null;
+
+    }
+
+    private static void isPathEmpty(String path){
+        if (StringUtils.isEmpty(path)) {
+            throw new IllegalArgumentException("Argument path is empty or null");
+        }
+    }
+
 }

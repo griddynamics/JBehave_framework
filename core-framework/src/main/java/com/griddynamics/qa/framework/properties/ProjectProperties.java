@@ -15,7 +15,7 @@ import static java.util.Arrays.asList;
 public class ProjectProperties {
 
     public static final String JRUNNER_CONFIG_FILENAME = "runner.config.file.location"; /*!< mandatory property */
-    public static final String ATG_CONFIG_FILENAME = "execution.config.file.location"; /*!< mandatory property */
+    public static final String APPLICATION_CONFIG_FILENAME = "execution.config.file.location"; /*!< mandatory property */
     public static final String SUITE_ALL_PROPERTY_NAME = "suite.all"; /*!< mandatory property */
     public static final String SUITE_LIST_PROPERTY_NAME = "suite.list"; /*!< optional property */
     public static final String STORY_LIST_PROPERTY_NAME = "story.list"; /*!< optional property */
@@ -62,6 +62,14 @@ public class ProjectProperties {
 
     public static String getJbehaveStoryTimeoutInSecs() {
         return PropertiesUtils.getProperty(props, JBEHAVE_STORY_TIMEOUT_IN_SECS);
+    }
+
+    public static String getJrunnerConfigFilenameValue() {
+        return System.getProperty(JRUNNER_CONFIG_FILENAME);
+    }
+
+    public static String getApplicationConfigFilenameValue() {
+        return System.getProperty(APPLICATION_CONFIG_FILENAME);
     }
 
 }

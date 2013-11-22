@@ -2,9 +2,9 @@ package com.griddynamics.qa.ui;
 
 
 import com.griddynamics.qa.tools.StringParser;
+import org.codehaus.plexus.util.StringUtils;
 import org.jbehave.web.selenium.WebDriverPage;
 import org.jbehave.web.selenium.WebDriverProvider;
-import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -13,10 +13,13 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.*;
 
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
+
 /**
  * @author ybaturina
- *         mlykosova
- *         aluchin
+ * @author mlykosova
+ * @author aluchin
  *         <p/>
  *         Entity class containing common methods that work with page elements
  */
@@ -49,9 +52,7 @@ public class CommonElementMethods extends WebDriverPage {
     }
 
     public void setElementsMap(Map<String, By> elementsMap) {
-        for (String elementName : elementsMap.keySet()) {
-            this.elementsMap.put(elementName, elementsMap.get(elementName));
-        }
+        this.elementsMap.putAll(elementsMap);
     }
 
     public void addBlock(ElementBlock block) {
@@ -75,7 +76,7 @@ public class CommonElementMethods extends WebDriverPage {
     public ElementBlock getBlockByName(String blockName) {
         ElementBlock bl = null;
         for (ElementBlock block : getBlockList()) {
-            if (block.getName() != null && block.getName().equals(blockName)) {
+            if (StringUtils.isNotEmpty(block.getName()) && block.getName().equals(blockName)) {
                 return block;
             } else {
                 bl = block.getBlockByName(blockName);
@@ -100,7 +101,7 @@ public class CommonElementMethods extends WebDriverPage {
 
     public By getMandatoryElementLocatorByName(String name) {
         By elLoc = getLocatorByName(name);
-        Assert.assertFalse("[ERROR] Element " + name + " was not found in the page and its block classes", elLoc.toString().isEmpty());
+        assertThat("[ERROR] Element " + name + " was not found in the page and its block classes", elLoc, not(nullValue()));
         return elLoc;
     }
 
@@ -116,7 +117,8 @@ public class CommonElementMethods extends WebDriverPage {
     public By getElementLocatorByName(String name, boolean isFound, boolean shouldPresent) {
         By elementLocator = (isFound) ? getMandatoryElementLocatorByName(name) : getLocatorByName(name);
         if (shouldPresent) {
-            Assert.assertTrue("[ERROR] Element " + name + " with locator " + elementLocator + " is not present on page", isLocatorPresentOnPage(elementLocator));
+            assertTrue("[ERROR] Element " + name + " with locator " + elementLocator + " is not present on page",
+                    elementLocator != null && isLocatorPresentOnPage(elementLocator));
         }
         return elementLocator;
     }
@@ -142,15 +144,16 @@ public class CommonElementMethods extends WebDriverPage {
     public By getLocatorByName(String elementName) {
         Map<String, By> elementMap = getElementsMap();
         By temp = elementMap.get(elementName);
-        if (!temp.toString().isEmpty()){
+        if (temp != null) {
             return elementMap.get(elementName);
 
         }
 
         for (ElementBlock block : getBlockList()) {
             temp = block.getLocatorByName(elementName);
-            if (!temp.toString().isEmpty()) ;
-            return temp;
+            if (temp != null) {
+                return temp;
+            }
         }
         return temp;
     }
@@ -196,11 +199,7 @@ public class CommonElementMethods extends WebDriverPage {
      */
     public boolean isFirstElementSelected(String name) {
         Select sel = new Select(getElementByName(name));
-        if (getSelectedText(name).equals(sel.getOptions().get(0).getText())) {
-            return true;
-        } else {
-            return false;
-        }
+        return (getSelectedText(name).equals(sel.getOptions().get(0).getText())) ? true : false;
     }
 
     public String getDropDownElementText(String selectorName, int elementNum) {
@@ -238,12 +237,12 @@ public class CommonElementMethods extends WebDriverPage {
      */
     public ArrayList<String> getAttributeValueForAllElements(By by, String attr) {
         List<WebElement> elements = findElements(by);
-        Assert.assertTrue("Can not find any element with locator: " + by, elements.size() > 0);
+        assertThat("[ERROR] Can not find any element with locator: " + by, elements.size(), greaterThan(0));
         ArrayList<String> attributes = new ArrayList<String>();
         for (WebElement element : elements) {
             attributes.add(element.getAttribute(attr));
         }
-        Assert.assertFalse("Can not find such attribute: " + attr, attributes.contains(null));
+        assertFalse("Can not find such attribute: " + attr, attributes.contains(null));
         return attributes;
     }
 
@@ -267,8 +266,8 @@ public class CommonElementMethods extends WebDriverPage {
     }
 
     public boolean isElementEmpty(String name) {
-        return getElementText(name).equals("")
-                && getElementValue(name).equals("");
+        return StringUtils.isEmpty(getElementText(name))
+                && StringUtils.isEmpty(getElementValue(name));
     }
 
     public String getSelectedValue(String name) {
@@ -284,7 +283,7 @@ public class CommonElementMethods extends WebDriverPage {
     public void clearField(String name) {
         WebElement el = getElementByName(name);
         el.clear();
-        Assert.assertNotSame("Field should be clear", "", el.getText());
+        assertThat("Field should be clear", el.getText(), isEmptyString());
     }
 
     /**
@@ -295,6 +294,24 @@ public class CommonElementMethods extends WebDriverPage {
         clearField(name);
         WebElement el = getElementByName(name);
         el.sendKeys(text);
+    }
+
+    public void typeTextInBlock(String blockName, String elementName, String text) {
+        ElementBlock block = getBlockByName(blockName);
+        if (block == null) {
+            throw new RuntimeException("Block with name " + blockName
+                    + " was not found in page class");
+        }
+        block.typeText(elementName, text);
+    }
+
+    public void selectTextInBlock(String blockName, String elementName, String text) {
+        ElementBlock block = getBlockByName(blockName);
+        if (block == null) {
+            throw new RuntimeException("Block with name " + blockName
+                    + " was not found in page class");
+        }
+        block.selectText(elementName, text);
     }
 
     public boolean isChecked(String name) {
@@ -326,7 +343,7 @@ public class CommonElementMethods extends WebDriverPage {
 
     public void selectText(String elementName, String text) {
         Select sel = new Select(getElementByName(elementName));
-        if (!text.isEmpty()) {
+        if (StringUtils.isNotEmpty(text)) {
             sel.selectByVisibleText(text);
         } else {
             sel.selectByIndex(0);
@@ -335,7 +352,7 @@ public class CommonElementMethods extends WebDriverPage {
 
     public void selectValue(String elementName, String value) {
         Select sel = new Select(getElementByName(elementName));
-        if (!value.isEmpty()) {
+        if (StringUtils.isNotEmpty(value)) {
             sel.selectByValue(value);
         } else {
             sel.selectByIndex(0);
@@ -445,7 +462,8 @@ public class CommonElementMethods extends WebDriverPage {
         try {
             Thread.sleep(WAIT_AFTER_HOVER_TIMEOUT);
         } catch (InterruptedException e) {
-            Assert.assertTrue("", false);
+            Thread.currentThread().interrupt();
+            assertTrue("[ERROR] Interrupted exception was thrown during timeout: " + e.getMessage(), false);
         }
     }
 
@@ -608,7 +626,7 @@ public class CommonElementMethods extends WebDriverPage {
      */
     public ElementBlock findBlockWithElement(String elName) {
         for (ElementBlock block : getBlockList()) {
-            if (!block.getLocatorByName(elName).toString().isEmpty()) {
+            if (block.getLocatorByName(elName) != null) {
                 return block;
             }
         }
@@ -664,7 +682,8 @@ public class CommonElementMethods extends WebDriverPage {
             try {
                 Thread.sleep(WAIT_ALERT_DISMISS);
             } catch (InterruptedException e1) {
-                Assert.assertTrue("[ERROR] Exception in waiting for alert to disappear:" + e1.getMessage(), false);
+                Thread.currentThread().interrupt();
+                assertTrue("[ERROR] Exception in waiting for alert to disappear:" + e1.getMessage(), false);
             }
             return findElement(loc);
         }
@@ -676,7 +695,7 @@ public class CommonElementMethods extends WebDriverPage {
      */
     public static WebElement getRandomWebElement(List<WebElement> elements) {
         int size = elements.size();
-        Assert.assertTrue("[ERROR] Cannot select random element from empty list.", size > 0);
+        assertThat("[ERROR] Cannot select random element from empty list.", size, greaterThan(0));
         Random randomGenerator = new Random();
         return elements.get(randomGenerator.nextInt(size));
     }
@@ -687,13 +706,13 @@ public class CommonElementMethods extends WebDriverPage {
     public void switchToIframeWithLoc(By loc) {
         try {
             WebElement element = findElementSuppressAlert(loc);
-            if (element.getAttribute("id").isEmpty()) {
+            if (StringUtils.isEmpty(element.getAttribute("id"))) {
                 switchTo().frame(findElementSuppressAlert(loc));
             } else {
                 switchTo().frame(findElementSuppressAlert(loc).getAttribute("id"));
             }
         } catch (NoSuchFrameException e) {
-            Assert.assertTrue("[ERROR] Element with locator " + loc + " is not an iframe:" + e.getMessage(), false);
+            assertTrue("[ERROR] Element with locator " + loc + " is not an iframe:" + e.getMessage(), false);
         }
 
     }

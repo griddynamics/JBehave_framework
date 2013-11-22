@@ -6,8 +6,10 @@ import com.griddynamics.qa.tools.rest.TestRequest;
 import java.io.IOException;
 
 import static com.griddynamics.qa.logger.LoggerFactory.getLogger;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertThat;
 
 /**
  * Class containing methods for working with SOAP stub
@@ -42,7 +44,8 @@ public abstract class SoapStubCommonLogic {
             } catch (IOException e) {
                 getLogger().error("Couldn't load data from file, reason: " + e.getMessage());
             }
-            assertEquals("File was not loaded, HTTP status code is ", TestRequest.HTTP_OK, request.getResponse() == null ? "Unable to connect" : request.getStatusCode());
+            assertEquals("[ERROR] File was not loaded, HTTP status code is ", TestRequest.HTTP_OK,
+                    request.getResponse() == null ? "Unable to connect" : request.getStatusCode());
         }
 
     }
@@ -58,10 +61,8 @@ public abstract class SoapStubCommonLogic {
 
         for (int i = 0; i < fileNames.length; i++) {
             String filePath = stubDataPath + fileNames[i];
-            if (getClass().getResource(filePath) == null) {
-                assertTrue("File with path " + filePath + " that should be loaded to stub " +
-                        stubName + " does not exist", false);
-            }
+            assertThat("[ERROR] File with path " + filePath + " that should be loaded to stub " +
+                    stubName + " does not exist", getClass().getResource(filePath), notNullValue());
             filePaths[i] = filePath;
         }
         return filePaths;
@@ -73,6 +74,7 @@ public abstract class SoapStubCommonLogic {
     public void invokeCleanStubMethod() {
         TestRequest request = new TestRequest(stubResetUrl);
         String response = request.getResponseAsString();
-        assertEquals("Stub returns <" + CLEAR_ALL_RESPONSE + "> in case when it was successfully cleared\n", CLEAR_ALL_RESPONSE, response);
+        assertThat("Stub returns <" + CLEAR_ALL_RESPONSE + "> in case when it was successfully cleared\n", response,
+                is(CLEAR_ALL_RESPONSE));
     }
 }

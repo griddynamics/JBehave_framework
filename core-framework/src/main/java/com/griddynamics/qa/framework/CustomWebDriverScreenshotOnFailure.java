@@ -62,7 +62,7 @@ public class CustomWebDriverScreenshotOnFailure extends WebDriverSteps {
             return; // we don't take screen-shots for Pending Steps
         }
         String screenshotPath = screenshotPath(uuidWrappedFailure.getUUID());
-        String currentUrl = "[unknown page title]";
+        String currentUrl = "[unknown page URL]";
         try {
             currentUrl = driverProvider.get().getCurrentUrl();
         } catch (Exception e) {
