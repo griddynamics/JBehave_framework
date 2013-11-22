@@ -51,7 +51,7 @@
         <junit.version>4.11</junit.version>
         <spring.version>3.2.4.RELEASE</spring.version>
         <log4j.version>1.2.17</log4j.version>
-        <doxygen.path>/usr/local/bin/doxygen</doxygen.path>
+        <doxygen.path>/usr/bin/doxygen</doxygen.path>
     </properties>
 
     <!--<profiles>
@@ -140,7 +140,7 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <phase>install</phase>
+                        <phase>package</phase>
                         <goals><goal>report</goal></goals>
                     </execution>
                 </executions>
