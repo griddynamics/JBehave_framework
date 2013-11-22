@@ -22,14 +22,8 @@ public class ExamplesTableConverter {
         Map<String, String> parameters = new HashMap<String, String>();
         List<Map<String, String>> rows = table.getRows();
 
-        int i = 0;
         for (Map<String, String> row : rows) {
-
-            String key = row.get("name");
-            String value = row.get("value");
-
-            parameters.put(key, value);
-            i++;
+            parameters.put(row.get("name"), row.get("value"));
         }
 
         return parameters;

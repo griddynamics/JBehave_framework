@@ -1,6 +1,6 @@
 package com.griddynamics.qa.framework;
 
-import com.griddynamics.qa.framework.converters.NullAndEmptyStringConverter;
+import com.griddynamics.qa.framework.converters.SpecialStringValuesConverter;
 import com.griddynamics.qa.framework.logger.GlobalLoggerOutput;
 import org.jbehave.core.configuration.Configuration;
 import org.jbehave.core.failures.FailingUponPendingStep;
@@ -41,7 +41,7 @@ public abstract class WebStoriesRunner extends BaseStoriesRunner {
     protected Configuration getConfiguration() {
         if (configuration == null) {
             ParameterConverters parameterConverters = new ParameterConverters();
-            parameterConverters.addConverters(new NullAndEmptyStringConverter());
+            parameterConverters.addConverters(new SpecialStringValuesConverter());
             parameterConverters.addConverters(new ParameterConverters.StringListConverter());
             setConfiguration(new SeleniumConfiguration()
                     .useSeleniumContext(seleniumContext)

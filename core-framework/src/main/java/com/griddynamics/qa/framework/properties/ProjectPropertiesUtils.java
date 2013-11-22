@@ -1,9 +1,8 @@
 package com.griddynamics.qa.framework.properties;
 
+import com.griddynamics.qa.properties.utils.FilePropertiesUtils;
 import com.griddynamics.qa.properties.utils.PropertiesUtils;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -41,23 +40,21 @@ public class ProjectPropertiesUtils extends PropertiesUtils {
 
     /**
      * Method gathers properties from 2 files with paths provided in {@link com.griddynamics.qa.framework.properties.ProjectProperties#JRUNNER_CONFIG_FILENAME}
-     * and {@link com.griddynamics.qa.framework.properties.ProjectProperties#ATG_CONFIG_FILENAME} system properties
+     * and {@link com.griddynamics.qa.framework.properties.ProjectProperties#APPLICATION_CONFIG_FILENAME} system properties
      * @return
      * @throws IOException
      */
     synchronized static boolean initAllProperties() throws IOException {
-        if (System.getProperty(ProjectProperties.JRUNNER_CONFIG_FILENAME) == null) {
+        if (ProjectProperties.getJrunnerConfigFilenameValue() == null) {
             throw new IllegalArgumentException("System property '" + ProjectProperties.JRUNNER_CONFIG_FILENAME +"' was not set");
         }
-        if (System.getProperty(ProjectProperties.ATG_CONFIG_FILENAME) == null) {
-            throw new IllegalArgumentException("System property '" + ProjectProperties.ATG_CONFIG_FILENAME +"' was not set");
+        if (ProjectProperties.getApplicationConfigFilenameValue() == null) {
+            throw new IllegalArgumentException("System property '" + ProjectProperties.APPLICATION_CONFIG_FILENAME +"' was not set");
         }
 
-        Properties runnerProperties = new Properties();
-        runnerProperties.load(new BufferedReader(new FileReader(System.getProperty(ProjectProperties.JRUNNER_CONFIG_FILENAME))));
-        Properties execProperties = new Properties();
-        execProperties.load(new BufferedReader(new FileReader(System.getProperty(ProjectProperties.ATG_CONFIG_FILENAME))));
-        runnerProperties.putAll(execProperties);
+        Properties runnerProperties = FilePropertiesUtils.getPropertiesFromFile(ProjectProperties.getJrunnerConfigFilenameValue(),
+                ProjectProperties.getApplicationConfigFilenameValue());
+
         setAllProperties(runnerProperties);
         return true;
     }

@@ -15,6 +15,8 @@ public interface ATGDataLoadRestUtilsData {
         put("submit", "Invoke Method");
     }};
 
+    public final static String DYN_ADMIN_RELATIVE_PATH = "/dyn/admin/nucleus";
+
     public static Map<String, String> SERVICE_URLS = new HashMap<String, String>();
 
     public static final int ITEM_LOAD_TIMEOUT = 5000;

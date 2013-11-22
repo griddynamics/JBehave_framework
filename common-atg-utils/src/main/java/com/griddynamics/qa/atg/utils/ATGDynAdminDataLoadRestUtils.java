@@ -5,6 +5,7 @@ import com.griddynamics.qa.tools.rest.TestRequest;
 import com.jayway.restassured.RestAssured;
 import com.griddynamics.qa.atg.utils.data.ATGDataLoadRestUtilsData;
 import com.griddynamics.qa.atg.utils.properties.ATGDynAdminProperties;
+import org.codehaus.plexus.util.StringUtils;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -24,13 +25,15 @@ public class ATGDynAdminDataLoadRestUtils implements ATGDataLoadRestUtilsData {
 
     protected static final String DYN_ADMIN_USER = ATGDynAdminProperties.getDynAdminUser();
     protected static final String DYN_ADMIN_PASSW = ATGDynAdminProperties.getDynAdminPassw();
-    protected static final String DYN_ADMIN_URL = ATGDynAdminProperties.getDynadminPort().isEmpty() ? "http://" + ATGDynAdminProperties.getDynadminIp() + "/dyn/admin/nucleus"
-            : "http://" + ATGDynAdminProperties.getDynadminIp() + ":" + ATGDynAdminProperties.getDynadminPort() + "/dyn/admin/nucleus";
+    protected static final String DYN_ADMIN_URL = ATGDynAdminProperties.getDynadminPort().isEmpty() ?
+            new StringBuilder("http://").append(ATGDynAdminProperties.getDynadminIp()).append(DYN_ADMIN_RELATIVE_PATH).toString()
+            : new StringBuilder("http://").append(ATGDynAdminProperties.getDynadminIp()).append(":")
+            .append(ATGDynAdminProperties.getDynadminPort()).append(DYN_ADMIN_RELATIVE_PATH).toString();
     protected static TestRequest request = getTestRequest();
-    protected static String fullRestUrl;
 
     /**
      * Method initializes parameters of REST connection to dyn/admin
+     *
      * @return
      */
     protected static TestRequest getTestRequest() {
@@ -41,59 +44,54 @@ public class ATGDynAdminDataLoadRestUtils implements ATGDataLoadRestUtilsData {
     }
 
     /**
-     * Method sets full repository REST path
-     * @param repoName - name of service
-     */
-    protected static void setFullRestURL(String repoName) {
-        fullRestUrl = DYN_ADMIN_URL + SERVICE_URLS.get(repoName);
-    }
-
-    /**
      * Method sends content from file to the repository
+     *
      * @param resourcePath - path to the resource located on classpath
-     * @param repoName - name of repository
+     * @param repoName     - name of repository
      * @throws IOException
      */
-    protected static void sendFileContentToRepository(String resourcePath, String repoName) throws IOException {
-        sendFileContentToRepository(resourcePath, repoName, ITEM_LOAD_TIMEOUT);
+    protected static void loadFileIntoRepository(String resourcePath, String repoName) throws IOException {
+        loadFileIntoRepository(resourcePath, repoName, ITEM_LOAD_TIMEOUT);
     }
 
     /**
      * Method sends content from file to the repository and waits for the specified amount of time
+     *
      * @param resourcePath - path to the resource located on classpath
-     * @param repoName - name of repository
-     * @param timeout - amount of time in ms
+     * @param repoName     - name of repository
+     * @param timeout      - amount of time in ms
      * @throws IOException
      */
-    protected static void sendFileContentToRepository(String resourcePath, String repoName, int timeout) throws IOException {
-        setFullRestURL(repoName);
-        request.setUrl(fullRestUrl);
-        executeQueryOnRepository(FileCommonTools.readFromFile(resourcePath), timeout);
+    protected static void loadFileIntoRepository(String resourcePath, String repoName, int timeout) throws IOException {
+        request.setUrl(DYN_ADMIN_URL.concat(SERVICE_URLS.get(repoName)));
+        executeQuery(FileCommonTools.readFromFile(resourcePath), timeout);
     }
 
     /**
      * Method sends content of String to the repository
-     * @param query - String with RQL statements
+     *
+     * @param query    - String with RQL statements
      * @param repoName - name of repository
      */
-    protected static void sendQueryToRepository(String query, String repoName) {
-        sendQueryToRepository(query, repoName, ITEM_LOAD_TIMEOUT);
+    protected static void executeQueryOnRepository(String query, String repoName) {
+        executeQueryOnRepository(query, repoName, ITEM_LOAD_TIMEOUT);
     }
 
     /**
      * Method sends content of String to the repository and waits for the specified amount of time
-     * @param query - String with RQL statements
+     *
+     * @param query    - String with RQL statements
      * @param repoName - name of repository
-     * @param timeout - amount of time in ms
+     * @param timeout  - amount of time in ms
      */
-    protected static void sendQueryToRepository(String query, String repoName, int timeout) {
-        setFullRestURL(repoName);
-        request.setUrl(fullRestUrl);
-        executeQueryOnRepository(query, timeout);
+    protected static void executeQueryOnRepository(String query, String repoName, int timeout) {
+        request.setUrl(DYN_ADMIN_URL.concat(SERVICE_URLS.get(repoName)));
+        executeQuery(query, timeout);
     }
 
     /**
      * Method invokes InvalidateCaches() method in repository
+     *
      * @param repoName - name of repository
      */
     protected static void invalidateCachesInRepository(String repoName) {
@@ -102,41 +100,44 @@ public class ATGDynAdminDataLoadRestUtils implements ATGDataLoadRestUtilsData {
 
     /**
      * Method invokes InvalidateCaches() method in repository and waits for the specified amount of time
+     *
      * @param repoName - name of repository
-     * @param timeout - amount of time in ms
+     * @param timeout  - amount of time in ms
      */
     protected static void invalidateCachesInRepository(String repoName, int timeout) {
-        setFullRestURL(repoName);
-        request.setUrl(fullRestUrl);
-        executeOperationOnService(invalidateCachesParamsMap, timeout);
+        request.setUrl(DYN_ADMIN_URL.concat(SERVICE_URLS.get(repoName)));
+        executeOperation(invalidateCachesParamsMap, timeout);
     }
 
     /**
      * Method executes RQL query statement in repository and waits for the specified amount of time
-     * @param query - RQL query statement as String
+     *
+     * @param query   - RQL query statement as String
      * @param timeout - amount of time in ms
      */
-    protected static void executeQueryOnRepository(String query, int timeout) {
-        if (!query.isEmpty()) {
+    protected static void executeQuery(String query, int timeout) {
+        if (!StringUtils.isEmpty(query)) {
             Map<String, String> propsMap = new HashMap<String, String>();
             propsMap.put("xmltext", query);
-            executeOperationOnService(propsMap, timeout);
+            executeOperation(propsMap, timeout);
         }
     }
 
     /**
      * Method executes some operation on service using request properties as input parameter
      * and waits for the specified amount of time
+     *
      * @param propsMap - properties of REST request
-     * @param timeout - amount of time in ms
+     * @param timeout  - amount of time in ms
      */
-    protected static void executeOperationOnService(Map<String, String> propsMap, int timeout){
+    protected static void executeOperation(Map<String, String> propsMap, int timeout) {
         request.post(propsMap);
         assertThat("[ERROR] Request returned status code " + request.getStatusCode(),
                 request.getStatusCode(), equalTo(request.HTTP_OK));
         try {
             Thread.sleep(timeout);
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             assertTrue("[ERROR] Exception occured during operation" + e.getMessage(), false);
         }
     }

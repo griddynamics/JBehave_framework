@@ -8,7 +8,6 @@
         <version>1.0</version>
     </parent>
 
-    <groupId>com.griddynamics.qa</groupId>
     <artifactId>stubs-soap-common</artifactId>
     <name>Common SOAP stub</name>
     <packaging>jar</packaging>

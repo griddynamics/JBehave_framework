@@ -37,14 +37,14 @@ public interface SoapCommonService {
     void fillRequestDataFromFile(InputStream inputStream);
 
     /**
-     * Adds pairs request/response
+     * Adds request/response pair
      * @param request
      * @param response
      */
     void addPair(String request, String response);
 
     /**
-     * Cleans all history
+     * Cleans all stub content
      */
     void clear();
 

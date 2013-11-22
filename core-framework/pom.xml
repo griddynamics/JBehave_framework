@@ -8,7 +8,6 @@
     </parent>
 
     <artifactId>core-framework</artifactId>
-    <groupId>com.griddynamics.qa</groupId>
     <name>JBehave Core Framework</name>
     <packaging>jar</packaging>
 

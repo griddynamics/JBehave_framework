@@ -9,7 +9,6 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.griddynamics.qa.atg</groupId>
     <artifactId>common-hybris-utils</artifactId>
     <name>Common Hybris Utils</name>
     <packaging>jar</packaging>

@@ -5,7 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 /**
  * Management class for page objects
@@ -72,7 +73,7 @@ public class Pages {
 
     public void setCurrentPage(String pageStoryName) {
         this.currentPage = pagesMap.get(pageStoryName);
-        assertTrue("[ERROR] Invalid page name is provided: " + pageStoryName, currentPage != null);
+        assertThat("[ERROR] Invalid page name is provided: " + pageStoryName, currentPage, notNullValue());
     }
 
     public void setCurrentPage(AbstractPage currentPage) {

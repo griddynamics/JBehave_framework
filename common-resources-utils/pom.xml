@@ -9,7 +9,6 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.griddynamics.qa</groupId>
     <artifactId>common-resources-utils</artifactId>
     <name>Resources Utils</name>
     <packaging>jar</packaging>

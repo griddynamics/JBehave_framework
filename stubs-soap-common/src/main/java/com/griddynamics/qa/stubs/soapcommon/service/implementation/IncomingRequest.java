@@ -19,8 +19,7 @@ import java.io.InputStream;
 
 public class IncomingRequest {
 
-    static Logger logger = Logger.getLogger(
-            IncomingRequest.class.getName());
+    static Logger logger = Logger.getLogger(IncomingRequest.class.getName());
     private Element requestBody;
     private String requestType;
 

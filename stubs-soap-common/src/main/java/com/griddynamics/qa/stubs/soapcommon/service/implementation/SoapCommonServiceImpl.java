@@ -2,6 +2,7 @@ package com.griddynamics.qa.stubs.soapcommon.service.implementation;
 
 import com.griddynamics.qa.stubs.soapcommon.service.SoapCommonService;
 import com.griddynamics.qa.stubs.soapcommon.service.implementation.data.HomePageData;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Element;
@@ -32,7 +33,7 @@ public class SoapCommonServiceImpl implements SoapCommonService, HomePageData {
 
     private List history = new ArrayList();
     /*Map containing possible stub request types and messages, which real services take such types */
-    private static Map<String, String> REQ_TYPES_MAP = new HashMap<String, String>();
+    private static Map<String, String> reqTypesMap = new HashMap<String, String>();
 
     private boolean available = true;
     private int responseTime = 0;
@@ -61,7 +62,7 @@ public class SoapCommonServiceImpl implements SoapCommonService, HomePageData {
 
     @Override
     public void fillRequestDataFromFile(InputStream inputStream) {
-        REQ_TYPES_MAP.putAll(getRequestResponsePairs(inputStream));
+        reqTypesMap.putAll(getRequestResponsePairs(inputStream));
     }
 
     /**
@@ -215,8 +216,8 @@ public class SoapCommonServiceImpl implements SoapCommonService, HomePageData {
      * @param request - request content
      */
     private void logRequestType(String type, String request) {
-        String logMessage = REQ_TYPES_MAP.get(type);
-        if (logMessage != null) {
+        String logMessage = reqTypesMap.get(type);
+        if (StringUtils.isNotEmpty(logMessage)) {
             logger.info(logMessage + request);
         }
     }

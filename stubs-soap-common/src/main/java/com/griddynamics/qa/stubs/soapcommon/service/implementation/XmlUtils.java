@@ -26,8 +26,7 @@ public class XmlUtils {
 
     public final static String TEXT_NODE = "#text";
 
-    static Logger logger = Logger.getLogger(
-            XmlUtils.class.getName());
+    static Logger logger = Logger.getLogger(XmlUtils.class.getName());
 
     /**
      * Get root element of the XML document

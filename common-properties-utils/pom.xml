@@ -9,7 +9,6 @@
         <version>1.0</version>
     </parent>
 
-    <groupId>com.griddynamics.qa</groupId>
     <artifactId>common-properties-utils</artifactId>
     <name>Properties Utils</name>
     <packaging>jar</packaging>

@@ -4,6 +4,7 @@ import org.codehaus.plexus.util.StringUtils;
 
 import java.util.Properties;
 
+import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -25,7 +26,7 @@ public class PropertiesUtils {
      */
     public static boolean doesPropertyExist(Properties props, String propertyName) {
         try {
-            if (getProperty(props, propertyName, true).equals("")){
+            if (StringUtils.isEmpty(getProperty(props, propertyName, true))){
                 return false;
             }
         } catch (Exception e) {
@@ -98,7 +99,7 @@ public class PropertiesUtils {
         }
 
         if (!allowEmpty)
-            assertThat(String.format(ERROR_MESSAGE, propertyName), property, not(""));
+            assertThat(String.format(ERROR_MESSAGE, propertyName), property, not(isEmptyString()));
 
         return property;
     }
