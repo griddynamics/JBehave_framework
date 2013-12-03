@@ -26,7 +26,6 @@ public abstract class AbstractPage extends CommonElementMethods {
     private final static String SECURED_URL = "https";
     private final static String UNSECURED_URL = "http";
 
-    protected String pageURL;
     protected String pageTitle;
 
     private boolean isSecuredURL;
@@ -48,17 +47,8 @@ public abstract class AbstractPage extends CommonElementMethods {
         this.isSecuredURL = isSecuredURL;
     }
 
-    public String getPageURL() {
-        return pageURL;
-    }
+    public abstract String getPageURL();
 
-    public void setPageURL(String pageURL) {
-        this.pageURL = pageURL;
-    }
-
-    public void setAbsolutePageURL(String pageURL) {
-        this.pageURL = pageURL;
-    }
 
     public boolean isPageUrlSecured() {
         return getCurrentUrl().startsWith(SECURED_URL);
@@ -81,13 +71,13 @@ public abstract class AbstractPage extends CommonElementMethods {
     }
 
     public boolean checkURL() {
-        return getCurrentUrl().startsWith(pageURL);
+        return getCurrentUrl().startsWith(getPageURL());
     }
 
     public void assertURL() {
         String expectedProtocol = isSecuredURL() ? SECURED_URL : UNSECURED_URL;
         assertThat("[ERROR] This page is not secured though it should be.", getCurrentUrl(), startsWith(expectedProtocol));
-        assertTrue("[ERROR] Expected URL [" + pageURL + "], was [" + getCurrentUrl() + "]",
+        assertTrue("[ERROR] Expected URL [" + getPageURL() + "], was [" + getCurrentUrl() + "]",
                 checkURL());
     }
 
@@ -101,8 +91,8 @@ public abstract class AbstractPage extends CommonElementMethods {
     }
 
     protected void open(int i) {
-        getLogger().info("Opening page " + this.getClass().getSimpleName() + ": " + pageURL + ": " + i + " attempt");
-        get(pageURL);
+        getLogger().info("Opening page " + this.getClass().getSimpleName() + ": " + getPageURL() + ": " + i + " attempt");
+        get(getPageURL());
         waitForPageToLoad();
     }
 
@@ -211,7 +201,7 @@ public abstract class AbstractPage extends CommonElementMethods {
         assertThat(
                 "[ERROR] Invalid window was opened. Actual popup page URL: "
                         + urlAndTitle.getValue() + ". Expected popup page URL: "
-                        + pageURL, urlAndTitle.getValue(), containsString(pageURL));
+                        + getPageURL(), urlAndTitle.getValue(), containsString(getPageURL()));
     }
 
     /**
