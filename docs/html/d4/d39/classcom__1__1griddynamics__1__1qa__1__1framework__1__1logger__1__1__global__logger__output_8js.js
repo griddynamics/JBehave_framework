@@ -1,0 +1,4 @@
+var classcom__1__1griddynamics__1__1qa__1__1framework__1__1logger__1__1__global__logger__output_8js =
+[
+    [ "classcom_1_1griddynamics_1_1qa_1_1framework_1_1logger_1_1_global_logger_output", "d4/d39/classcom__1__1griddynamics__1__1qa__1__1framework__1__1logger__1__1__global__logger__output_8js.html#ac85068e05e643d227a83cc11c87d9ed6", null ]
+];

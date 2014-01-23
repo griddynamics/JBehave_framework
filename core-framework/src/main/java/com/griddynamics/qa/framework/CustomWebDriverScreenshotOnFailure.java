@@ -1,5 +1,7 @@
 package com.griddynamics.qa.framework;
 
+import com.griddynamics.qa.mobile.MobileUtils;
+import org.codehaus.plexus.util.StringUtils;
 import org.jbehave.core.annotations.AfterScenario;
 import org.jbehave.core.failures.PendingStepFound;
 import org.jbehave.core.failures.UUIDExceptionWrapper;
@@ -15,13 +17,15 @@ import static com.griddynamics.qa.framework.converters.StackTraceConverter.getSt
 import static com.griddynamics.qa.logger.LoggerFactory.getLogger;
 
 /**
- * Class implements functionality of catching screenshots in case of test failure
+ * Class implements functionality of catching screenshots and additional logging in case of test failure
  *
  * @author mlykosova
  * @author ybaturina
+ * @author dcheremushkin
  */
 public class CustomWebDriverScreenshotOnFailure extends WebDriverSteps {
     public static final String DEFAULT_SCREENSHOT_PATH_PATTERN = "%s/screenshots/failed-scenario-%s.png";
+    public static final String PROPERTY_MOBILE = "mobile";
 
     protected StoryReporterBuilder reporterBuilder;
     protected final String screenshotPathPattern;
@@ -51,7 +55,9 @@ public class CustomWebDriverScreenshotOnFailure extends WebDriverSteps {
 
     /**
      * Method is triggered when the scenario failure happens;
-     * in this case the screenshot of current browser page is made
+     * In this case:
+     *   1) the screenshot of current browser page is made
+     *   2) appium's error message is printed to Maven's output [for mobile testing ONLY]
      *
      * @param uuidWrappedFailure
      * @throws Exception
@@ -59,8 +65,13 @@ public class CustomWebDriverScreenshotOnFailure extends WebDriverSteps {
     @AfterScenario(uponOutcome = AfterScenario.Outcome.FAILURE)
     public void afterScenarioFailure(UUIDExceptionWrapper uuidWrappedFailure) throws Exception {
         if (uuidWrappedFailure instanceof PendingStepFound) {
-            return; // we don't take screen-shots for Pending Steps
+            return; // we don't take screenshots for Pending Steps
         }
+
+        if (StringUtils.isNotBlank(System.getProperty(PROPERTY_MOBILE))) {
+            MobileUtils.outputAppiumErrors();
+        }
+
         String screenshotPath = screenshotPath(uuidWrappedFailure.getUUID());
         String currentUrl = "[unknown page URL]";
         try {

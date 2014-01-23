@@ -39,12 +39,16 @@ public class ProjectPropertiesUtils extends PropertiesUtils {
     }
 
     /**
-     * Method gathers properties from 2 files with paths provided in {@link com.griddynamics.qa.framework.properties.ProjectProperties#JRUNNER_CONFIG_FILENAME}
-     * and {@link com.griddynamics.qa.framework.properties.ProjectProperties#APPLICATION_CONFIG_FILENAME} system properties
+     * By default method gathers properties from 2 files with paths provided in {@link com.griddynamics.qa.framework.properties.ProjectProperties#JRUNNER_CONFIG_FILENAME}
+     * and {@link com.griddynamics.qa.framework.properties.ProjectProperties#APPLICATION_CONFIG_FILENAME} system properties.
+     * If testing on mobile platforms is activated (-Dmobile command-line parameter is supplied)
+     * then method also gathers properties from file with path provided in {@link com.griddynamics.qa.framework.properties.ProjectProperties#MOBILE_CONFIG_FILENAME}.
      * @return
      * @throws IOException
      */
     synchronized static boolean initAllProperties() throws IOException {
+        Properties runnerProperties;
+
         if (ProjectProperties.getJrunnerConfigFilenameValue() == null) {
             throw new IllegalArgumentException("System property '" + ProjectProperties.JRUNNER_CONFIG_FILENAME +"' was not set");
         }
@@ -52,7 +56,7 @@ public class ProjectPropertiesUtils extends PropertiesUtils {
             throw new IllegalArgumentException("System property '" + ProjectProperties.APPLICATION_CONFIG_FILENAME +"' was not set");
         }
 
-        Properties runnerProperties = FilePropertiesUtils.getPropertiesFromFile(ProjectProperties.getJrunnerConfigFilenameValue(),
+        runnerProperties = FilePropertiesUtils.getPropertiesFromFile(ProjectProperties.getJrunnerConfigFilenameValue(),
                 ProjectProperties.getApplicationConfigFilenameValue());
 
         setAllProperties(runnerProperties);

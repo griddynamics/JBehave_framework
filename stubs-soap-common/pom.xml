@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>stubs-soap-common</artifactId>
-    <name>Common SOAP stub</name>
+    <name>Common SOAP Stub</name>
     <packaging>jar</packaging>
 
     <build>

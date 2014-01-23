@@ -46,16 +46,17 @@
     </scm>
 
     <modules>
-        <module>common-resources-utils</module>
-        <module>common-logger</module>
-        <module>common-properties-utils</module>
-        <module>common-tools</module>
-        <module>core-framework</module>
-        <module>common-ui-utils</module>
-        <module>stubs-soap-common</module>
-        <module>stubs-tools</module>
         <module>common-atg-utils</module>
         <module>common-hybris-utils</module>
+        <module>common-logger</module>
+        <module>common-properties-utils</module>
+        <module>common-resources-utils</module>
+        <module>common-tools</module>
+        <module>common-ui-utils</module>
+        <module>core-framework</module>
+        <module>stubs-soap-common</module>
+        <module>stubs-tools</module>
+        <module>mobile</module>
     </modules>
 
     <properties>
@@ -70,7 +71,6 @@
         <junit.version>4.11</junit.version>
         <spring.version>3.2.4.RELEASE</spring.version>
         <log4j.version>1.2.17</log4j.version>
-        <doxygen.path>/usr/bin/doxygen</doxygen.path>
         <hamcrest.version>1.3</hamcrest.version>
 
     </properties>
@@ -151,13 +151,13 @@
                 <configuration>
                     <alphabeticalIndex>true</alphabeticalIndex>
                     <generateHtml>true</generateHtml>
-                    <inputDirectory>${basedir}</inputDirectory>
-                    <projectNumber>${version}</projectNumber>
-                    <outputDirectory>${project.build.directory}/doxygen/</outputDirectory>
-                    <configurationFile>doxygen.config</configurationFile>
+                    <inputDirectory>${project.basedir}</inputDirectory>
+                    <projectNumber>${project.version}</projectNumber>
+                    <outputDirectory>${project.build.directory}</outputDirectory>
+                    <configurationFile>docs/doxygen.config</configurationFile>
                     <filePatterns>*.java</filePatterns>
                     <recursive>true</recursive>
-                    <executable>${doxygen.path}</executable>
+                    <executable>/$(which doxygen)</executable>
                 </configuration>
                 <executions>
                     <execution>

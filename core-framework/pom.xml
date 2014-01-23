@@ -22,6 +22,16 @@
             <artifactId>common-properties-utils</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.griddynamics.qa</groupId>
+            <artifactId>common-ui-utils</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.griddynamics.qa</groupId>
+            <artifactId>mobile</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.jbehave</groupId>
