@@ -15,7 +15,7 @@ import static org.junit.Assert.assertTrue;
  * @author ybaturina
  * @author aluchin
  *         <p/>
- *         This is the abstract class which contains common page methods
+ *         This is the abstract class which contains webDriver page methods
  */
 public abstract class AbstractPage extends CommonElementMethods {
 
@@ -71,6 +71,11 @@ public abstract class AbstractPage extends CommonElementMethods {
     }
 
     public boolean checkURL() {
+        getLogger().info("Compare URLS: Expected PageUrl " + getPageURL() + " and current PageUrl " + getCurrentUrl());
+        getLogger().debug("Compare URLS: Expected PageUrl " + getPageURL() + " and current PageUrl " + getCurrentUrl());
+
+        System.out.println("DEBUG: Compare URLS: Expected PageUrl " + getPageURL() + " and current PageUrl " + getCurrentUrl());
+
         return getCurrentUrl().startsWith(getPageURL());
     }
 
@@ -341,6 +346,7 @@ public abstract class AbstractPage extends CommonElementMethods {
      * to initialize dynamic web elements om the page
      */
     public void gatherElements() {
+
     }
 
     /**

@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
- * Class with JBehave steps for working with common SOAP stub.
+ * Class with JBehave steps for working with webDriver SOAP stub.
  *
  * @author ybaturina
  */

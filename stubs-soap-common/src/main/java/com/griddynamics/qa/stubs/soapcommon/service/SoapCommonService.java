@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.util.List;
 
 /**
- * This interface provides the SOAP stub common methods
+ * This interface provides the SOAP stub webDriver methods
  *
  * @author ybaturina
  * @author lzakharova

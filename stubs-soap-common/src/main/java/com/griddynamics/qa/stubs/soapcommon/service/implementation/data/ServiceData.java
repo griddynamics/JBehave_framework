@@ -33,7 +33,7 @@ public interface ServiceData {
     public static final String POPULATE_REQUEST_DATA_RESPONSE = "Request data filled with data from file\n";
 
     public static final String STUB_LOG_URL = "log";
-    public static final String STUB_LOG_FILE = "stubs-soap-common.log";
+    public static final String STUB_LOG_FILE = "stubs-soap-webDriver.log";
 
     public static final String CLEAR_LOG_URL = "clearLog";
     public static final String CLEAR_LOG_RESPONSE = "Log is cleared";

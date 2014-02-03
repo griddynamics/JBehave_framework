@@ -15,7 +15,7 @@ import static org.junit.Assert.assertTrue;
  * @author ybaturina
  * @author mlykosova
  *         <p/>
- *         Base block class containing common block methods
+ *         Base block class containing webDriver block methods
  */
 public class ElementBlock extends CommonElementMethods implements Cloneable {
 

@@ -14,7 +14,7 @@ import java.security.CodeSource;
 import static org.apache.commons.io.FilenameUtils.separatorsToUnix;
 
 /**
- * Class contains methods for working with resources used in framework
+ * Class contains methods for working with resources used in webDriver
  *
  * @author sbashkyrtsev
  */

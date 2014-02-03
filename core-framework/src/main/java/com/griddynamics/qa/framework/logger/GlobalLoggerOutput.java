@@ -13,7 +13,7 @@ import static com.griddynamics.qa.logger.LoggerFactory.getLogger;
 
 /**
  * This custom output format was created to forward Jbehave core logs to logger to
- * implement per-story logging feature in multi-thread environment and convert all output to common format.
+ * implement per-story logging feature in multi-thread environment and convert all output to webDriver format.
  *
  * @author ybaturina
  * @author yhraichonak

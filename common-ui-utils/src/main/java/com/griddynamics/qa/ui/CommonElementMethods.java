@@ -21,7 +21,7 @@ import static org.junit.Assert.*;
  * @author mlykosova
  * @author aluchin
  *         <p/>
- *         Entity class containing common methods that work with page elements
+ *         Entity class containing webDriver methods that work with page elements
  */
 
 public class CommonElementMethods extends WebDriverPage {

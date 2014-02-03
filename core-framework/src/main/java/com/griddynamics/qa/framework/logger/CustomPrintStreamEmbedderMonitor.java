@@ -10,7 +10,7 @@ import static com.griddynamics.qa.logger.LoggerFactory.addThreadLogger;
 import static com.griddynamics.qa.logger.LoggerFactory.getLogger;
 
 /**
- * The class is used to send output of all common jbehave logs in separate files
+ * The class is used to send output of all webDriver jbehave logs in separate files
  *
  * @author ybaturina
  * @author abaranouski

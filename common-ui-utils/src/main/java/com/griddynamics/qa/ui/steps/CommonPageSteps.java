@@ -21,7 +21,7 @@ import static org.junit.Assert.*;
  * @author ybaturina
  * @author mlykosova
  * @author aluchin
- *         Entity class containing common steps implementation
+ *         Entity class containing webDriver steps implementation
  */
 
 @Component

@@ -19,7 +19,7 @@ import java.util.jar.JarFile;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Class containing common methods to work with files
+ * Class containing webDriver methods to work with files
  *
  * @author ybaturina
  */
