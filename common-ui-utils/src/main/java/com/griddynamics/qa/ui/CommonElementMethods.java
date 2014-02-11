@@ -7,6 +7,7 @@ import org.jbehave.web.selenium.WebDriverPage;
 import org.jbehave.web.selenium.WebDriverProvider;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.internal.Locatable;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -700,6 +701,7 @@ public class CommonElementMethods extends WebDriverPage {
         return elements.get(randomGenerator.nextInt(size));
     }
 
+
     /**
      * @param loc
      */
@@ -715,6 +717,31 @@ public class CommonElementMethods extends WebDriverPage {
             assertTrue("[ERROR] Element with locator " + loc + " is not an iframe:" + e.getMessage(), false);
         }
 
+    }
+
+    /**
+     * Scroll to the element on page
+     * @param element  - WebElement
+     */
+    public void scrollToElement(WebElement element) {
+        ((Locatable)element).getCoordinates().inViewPort();
+    }
+
+
+
+    /**
+     * Search HTML element by name
+     * Scroll to it on display
+     * And Hover Over The Element
+     *
+     * @param elName HTML element name from a Story
+     */
+    public void hoverOverTheElement(String elName){
+        Actions action = new Actions(getDriverProvider().get());
+
+        WebElement webElement = getElementByName(elName);
+        scrollToElement(webElement);
+        action.moveToElement(webElement).build().perform();
     }
 
 }
