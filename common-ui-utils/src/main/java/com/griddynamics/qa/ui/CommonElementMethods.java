@@ -596,11 +596,25 @@ public class CommonElementMethods extends WebDriverPage {
     /**
      * Get html source of element with javascript
      *
-     * @param name
+     * @param elementName
      */
-    public String getHTMLSourceOfElement(String name) {
+    public String getHTMLSourceOfElement(String elementName) {
+        return getHTMLSource(elementName, true);
+
+    }
+
+    /**
+     * Get html source of block with javascript
+     *
+     * @param blockName
+     */
+    public String getHTMLSourceOfBlock(String blockName) {
+        return getHTMLSource(blockName, false);
+    }
+
+    private String getHTMLSource(String name, boolean isElement) {
         JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        By loc = getElementLocatorByName(name);
+        By loc = isElement? getElementLocatorByName(name) : getBlockByName(name).getLocator();
         String elementText = null;
         WebElement element = findElementSuppressAlert(loc);
         elementText = ((String) js.executeScript("return arguments[0].innerHTML;", element)).trim();
