@@ -767,7 +767,7 @@ public class CommonPageSteps {
             currentStepNumber++;
             pages.getCurrentPage().sleep(WAIT_LOAD_TIMEOUT_IN_MS);
         }
-        assertTrue("[ERROR] Scripts were not completed during timeout " + WAIT_ELEMENT_LOAD_TIMEOUT_IN_SEC +" seconds", pages.getCurrentPage().isAjaxJQueryCompleted());
+        assertTrue("[ERROR] Scripts were not completed during timeout " + WAIT_ELEMENT_LOAD_TIMEOUT_IN_SEC +" seconds", pages.getCurrentPage().isAjaxJQueryCompleted() || currentStepNumber < (stepsCount * 2));
     }
 
     /**
