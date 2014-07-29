@@ -377,7 +377,7 @@ public class CommonPageSteps {
      * @param quantity
      */
     @Then("block $name has $quantity elements")
-    public void thenBlockHasElements(@Named("name") String name, int quantity) {
+    public void thenBlockHasElements(String name, int quantity) {
         ElementBlock block = pages.getCurrentPage().getBlockByName(name);
         if (block == null) {
             throw new RuntimeException("[ERROR] Block with name " + name
