@@ -63,7 +63,7 @@
         <ojdbc.version>11.2.0.3</ojdbc.version>
 
 
-        <jbehave.core.version>3.8</jbehave.core.version>
+        <jbehave.core.version>3.9.4</jbehave.core.version>
         <jbehave.web.version>3.5.5</jbehave.web.version>
         <selenium.version>2.34.0</selenium.version>
         <jbehave.site.version>3.1.1</jbehave.site.version>
