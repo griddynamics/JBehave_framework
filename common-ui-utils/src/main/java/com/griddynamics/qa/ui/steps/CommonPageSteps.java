@@ -732,7 +732,8 @@ public class CommonPageSteps {
     public void waitForElement(String elementName, Integer timeout) {
         long currentStepNumber = 0;
         long stepsCount = timeout;
-        while (!pages.getCurrentPage().isElementDisplayedOnPage(elementName) &&
+        while ( !pages.getCurrentPage().isElementPresentOnPage(elementName) &&
+                !pages.getCurrentPage().isElementDisplayedOnPage(elementName) &&
                 currentStepNumber < (stepsCount * 2)) {
             currentStepNumber++;
             pages.getCurrentPage().sleep(WAIT_LOAD_TIMEOUT_IN_MS);
