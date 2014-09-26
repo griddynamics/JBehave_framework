@@ -758,30 +758,29 @@ public class CommonPageSteps {
      * time steps waiting {@value#WAIT_LOAD_TIMEOUT_IN_MS}
      */
     @Then("customer waits while all ajax scripts will be completed")
-    public void waitAllAjaxWillFinished () throws InterruptedException
-    {
+    public void waitAllAjaxWillFinished () {
         int currentStepNumber = 0;
-        int stepsCount = 120;
+        int stepsCount = WAIT_ELEMENT_LOAD_TIMEOUT_IN_SEC;
 
         getLogger().info("Wait for DOM readiness");
 
         while ((!pages.getCurrentPage().isAjaxJQueryReady()) && (currentStepNumber < stepsCount * 2))
         {
             currentStepNumber++;
-            pages.getCurrentPage().sleep(500);
+            pages.getCurrentPage().sleep(WAIT_LOAD_TIMEOUT_IN_MS);
         }
 
         getLogger().info("DOM is ready, start to wait for ajax script");
 
-        Thread.sleep(1000);
+        pages.getCurrentPage().sleep(WAIT_LOAD_TIMEOUT_IN_MS * 2);
         currentStepNumber += 2;
 
         while ((!pages.getCurrentPage().isAjaxJQueryCompleted()) && (currentStepNumber < stepsCount * 2))
         {
             currentStepNumber++;
-            pages.getCurrentPage().sleep(500);
+            pages.getCurrentPage().sleep(WAIT_LOAD_TIMEOUT_IN_MS);
         }
-        Assert.assertTrue(" [ERROR] Scripts were not completed during timeout120 seconds", pages.getCurrentPage().isAjaxJQueryCompleted());
+        assertTrue("[ERROR] Scripts were not completed during timeout" + WAIT_ELEMENT_LOAD_TIMEOUT_IN_SEC +" seconds", pages.getCurrentPage().isAjaxJQueryCompleted());
     }
 
     /**
