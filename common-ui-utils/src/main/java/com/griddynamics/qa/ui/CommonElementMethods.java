@@ -423,8 +423,8 @@ public class CommonElementMethods extends WebDriverPage {
      * @return true if window.jQuery != undefined && jQuery.isReady == 1
      */
     public boolean isAjaxJQueryReady() {
-        JavascriptExecutor js = (JavascriptExecutor) this.pages.getCurrentPage().getDriver();
-        Boolean scriptResult = (Boolean)js.executeScript("return window.jQuery != undefined && jQuery.isReady == 1", new Object[0]);
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        Boolean scriptResult = (Boolean) js.executeScript("return window.jQuery != undefined && jQuery.isReady == 1", new Object[0]);
         return scriptResult.booleanValue();
     }
 
@@ -435,8 +435,8 @@ public class CommonElementMethods extends WebDriverPage {
      * @return true if jQuery.active == 0
      */
     public boolean isAjaxJQueryCompleted() {
-        JavascriptExecutor js = (JavascriptExecutor) this.pages.getCurrentPage().getDriver();
-        Boolean scriptResult = (Boolean)js.executeScript("return jQuery.active == 0", new Object[0]);
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        Boolean scriptResult = (Boolean) js.executeScript("return jQuery.active == 0", new Object[0]);
         return scriptResult.booleanValue();
     }
 
