@@ -732,7 +732,8 @@ public class CommonPageSteps {
     public void waitForElement(String elementName, Integer timeout) {
         long currentStepNumber = 0;
         long stepsCount = timeout;
-        while (!pages.getCurrentPage().isElementDisplayedOnPage(elementName) &&
+        while ( !pages.getCurrentPage().isElementPresentOnPage(elementName) &&
+                !pages.getCurrentPage().isElementDisplayedOnPage(elementName) &&
                 currentStepNumber < (stepsCount * 2)) {
             currentStepNumber++;
             pages.getCurrentPage().sleep(WAIT_LOAD_TIMEOUT_IN_MS);
@@ -757,17 +758,29 @@ public class CommonPageSteps {
      * time steps waiting {@value#WAIT_LOAD_TIMEOUT_IN_MS}
      */
     @Then("customer waits while all ajax scripts will be completed")
-    public void waitAllAjaxWillFinished() {
-        long currentStepNumber = 0;
-        long stepsCount = WAIT_ELEMENT_LOAD_TIMEOUT_IN_SEC;
+    public void waitAllAjaxWillFinished () {
+        int currentStepNumber = 0;
+        int stepsCount = WAIT_ELEMENT_LOAD_TIMEOUT_IN_SEC;
 
-        while (!pages.getCurrentPage().isAjaxJQueryCompleted() &&
-                currentStepNumber < (stepsCount * 2)) {
+        getLogger().info("Wait for DOM readiness");
 
+        while ((!pages.getCurrentPage().isAjaxJQueryReady()) && (currentStepNumber < stepsCount * 2))
+        {
             currentStepNumber++;
             pages.getCurrentPage().sleep(WAIT_LOAD_TIMEOUT_IN_MS);
         }
-        assertTrue(" [ERROR] Scripts were not completed during timeout" + WAIT_ELEMENT_LOAD_TIMEOUT_IN_SEC +" seconds", pages.getCurrentPage().isAjaxJQueryCompleted() || currentStepNumber < (stepsCount * 2));
+
+        getLogger().info("DOM is ready, start to wait for ajax script");
+
+        pages.getCurrentPage().sleep(WAIT_LOAD_TIMEOUT_IN_MS * 2);
+        currentStepNumber += 2;
+
+        while ((!pages.getCurrentPage().isAjaxJQueryCompleted()) && (currentStepNumber < stepsCount * 2))
+        {
+            currentStepNumber++;
+            pages.getCurrentPage().sleep(WAIT_LOAD_TIMEOUT_IN_MS);
+        }
+        assertTrue("[ERROR] Scripts were not completed during timeout" + WAIT_ELEMENT_LOAD_TIMEOUT_IN_SEC +" seconds", pages.getCurrentPage().isAjaxJQueryCompleted());
     }
 
     /**

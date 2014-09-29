@@ -416,6 +416,18 @@ public class CommonElementMethods extends WebDriverPage {
         WebElement element = wait.until(ExpectedConditions.elementToBeClickable(loc));
         return element.isDisplayed();
     }
+    
+    /**
+     * Check that jQuery is defined and ready
+     *
+     * @return true if window.jQuery != undefined && jQuery.isReady == 1
+     */
+    public boolean isAjaxJQueryReady() {
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        Boolean scriptResult = (Boolean) js.executeScript("return window.jQuery != undefined && jQuery.isReady == 1", new Object[0]);
+        return scriptResult.booleanValue();
+    }
+
 
     /**
      * Check that there is no active jQuery session
@@ -424,8 +436,8 @@ public class CommonElementMethods extends WebDriverPage {
      */
     public boolean isAjaxJQueryCompleted() {
         JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        Boolean scriptResult = (Boolean) js.executeScript("return jQuery.active == 0");
-        return scriptResult;
+        Boolean scriptResult = (Boolean) js.executeScript("return jQuery.active == 0", new Object[0]);
+        return scriptResult.booleanValue();
     }
 
 
