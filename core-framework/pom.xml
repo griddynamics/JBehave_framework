@@ -3,7 +3,7 @@
     <parent>
         <artifactId>jbehave-framework</artifactId>
         <groupId>com.griddynamics.qa</groupId>
-        <version>1.3-SNAPSHOT</version>
+        <version>RALEYS_1.0.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>core-framework</artifactId>
