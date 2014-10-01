@@ -3,7 +3,7 @@
     <parent>
         <artifactId>jbehave-framework</artifactId>
         <groupId>com.griddynamics.qa</groupId>
-        <version>1.0</version>
+        <version>1.1</version>
     </parent>
 
     <artifactId>core-framework</artifactId>
