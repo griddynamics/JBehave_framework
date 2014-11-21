@@ -58,22 +58,18 @@ public class ElementBlock extends CommonElementMethods implements Cloneable {
     }
 
     public String getBlockText() {
-        return isLocatorPresentOnPage(locator) ? findElementSuppressAlert(locator).getText() : "";
+        return isLocatorPresentOnPage(locator) ? findElement(locator).getText() : "";
     }
 
     /**
      * Returns block's HTML content as String
      */
     public String getBlockInnerHTML() {
-        return isLocatorPresentOnPage(locator) ? findElementSuppressAlert(locator).getAttribute("innerHTML") : "";
+        return isLocatorPresentOnPage(locator) ? findElement(locator).getAttribute("innerHTML") : "";
     }
 
     public boolean isBlockDisplayed() {
         return isLocatorDisplayedOnPage(getLocator());
-    }
-
-    public boolean isBlockNotDisplayed() {
-        return isLocatorDisplayedOnPage(getLocator(), false, DEFAULT_TIMEOUT_IN_SECONDS);
     }
 
     public boolean isBlockPresent() {
@@ -84,10 +80,6 @@ public class ElementBlock extends CommonElementMethods implements Cloneable {
         return getBlockList().get(index);
     }
 
-    /**
-     * use isBlockDisplayed() instead
-     */
-    @Deprecated
     public void waitForBlockToLoad() {
         long currentSleepCount = 0;
         long totalSleepCount = WAIT_FOR_BLOCK_LOAD_TIMEOUT_IN_MS / WAIT_BLOCK_LOAD_TIMEOUT_IN_MS;
