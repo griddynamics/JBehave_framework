@@ -1,6 +1,7 @@
 package com.griddynamics.qa.ui;
 
 import org.jbehave.web.selenium.WebDriverProvider;
+import org.openqa.selenium.TimeoutException;
 
 import java.util.AbstractMap;
 import java.util.Map;
@@ -97,10 +98,22 @@ public abstract class AbstractPage extends CommonElementMethods {
     }
 
     public void openPage() {
-        int i = 1;
-        while (!checkCurrentPage() && i <= PAGE_OPEN_ATTEMPTS_NUMBER) {
-            open(i);
-            i++;
+        int timeoutExc = 0;
+        int attempt = 0;
+        while (timeoutExc < PAGE_OPEN_ATTEMPTS_NUMBER) {
+            int i = 1;
+            try {
+                while (!checkCurrentPage() && i <= PAGE_OPEN_ATTEMPTS_NUMBER) {
+                    attempt++;
+                    open(attempt);
+                    i++;
+                }
+            } catch (TimeoutException e) {
+                timeoutExc++;
+                getLogger().info("Caught TimeoutException. " + e.getMessage());
+                continue;
+            }
+            timeoutExc = PAGE_OPEN_ATTEMPTS_NUMBER;
         }
         assertCurrentPage();
     }
@@ -258,6 +271,10 @@ public abstract class AbstractPage extends CommonElementMethods {
             newURL = getDriverProvider().get().getCurrentUrl();
         }
         assertThat("[ERROR] New page is not opened", newURL, not(oldURL));
+    }
+
+    public boolean isBlockLoaded(ElementBlock elementBlock) {
+        return isHiddenElementLoaded(elementBlock.getLocator());
     }
 
     /**

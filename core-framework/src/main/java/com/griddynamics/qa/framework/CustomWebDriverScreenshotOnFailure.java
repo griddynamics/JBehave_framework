@@ -1,6 +1,7 @@
 package com.griddynamics.qa.framework;
 
 import org.jbehave.core.annotations.AfterScenario;
+import org.jbehave.core.annotations.ScenarioType;
 import org.jbehave.core.failures.PendingStepFound;
 import org.jbehave.core.failures.UUIDExceptionWrapper;
 import org.jbehave.core.reporters.StoryReporterBuilder;
@@ -56,7 +57,12 @@ public class CustomWebDriverScreenshotOnFailure extends WebDriverSteps {
      * @param uuidWrappedFailure
      * @throws Exception
      */
-    @AfterScenario(uponOutcome = AfterScenario.Outcome.FAILURE)
+    @AfterScenario(uponType = ScenarioType.EXAMPLE, uponOutcome = AfterScenario.Outcome.FAILURE)
+    public void afterScenarioWithExamplesFailure(UUIDExceptionWrapper uuidWrappedFailure) throws Exception {
+        afterScenarioFailure(uuidWrappedFailure);
+    }
+
+    @AfterScenario(uponType = ScenarioType.NORMAL, uponOutcome = AfterScenario.Outcome.FAILURE)
     public void afterScenarioFailure(UUIDExceptionWrapper uuidWrappedFailure) throws Exception {
         if (uuidWrappedFailure instanceof PendingStepFound) {
             return; // we don't take screen-shots for Pending Steps
