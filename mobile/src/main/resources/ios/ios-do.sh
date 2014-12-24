@@ -5,11 +5,12 @@
 #  1) Closes Appium server and webproxy
 #  2) Copies SafariLauncher from project to Appium directory
 #  3) Starts Appium server
-function ios_prerequisites {
+ios_prerequisites () {
+echo "[INFO] executing ios_prerequisites function...";
   : '(1)' &&   kill $(ps -e | grep node | grep "[0-9]. node \./lib/server/main\.js") 2>/dev/null;
                kill $(ps -e | grep ios_webkit | grep "[0-9]. ios_webkit_debug_proxy") 2>/dev/null;
   : '(2)' &&   mkdir -p $APPIUM_HOME/build/SafariLauncher >/dev/null 2>/dev/null;
-               cp -f $BUILD_DIR/../src/main/resources/com/kohls/mobile/ios/SafariLauncher.zip $APPIUM_HOME/build/SafariLauncher/ >/dev/null 2>/dev/null;
+               cp -f $BUILD_DIR/mobile/ios/SafariLauncher.zip $APPIUM_HOME/build/SafariLauncher/ >/dev/null 2>/dev/null;
                cd $APPIUM_HOME;
                test -z `cat $APPIUM_HOME/.appiumconfig | grep -o ios` && ./reset.sh --android --selendroid --ios;
   : '(3)' &&   if [ "$1" == "true" ]; then

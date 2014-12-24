@@ -6,7 +6,7 @@ import com.griddynamics.qa.framework.logger.GlobalLoggerOutput;
 import com.griddynamics.qa.framework.properties.ProjectProperties;
 import com.griddynamics.qa.framework.properties.ProjectPropertiesUtils;
 import com.griddynamics.qa.logger.LoggerFactory;
-import com.griddynamics.qa.properties.utils.PropertiesUtils;
+import io.selendroid.SelendroidLauncher;
 import org.codehaus.plexus.util.StringUtils;
 import org.jbehave.core.configuration.Configuration;
 import org.jbehave.core.configuration.MostUsefulConfiguration;
@@ -32,7 +32,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.griddynamics.qa.logger.LoggerFactory.getLogger;
-import static com.griddynamics.qa.mobile.MobileUtils.*;
+import static com.griddynamics.qa.mobile.MobileUtils.uninstallMobileApps;
 import static java.util.Arrays.asList;
 import static org.jbehave.core.io.CodeLocations.codeLocationFromClass;
 import static org.jbehave.core.reporters.Format.*;
@@ -61,6 +61,8 @@ public abstract class BaseStoriesRunner extends JUnitStories {
     private StoryReporterBuilder storyReporterBuilder;
     private String applicationContextPath;
     private Embedder embedder;
+
+    private static SelendroidLauncher selendroidServer = null;
 
     public BaseStoriesRunner() {
     }

@@ -10,8 +10,8 @@ import java.io.InputStreamReader;
  */
 public class MobileUtils {
 
-    private static final String PATH_TO_ADB = "/usr/local/adt/sdk/platform-tools/adb";
-    private static final String PATH_TO_FRUITSTRAP = "/usr/local/appium/submodules/fruitstrap/fruitstrap";
+    private static final String PATH_TO_ADB = System.getProperty("ADB_PATH")+"/adb";
+    private static final String PATH_TO_FRUITSTRAP = System.getProperty("APPIUM_HOME")+"/submodules/fruitstrap/fruitstrap";
 
     private final static String ANDROID_APP_PACKAGE         = "android.appPackage";
     private static final String IOS_APP_BUNDLE              = "ios.appBundle";

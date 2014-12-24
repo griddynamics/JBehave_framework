@@ -9,7 +9,6 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.Locale;
 
-import static org.junit.Assert.assertTrue;
 import static org.openqa.selenium.remote.CapabilityType.ACCEPT_SSL_CERTS;
 
 
@@ -38,7 +37,8 @@ public class CustomRemoteWebDriverProvider extends RemoteWebDriverProvider {
     private final static String MOBILE = "mobile";
     private final static String MOBILE_BUILD_DIRECTORY = System.getProperty(PROJECT_BUILD_DIRECTORY) + "/mobile/";
     private final static String ANDROID_APPLICATION = "android.app";
-    private final static String ANDROID_APPLICATION_WEBDRIVER = "WebDriver.apk";
+    private final static String ANDROID_APPLICATION_WEBDRIVER = "android/android-driver-app-0.12.0.apk";
+    //private final static String ANDROID_APPLICATION_WEBDRIVER = "android/android-server-2.21.0.apk";
     private final static String ANDROID_ACTIVITY_MAIN = "android.mainActivity";
     private final static String ANDROID_ACTIVITY_WAIT = "android.waitActivity";
     private final static String ANDROID_PACKAGE = "android.appPackage";
@@ -140,11 +140,14 @@ public class CustomRemoteWebDriverProvider extends RemoteWebDriverProvider {
                 break;
 
             case ANDROID_BROWSER:
-                oldCapabilities.setCapability("app", MOBILE_BUILD_DIRECTORY + System.getProperty(ANDROID_APPLICATION_WEBDRIVER));
-                oldCapabilities.setCapability("app-package", "org.openqa.selenium.android.app");
-                oldCapabilities.setCapability("app-activity", "MainActivity");
-                oldCapabilities.setCapability("device", "Android");
-                oldCapabilities.setCapability("launch", "false");
+                //oldCapabilities.setCapability("app", MOBILE_BUILD_DIRECTORY + ANDROID_APPLICATION_WEBDRIVER);
+                oldCapabilities.setCapability("app-package", "io.selendroid.androiddriver");
+                oldCapabilities.setCapability("app-activity", ".WebViewActivity");
+                //oldCapabilities.setCapability("app", MOBILE_BUILD_DIRECTORY + ANDROID_APPLICATION_WEBDRIVER);
+                oldCapabilities.setCapability("automationName", "Selendroid");
+                oldCapabilities.setCapability("platformName", "Android");
+                oldCapabilities.setCapability("browserName", "android");
+                oldCapabilities.setCapability("deviceName", "Android Emulator");
                 oldCapabilities.setCapability(ACCEPT_SSL_CERTS, "true");
                 oldCapabilities.setJavascriptEnabled(true);
                 break;

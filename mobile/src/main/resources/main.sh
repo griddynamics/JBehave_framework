@@ -8,7 +8,9 @@ osType=`echo $mobile | awk -F "_" '{print $1}'`
 appType=`echo $mobile | awk -F "_" '{print $2}'`
 
 
-function launch_appium {
+launch_appium () {
+echo "[INFO] executing launch_appium function...";
+     > $BUILD_DIR/../appium.log;
      set_mobile_properties;
      if [ "$osType" == "android" ]; then
        android_prerequisites $device;
@@ -18,7 +20,8 @@ function launch_appium {
 }
 
 
-function install_app {
+install_app () {
+echo "[INFO] executing install_app function...";
      set_mobile_properties;
      if [ "$osType" == "android" ]; then
        android_connect;
