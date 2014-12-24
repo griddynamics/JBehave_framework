@@ -32,7 +32,7 @@ android_connect () {
         printf "[INFO] Waiting until device is connected / emulator is started...";
         $ADB_PATH/adb start-server 1>/dev/null 2>/dev/null;
         count=0;
-        until [ "$($ADB_PATH/adb wait-for-device && $ADB_PATH/adb shell dumpsys window | grep mCurrentFocus | grep Keyguard | wc -l)" == "1" ]; do
+        until [ $($ADB_PATH/adb wait-for-device && $ADB_PATH/adb shell dumpsys window | grep mCurrentFocus | grep Keyguard | wc -l) -eq 1 ]; do
           printf ".";
           sleep 1; let count+=1;
           #[ $(expr $count % 40) == "0" ] && android_prerequisites "false";
@@ -79,7 +79,7 @@ echo "[INFO] executing android_prepare_browser function...";
 : '(1)' &&     kill $(jps -m | grep selendroid-standalone | awk -F " " '{print $1}') 2>/dev/null;
                execute --in_background "java -jar $APPIUM_HOME/submodules/selendroid/selendroid-standalone/target/selendroid-standalone-0.12.0-with-dependencies.jar" 1>/dev/null 2>/dev/null;
 : '(2)' &&     $ADB_PATH/adb start-server 1>/dev/null 2>/dev/null;
-               until [ "$($ADB_PATH/adb connect 192.168.56.101 1>/dev/null 2>/dev/null && $ADB_PATH/adb shell dumpsys window | grep mCurrentFocus | grep Keyguard | wc -l)" == "0" ]; do
+               until [ $($ADB_PATH/adb connect 192.168.56.101 1>/dev/null 2>/dev/null && $ADB_PATH/adb shell dumpsys window | grep mCurrentFocus | grep Keyguard | wc -l) -eq 0 ]; do
                  $ADB_PATH/adb install $APPIUM_HOME/submodules/unlock_apk/bin/unlock_apk-debug.apk 1>/dev/null 2>/dev/null;
                  $ADB_PATH/adb shell am start -n io.appium.unlock/.Unlock 1>/dev/null 2>/dev/null;
                done;
