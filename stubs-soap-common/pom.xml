@@ -5,7 +5,7 @@
     <parent>
         <artifactId>jbehave-framework</artifactId>
         <groupId>com.griddynamics.qa</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.1.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>stubs-soap-common</artifactId>
@@ -25,8 +25,8 @@
                         </connector>
                     </connectors>
                     <scanIntervalSeconds>10</scanIntervalSeconds>
-                    <stopKey/>
-                    <stopPort/>
+                    <stopKey />
+                    <stopPort />
                 </configuration>
             </plugin>
             <plugin>

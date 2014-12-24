@@ -3,8 +3,11 @@ package com.griddynamics.qa.ui.steps;
 import com.griddynamics.qa.tools.rest.TestRequest;
 import com.griddynamics.qa.ui.ElementBlock;
 import com.griddynamics.qa.ui.Pages;
+import com.griddynamics.qa.ui.utils.TimeoutConstants;
 import org.jbehave.core.annotations.*;
 import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.interactions.Actions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -14,6 +17,7 @@ import java.util.*;
 
 import static com.griddynamics.qa.logger.LoggerFactory.getLogger;
 import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 
 
@@ -26,12 +30,10 @@ import static org.junit.Assert.*;
 
 @Component
 @Scope("thread")
-public class CommonPageSteps {
+public class CommonPageSteps implements TimeoutConstants{
 
     @Autowired
     public Pages pages;
-    private final static int WAIT_LOAD_TIMEOUT_IN_MS = 500;
-    private final static int WAIT_ELEMENT_LOAD_TIMEOUT_IN_SEC = 120;
 
     public CommonPageSteps() { // constructor
     }
@@ -48,7 +50,16 @@ public class CommonPageSteps {
      */
     @When("customer clicks $elementName")
     public void click(String elementName) {
-        pages.getCurrentPage().click(elementName);
+        By loc = pages.getCurrentPage().getElementLocatorByName(elementName, true, true);
+        pages.getCurrentPage().waitForLocatorClickable(loc, DEFAULT_TIMEOUT_IN_SECONDS);
+        try {
+            pages.getCurrentPage().click(elementName);
+        } catch (TimeoutException e) {
+            getLogger().warn(e.getMessage());
+        } catch (StaleElementReferenceException e){
+            pages.getCurrentPage().waitForLocatorClickable(loc, DEFAULT_TIMEOUT_IN_SECONDS);
+            pages.getCurrentPage().click(elementName);
+        }
     }
 
 
@@ -57,7 +68,7 @@ public class CommonPageSteps {
      */
     @When(value = "customer clicks on $elementName", priority = 1)
     public void clickOn(String elementName) {
-        pages.getCurrentPage().click(elementName);
+        click(elementName);
     }
 
     /**
@@ -71,7 +82,15 @@ public class CommonPageSteps {
     public void thenElementContainsStringInAttribute(String attrName,
                                                      String elementName,
                                                      String attrValue) {
-        String currentAttrValue = pages.getCurrentPage().getElementAttributeValue(elementName, attrName);
+        By loc = pages.getCurrentPage().getElementLocatorByName(elementName, true, true);
+        pages.getCurrentPage().waitForLocatorAttributeValue(loc, attrName, attrValue, DEFAULT_TIMEOUT_IN_SECONDS);
+        String currentAttrValue = "";
+        try {
+            currentAttrValue = pages.getCurrentPage().getElementAttributeValue(elementName, attrName);
+        } catch (StaleElementReferenceException e) {
+            pages.getCurrentPage().waitForLocatorAttributeValue(loc, attrName, attrValue, DEFAULT_TIMEOUT_IN_SECONDS);
+            currentAttrValue = pages.getCurrentPage().getElementAttributeValue(elementName, attrName);
+        }
         assertThat("[ERROR] Element " + elementName + " has attribute " + attrName + " with value "
                 + currentAttrValue, currentAttrValue, containsString(attrValue));
     }
@@ -85,7 +104,15 @@ public class CommonPageSteps {
     @Then("element $elementName doesn't contain attribute $attribute")
     public void thenElementDoesNotContainAttribute(String elementName,
                                                    String attribute) {
-        String currentAttrValue = pages.getCurrentPage().getElementAttributeValue(elementName, attribute);
+        By loc = pages.getCurrentPage().getElementLocatorByName(elementName, true, true);
+        pages.getCurrentPage().waitForLocatorAttributeNoValue(loc, attribute, "", DEFAULT_TIMEOUT_IN_SECONDS);
+        String currentAttrValue = "";
+        try {
+            currentAttrValue = pages.getCurrentPage().getElementAttributeValue(elementName, attribute);
+        } catch (StaleElementReferenceException e) {
+            pages.getCurrentPage().waitForLocatorAttributeNoValue(loc, attribute, "", DEFAULT_TIMEOUT_IN_SECONDS);
+            currentAttrValue = pages.getCurrentPage().getElementAttributeValue(elementName, attribute);
+        }
         assertNull("[ERROR] Element " + elementName + "should not contain attribute " +
                 attribute + ", but it does", currentAttrValue);
     }
@@ -101,7 +128,15 @@ public class CommonPageSteps {
     public void thenElementDoesNotContainStringInAttribute(String attrName,
                                                            String elementName,
                                                            String attrValue) {
-        String currentAttrValue = pages.getCurrentPage().getElementAttributeValue(elementName, attrName);
+        By loc = pages.getCurrentPage().getElementLocatorByName(elementName, true, true);
+        pages.getCurrentPage().waitForLocatorAttributeNoValue(loc, attrName, attrValue, DEFAULT_TIMEOUT_IN_SECONDS);
+        String currentAttrValue = "";
+        try {
+            currentAttrValue = pages.getCurrentPage().getElementAttributeValue(elementName, attrName);
+        } catch (StaleElementReferenceException e) {
+            pages.getCurrentPage().waitForLocatorAttributeNoValue(loc, attrName, attrValue, DEFAULT_TIMEOUT_IN_SECONDS);
+            currentAttrValue = pages.getCurrentPage().getElementAttributeValue(elementName, attrName);
+        }
         assertThat("[ERROR] Element " + elementName + " has attribute " + attrName + " with value "
                 + currentAttrValue, currentAttrValue, not(containsString(attrValue)));
     }
@@ -124,7 +159,14 @@ public class CommonPageSteps {
             throw new RuntimeException("[ERROR] Block with name " + blockName
                     + " was not found in page class");
         }
-        String currentAttrValue = pages.getCurrentPage().getLocatorAttributeValue(block.getLocator(), attrName);
+        pages.getCurrentPage().waitForLocatorAttributeNoValue(block.getLocator(), attrName, attrValue, DEFAULT_TIMEOUT_IN_SECONDS);
+        String currentAttrValue = "";
+        try {
+            currentAttrValue = pages.getCurrentPage().getLocatorAttributeValue(block.getLocator(), attrName);
+        } catch (StaleElementReferenceException e) {
+            pages.getCurrentPage().waitForLocatorAttributeNoValue(block.getLocator(), attrName, attrValue, DEFAULT_TIMEOUT_IN_SECONDS);
+            currentAttrValue = pages.getCurrentPage().getLocatorAttributeValue(block.getLocator(), attrName);
+        }
         assertThat("[ERROR] Block " + blockName + " locator has attribute " + attrName + " with value "
                 + currentAttrValue, currentAttrValue, not(containsString(attrValue)));
     }
@@ -147,7 +189,14 @@ public class CommonPageSteps {
             throw new RuntimeException("[ERROR] Block with name " + blockName
                     + " was not found in page class");
         }
-        String currentAttrValue = pages.getCurrentPage().getLocatorAttributeValue(block.getLocator(), attrName);
+        pages.getCurrentPage().waitForLocatorAttributeValue(block.getLocator(), attrName, attrValue, DEFAULT_TIMEOUT_IN_SECONDS);
+        String currentAttrValue = "";
+        try {
+            currentAttrValue = pages.getCurrentPage().getLocatorAttributeValue(block.getLocator(), attrName);
+        } catch (StaleElementReferenceException e) {
+            pages.getCurrentPage().waitForLocatorAttributeValue(block.getLocator(), attrName, attrValue, DEFAULT_TIMEOUT_IN_SECONDS);
+            currentAttrValue = pages.getCurrentPage().getLocatorAttributeValue(block.getLocator(), attrName);
+        }
         assertThat("[ERROR] Block " + blockName + " locator has attribute " + attrName + " with value "
                 + currentAttrValue, currentAttrValue, containsString(attrValue));
     }
@@ -158,7 +207,7 @@ public class CommonPageSteps {
      * @param elements link enumeration with separator ","
      */
     @Then("the links $links are displayed on page")
-    public void footerLinks(@Named("Links") String elements) {
+    public void isLinksDisplayed(String elements) {
         String[] splits = elements.split(",");
         for (String element : splits) {
             assertTrue("[ERROR] Element " + element + " is not displayed",
@@ -173,7 +222,15 @@ public class CommonPageSteps {
      */
     @When(value = "customer clicks on $elementName in the $blockName", priority = 2)
     public void clickOnInTheBlock(String elementName, String blockName) {
-        pages.getCurrentPage().click(pages.getCurrentPage().findElementInBlock(blockName, elementName));
+        pages.getCurrentPage().getBlockByName(blockName).waitForElementClickable(elementName, DEFAULT_TIMEOUT_IN_SECONDS);
+        try {
+            pages.getCurrentPage().click(pages.getCurrentPage().findElementInBlock(blockName, elementName));
+        } catch (TimeoutException e) {
+            getLogger().warn(e.getMessage());
+        } catch (StaleElementReferenceException e1) {
+            pages.getCurrentPage().getBlockByName(blockName).waitForElementClickable(elementName, DEFAULT_TIMEOUT_IN_SECONDS);
+            pages.getCurrentPage().click(pages.getCurrentPage().findElementInBlock(blockName, elementName));
+        }
     }
 
     /**
@@ -205,7 +262,13 @@ public class CommonPageSteps {
     @When("customer types $text in $elementName")
     @Alias("customer writes $text at $elementName")
     public void whenTypeText(String text, String elementName) {
-        pages.getCurrentPage().typeText(elementName, text);
+        pages.getCurrentPage().isElementLoaded(elementName);
+        try {
+            pages.getCurrentPage().typeText(elementName, text);
+        } catch (StaleElementReferenceException e) {
+            pages.getCurrentPage().isElementLoaded(elementName);
+            pages.getCurrentPage().typeText(elementName, text);
+        }
     }
 
     /**
@@ -215,7 +278,13 @@ public class CommonPageSteps {
      */
     @When("customer clears $elementName")
     public void whenClearField(String elementName) {
-        pages.getCurrentPage().clearField(elementName);
+        pages.getCurrentPage().isElementLoaded(elementName);
+        try {
+            pages.getCurrentPage().clearField(elementName);
+        } catch (StaleElementReferenceException e) {
+            pages.getCurrentPage().isElementLoaded(elementName);
+            pages.getCurrentPage().clearField(elementName);
+        }
     }
 
     /**
@@ -225,19 +294,30 @@ public class CommonPageSteps {
      */
     @When("customer submits $elementName")
     public void submit(String elementName) {
-        pages.getCurrentPage().submit(elementName);
-
+        pages.getCurrentPage().isElementLoaded(elementName);
+        try {
+            pages.getCurrentPage().submit(elementName);
+        } catch (StaleElementReferenceException e) {
+            pages.getCurrentPage().isElementLoaded(elementName);
+            pages.getCurrentPage().submit(elementName);
+        }
     }
 
     @When(value = "customer submits button $elementName", priority = 2)
     public void submitButton(String elementName) {
-        pages.getCurrentPage().submitButton(elementName);
+        submit(elementName);
     }
 
 
     @When(value = "customer selects $text in $elementName", priority = 2)
     public void selectText(String text, String elementName) {
-        pages.getCurrentPage().selectText(elementName, text);
+        pages.getCurrentPage().isElementLoaded(elementName);
+        try {
+            pages.getCurrentPage().selectText(elementName, text);
+        } catch (StaleElementReferenceException e) {
+            pages.getCurrentPage().isElementLoaded(elementName);
+            pages.getCurrentPage().selectText(elementName, text);
+        }
     }
 
     /**
@@ -249,7 +329,13 @@ public class CommonPageSteps {
     @When("customer sets $value in checkbox $elementName")
     @Alias("customer sets $value in $elementName checkbox")
     public void setCheckbox(Boolean value, String elementName) {
-        pages.getCurrentPage().setCheckbox(elementName, value);
+        pages.getCurrentPage().isElementLoaded(elementName);
+        try {
+            pages.getCurrentPage().setCheckbox(elementName, value);
+        } catch (StaleElementReferenceException e) {
+            pages.getCurrentPage().isElementLoaded(elementName);
+            pages.getCurrentPage().setCheckbox(elementName, value);
+        }
     }
 
     /**
@@ -303,21 +389,29 @@ public class CommonPageSteps {
 
     @Then(value = "checkbox $elementName has value $value", priority = 1)
     public void thenCheckboxHasValue(String elementName, Boolean val) {
-        assertThat("[ERROR] Checkbox " + elementName + " has another value: ",
-                pages.getCurrentPage().isChecked(elementName), is(val));
+        By loc = pages.getCurrentPage().getElementLocatorByName(elementName, true, true);
+        pages.getCurrentPage().waitForLocatorVisibility(loc, DEFAULT_TIMEOUT_IN_SECONDS);
+        try {
+            assertThat("[ERROR] Checkbox " + elementName + " has another value: ",
+                    pages.getCurrentPage().isChecked(elementName), is(val));
+        } catch (StaleElementReferenceException e) {
+            pages.getCurrentPage().waitForLocatorVisibility(loc, DEFAULT_TIMEOUT_IN_SECONDS);
+            assertThat("[ERROR] Checkbox " + elementName + " has another value: ",
+                    pages.getCurrentPage().isChecked(elementName), is(val));
+        }
     }
 
 
     @Then("element $elementName has text $text")
     @Aliases(values = {"\"$text\" $elementName is displayed"})
     public void thenElementHasText(@Named("elementName") String elementName, @Named("text") String text) {
-        assertThat(pages.getCurrentPage().getElementText(elementName).replace("\n", " ").trim(), is(text));
+        By loc = pages.getCurrentPage().getElementLocatorByName(elementName, true, true);
+        pages.getCurrentPage().waitForElementContainsText(elementName, text, DEFAULT_TIMEOUT_IN_SECONDS);
     }
 
     @Then("element $elementName has value $value")
     public void thenElementHasValue(String elementName, String value) {
-        assertThat("[ERROR] Element " + elementName + " has another value: ",
-                pages.getCurrentPage().getElementValue(elementName), is(value));
+        pages.getCurrentPage().waitForElementAttributeValue(elementName, "value", value, DEFAULT_TIMEOUT_IN_SECONDS);
     }
 
     /**
@@ -342,7 +436,7 @@ public class CommonPageSteps {
                         block.isBlockDisplayed());
             } else if (value.equals("not displayed")) {
                 assertTrue("[ERROR] Block " + blockName + " is displayed though it shouldn't be",
-                        !block.isBlockDisplayed());
+                        block.isBlockNotDisplayed());
             } else if (value.equals("not present")) {
                 assertTrue("[ERROR] Block " + blockName + " is present though it shouldn't be",
                         !pages.getCurrentPage().isLocatorPresentOnPage(block.getLocator()));
@@ -377,7 +471,7 @@ public class CommonPageSteps {
      * @param quantity
      */
     @Then("block $name has $quantity elements")
-    public void thenBlockHasElements(@Named("name") String name, int quantity) {
+    public void thenBlockHasElements(String name, int quantity) {
         ElementBlock block = pages.getCurrentPage().getBlockByName(name);
         if (block == null) {
             throw new RuntimeException("[ERROR] Block with name " + name
@@ -455,11 +549,11 @@ public class CommonPageSteps {
      */
     @Then("$elementName is $value on page")
     public void thenElementIsPresent(String elementName, String val) {
-        By loc = pages.getCurrentPage().getElementLocatorByName(elementName, true, false);
-
         assertThat("[ERROR] Invalid name of step: should be '" + elementName + " is present on page', '" + elementName
                 + " is displayed on page', '" + elementName + " is not displayed on page' or '"
                 + elementName + " is not present on page'", val, isOneOf("present", "not present", "displayed", "not displayed"));
+
+        By loc = pages.getCurrentPage().getElementLocatorByName(elementName, false, false);
 
         if (val.equals("present")) {
             assertTrue("[ERROR] Element " + elementName + " with locator " + loc + " is not present on page",
@@ -472,7 +566,7 @@ public class CommonPageSteps {
                     pages.getCurrentPage().isLocatorDisplayedOnPage(loc));
         } else if (val.equals("not displayed")) {
             assertFalse("[ERROR] Element " + elementName + " with locator " + loc + " is displayed",
-                    pages.getCurrentPage().isLocatorDisplayedOnPage(loc));
+                    pages.getCurrentPage().isLocatorDisplayedOnPage(loc, false, DEFAULT_TIMEOUT_IN_SECONDS));
         }
     }
 
@@ -518,7 +612,15 @@ public class CommonPageSteps {
      */
     @When(value = "customer clicks $elementName with javascript", priority = 2)
     public void whenClickWithJs(String elementName) {
-        pages.getCurrentPage().clickElementWithScript(elementName);
+        try {
+            pages.getCurrentPage().clickElementWithScript(elementName);
+        } catch (TimeoutException e) {
+            getLogger().warn(e.getMessage());
+        } catch (StaleElementReferenceException e){
+            pages.getCurrentPage().waitUntilNotStaleElement(pages.getCurrentPage().getElementLocatorByName(elementName, true, false),
+                    DEFAULT_TIMEOUT_IN_SECONDS);
+            pages.getCurrentPage().clickElementWithScript(elementName);
+        }
     }
 
     /**
@@ -529,23 +631,45 @@ public class CommonPageSteps {
      */
     @When(value = "customer clicks $elementName with actions", priority = 2)
     public void whenClickWithActions(String elementName) {
-        new Actions(pages.getCurrentPage().getDriver()).moveToElement(pages.getCurrentPage().getElementByName(elementName)).click().perform();
+        try {
+            new Actions(pages.getCurrentPage().getDriver()).moveToElement(pages.getCurrentPage().getElementByName(elementName)).click().perform();
+        } catch (TimeoutException e) {
+            getLogger().warn(e.getMessage());
+        } catch (StaleElementReferenceException e){
+            pages.getCurrentPage().waitUntilNotStaleElement(pages.getCurrentPage().getElementLocatorByName(elementName, true, false),
+                    DEFAULT_TIMEOUT_IN_SECONDS);
+            new Actions(pages.getCurrentPage().getDriver()).moveToElement(pages.getCurrentPage().getElementByName(elementName)).click().perform();
+        }
     }
 
 
-    @Then("element $elementName not contains $text")
+    @Then("element $elementName does not contain $text")
     public void elementNotContainsText(String elementName, String text) {
-        String currText = pages.getCurrentPage().getElementText(elementName);
+        pages.getCurrentPage().waitForElementContainsNoText(elementName, text, DEFAULT_TIMEOUT_IN_SECONDS);
+        String currText = "";
+        try {
+            currText = pages.getCurrentPage().getElementText(elementName);
+        } catch (StaleElementReferenceException e) {
+            pages.getCurrentPage().waitForElementContainsNoText(elementName, text, DEFAULT_TIMEOUT_IN_SECONDS);
+            currText = pages.getCurrentPage().getElementText(elementName);
+        }
         assertThat("[ERROR] Text of the element " + elementName + ": '" + currText + "' doesn't contain " +
-                "substring '" + text + "'.",
+                        "substring '" + text + "'.",
                 currText, not(containsString(text)));
     }
 
     @Then("element $elementName contains $text")
     public void elementContainsText(String elementName, String text) {
-        String currText = pages.getCurrentPage().getElementText(elementName);
+        pages.getCurrentPage().waitForElementContainsText(elementName, text, DEFAULT_TIMEOUT_IN_SECONDS);
+        String currText = "";
+        try {
+            currText = pages.getCurrentPage().getElementText(elementName);
+        } catch (StaleElementReferenceException e) {
+            pages.getCurrentPage().waitForElementContainsText(elementName, text, DEFAULT_TIMEOUT_IN_SECONDS);
+            currText = pages.getCurrentPage().getElementText(elementName);
+        }
         assertThat("[ERROR] Text of the element " + elementName + ": '" + currText + "' doesn't contain " +
-                "substring '" + text + "'.",
+                        "substring '" + text + "'.",
                 currText, containsString(text));
     }
 
@@ -564,7 +688,14 @@ public class CommonPageSteps {
      */
     @When("customer press Enter on $elementName")
     public void pressEnter(String elementName) {
-        pages.getCurrentPage().pressEnter(elementName);
+        By loc = pages.getCurrentPage().getElementLocatorByName(elementName, true, false);
+        pages.getCurrentPage().waitForElementDisplayed(elementName, DEFAULT_TIMEOUT_IN_SECONDS);
+        try {
+            pages.getCurrentPage().pressEnter(elementName);
+        } catch (StaleElementReferenceException e) {
+            pages.getCurrentPage().waitForElementDisplayed(elementName, DEFAULT_TIMEOUT_IN_SECONDS);
+            pages.getCurrentPage().pressEnter(elementName);
+        }
     }
 
 
@@ -597,7 +728,13 @@ public class CommonPageSteps {
 
             assertTrue("[ERROR] Element " + elementName + " is not displayed on page", pages.getCurrentPage().isElementDisplayedOnPage(elementName));
 
-            String val = pages.getCurrentPage().getElementCssAttributeValue(elementName, "color");
+            String val = "";
+            try {
+                val = pages.getCurrentPage().getElementCssAttributeValue(elementName, "color");
+            } catch (StaleElementReferenceException e) {
+                pages.getCurrentPage().waitForElementDisplayed(elementName, DEFAULT_TIMEOUT_IN_SECONDS);
+                val = pages.getCurrentPage().getElementCssAttributeValue(elementName, "color");
+            }
 
             assertThat("[ERROR] Element color should be " + color + " but it have another color", val, is(hColor));
         } catch (NullPointerException npe) {
@@ -648,7 +785,14 @@ public class CommonPageSteps {
      */
     @Then(value = "label $elementName has text $text", priority = 2)
     public void labelHasText(@Named("elementName") String elementName, @Named("text") String text) {
-        String labelText = pages.getCurrentPage().getTextOfHiddenElement(elementName);
+        String labelText = "";
+        try {
+            labelText = pages.getCurrentPage().getTextOfHiddenElement(elementName);
+        } catch (StaleElementReferenceException e) {
+            pages.getCurrentPage().waitUntilNotStaleElement(pages.getCurrentPage().getElementLocatorByName(elementName, true, false),
+                    DEFAULT_TIMEOUT_IN_SECONDS);
+            labelText = pages.getCurrentPage().getTextOfHiddenElement(elementName);
+        }
         labelText = labelText.replace("\n", "").replace("\t", "").replaceAll("<!--.*-->", "").trim();
         assertThat("[ERROR] Label " + elementName + " has wrong label text", labelText, is(text));
     }
@@ -657,27 +801,55 @@ public class CommonPageSteps {
     public void hiddenElementHasAttributeWithValue(String attrName,
                                                    String elementName,
                                                    String attrValue) {
-        String currentAttrValue = pages.getCurrentPage().getAttrValueOfHiddenElement(elementName, attrName);
+        String currentAttrValue = "";
+        try {
+            currentAttrValue = pages.getCurrentPage().getAttrValueOfHiddenElement(elementName, attrName);
+        } catch (StaleElementReferenceException e) {
+            pages.getCurrentPage().waitUntilNotStaleElement(pages.getCurrentPage().getElementLocatorByName(elementName, true, false),
+                    DEFAULT_TIMEOUT_IN_SECONDS);
+            currentAttrValue = pages.getCurrentPage().getAttrValueOfHiddenElement(elementName, attrName);
+        }
         assertThat("[ERROR] Element " + elementName + " has wrong attribute " + attrName + " value",
                 currentAttrValue, containsString(attrValue));
     }
 
     @Then("Selector $elementName has element with text $text on $number place")
     public void selectorOptionHasText(String elementName, String text, int number) {
-        String optionText = pages.getCurrentPage().getDropDownElementText(elementName, number);
+        String optionText = "";
+        try {
+            optionText = pages.getCurrentPage().getDropDownElementText(elementName, number);
+        } catch (StaleElementReferenceException e) {
+            pages.getCurrentPage().waitUntilNotStaleElement(pages.getCurrentPage().getElementLocatorByName(elementName, true, true),
+                    DEFAULT_TIMEOUT_IN_SECONDS);
+            optionText = pages.getCurrentPage().getDropDownElementText(elementName, number);
+        }
         assertThat("[ERROR] Options value in selector " + elementName + " located at " +
                 number + " place has wrong text", optionText, is(text));
     }
 
     @Then("first element of $elementName is selected")
     public void firstElementIsSelected(String elementName) {
-        assertTrue("[ERROR] First element should be selected in " + elementName + ", but it is not",
-                pages.getCurrentPage().isFirstElementSelected(elementName));
+        boolean isSelected = false;
+        try {
+            isSelected = pages.getCurrentPage().isFirstElementSelected(elementName);
+        } catch (StaleElementReferenceException e) {
+            pages.getCurrentPage().waitUntilNotStaleElement(pages.getCurrentPage().getElementLocatorByName(elementName, true, false),
+                    DEFAULT_TIMEOUT_IN_SECONDS);
+            isSelected = pages.getCurrentPage().isFirstElementSelected(elementName);
+        }
+        assertTrue("[ERROR] First element should be selected in " + elementName + ", but it is not", isSelected);
     }
 
     @Then("Attribute $attribute of $number option in $elementName selector has text $text")
     public void selectorAttrHasText(String attribute, int number, String elementName, String text) {
-        String optionText = pages.getCurrentPage().getAttributeValueFromDropDownElement(elementName, attribute, number);
+        String optionText = "";
+        try {
+            optionText = pages.getCurrentPage().getAttributeValueFromDropDownElement(elementName, attribute, number);
+        } catch (StaleElementReferenceException e){
+            pages.getCurrentPage().waitUntilNotStaleElement(pages.getCurrentPage().getElementLocatorByName(elementName, true, false),
+                    DEFAULT_TIMEOUT_IN_SECONDS);
+            optionText = pages.getCurrentPage().getAttributeValueFromDropDownElement(elementName, attribute, number);
+        }
         assertThat("[ERROR] Options attribute " + attribute + " in selector " + elementName + " located at " +
                 number + " place has wrong text", optionText, is(text));
     }
@@ -685,21 +857,21 @@ public class CommonPageSteps {
     /**
      * @param blockName
      * @see CommonPageSteps#waitForBlockForTime(java.lang.String, java.lang.Integer)
-     *      timeout {@link CommonPageSteps#WAIT_ELEMENT_LOAD_TIMEOUT_IN_SEC}
+     *      timeout {@link CommonPageSteps#DEFAULT_TIMEOUT_IN_SECONDS}
      */
     @Then("customer waits when block $blockName appears")
     public void waitForBlock(String blockName) {
-        waitForBlockForTime(blockName, WAIT_ELEMENT_LOAD_TIMEOUT_IN_SEC);
+        waitForBlockForTime(blockName, DEFAULT_TIMEOUT_IN_SECONDS);
     }
 
     /**
      * @param elementName
      * @see com.griddynamics.qa.ui.steps.CommonPageSteps#waitForElement
-     *      timeout {@link CommonPageSteps#WAIT_ELEMENT_LOAD_TIMEOUT_IN_SEC}
+     *      timeout {@link CommonPageSteps#DEFAULT_TIMEOUT_IN_SECONDS}
      */
     @Then("customer waits when element $element appears")
     public void waitForElement(String elementName) {
-        waitForElement(elementName, WAIT_ELEMENT_LOAD_TIMEOUT_IN_SEC);
+        waitForElement(elementName, DEFAULT_TIMEOUT_IN_SECONDS);
     }
 
     /**
@@ -710,16 +882,7 @@ public class CommonPageSteps {
      */
     @Then("customer waits when block $blockName appears for $timeout second{s|}")
     public void waitForBlockForTime(String blockName, Integer timeout) {
-        long currentStepNumber = 0;
-        long stepsCount = timeout;
-        ElementBlock block = pages.getCurrentPage().getBlockByName(blockName);
-        assertNotNull("[ERROR] Can't find block " + blockName + " in Page Class", block);
-        while (!pages.getCurrentPage().isLocatorDisplayedOnPage(block.getLocator()) &&
-                currentStepNumber < (stepsCount * 2)) {
-            currentStepNumber++;
-            pages.getCurrentPage().sleep(WAIT_LOAD_TIMEOUT_IN_MS);
-        }
-        assertTrue("[ERROR] Block " + blockName + " was not displayed during timeout - " + timeout, pages.getCurrentPage().isLocatorDisplayedOnPage(block.getLocator()));
+        pages.getCurrentPage().waitForBlockDisplayed(blockName, timeout);
     }
 
     /**
@@ -730,22 +893,17 @@ public class CommonPageSteps {
      */
     @Then("customer waits when element $element appears for $timeout second{s|}")
     public void waitForElement(String elementName, Integer timeout) {
-        long currentStepNumber = 0;
-        long stepsCount = timeout;
-        while (!pages.getCurrentPage().isElementDisplayedOnPage(elementName) &&
-                currentStepNumber < (stepsCount * 2)) {
-            currentStepNumber++;
-            pages.getCurrentPage().sleep(WAIT_LOAD_TIMEOUT_IN_MS);
-        }
-        assertTrue("[ERROR] Element " + elementName + " was not displayed during timeout - " + timeout, pages.getCurrentPage().isElementDisplayedOnPage(elementName));
+        pages.getCurrentPage().waitForElementDisplayed(elementName, timeout);
     }
 
     /**
-     * waits during timeout {@link com.griddynamics.qa.ui.CommonElementMethods#TIME_OUT_IN_SECONDS} while element will be load and displayed
+     * @deprecated use waitForElement(String elementName)
+     * waits during timeout {@link com.griddynamics.qa.ui.CommonElementMethods#DEFAULT_TIMEOUT_IN_SECONDS} while element will be load and displayed
      * Element can absent on page when waiting is started
      *
      * @param elementName
      */
+    @Deprecated
     @Then("customer waits when element $element load and will be displayed")
     public void waitWhileElementLoadAndDisplayed(String elementName) {
         boolean isDisplayed = pages.getCurrentPage().isElementDisplayedAndClickable(elementName);
@@ -753,31 +911,53 @@ public class CommonPageSteps {
     }
 
     /**
+     * @deprecated use waitAllScriptsFinish() instead
      * waits {@value#WAIT_ELEMENT_LOAD_TIMEOUT_IN_SEC} seconds while Java Scripts will be completed
      * time steps waiting {@value#WAIT_LOAD_TIMEOUT_IN_MS}
      */
+    @Deprecated
     @Then("customer waits while all ajax scripts will be completed")
-    public void waitAllAjaxWillFinished() {
-        long currentStepNumber = 0;
-        long stepsCount = WAIT_ELEMENT_LOAD_TIMEOUT_IN_SEC;
+    public void waitAllAjaxWillFinished () {
+        int currentStepNumber = 0;
+        int stepsCount = DEFAULT_TIMEOUT_IN_SECONDS*2;
 
-        while (!pages.getCurrentPage().isAjaxJQueryCompleted() &&
-                currentStepNumber < (stepsCount * 2)) {
+        getLogger().info("Wait for DOM readiness");
 
+        while ((!pages.getCurrentPage().isAjaxJQueryReady()) && (currentStepNumber < stepsCount * 2))
+        {
             currentStepNumber++;
             pages.getCurrentPage().sleep(WAIT_LOAD_TIMEOUT_IN_MS);
         }
-        assertTrue("[ERROR] Scripts were not completed during timeout " + WAIT_ELEMENT_LOAD_TIMEOUT_IN_SEC +" seconds", pages.getCurrentPage().isAjaxJQueryCompleted());
+
+        getLogger().info("DOM is ready, start to wait for ajax script");
+
+        pages.getCurrentPage().sleep(WAIT_LOAD_TIMEOUT_IN_MS * 2);
+        currentStepNumber += 2;
+
+        while ((!pages.getCurrentPage().isAjaxJQueryCompleted()) && (currentStepNumber < stepsCount * 2))
+        {
+            currentStepNumber++;
+            pages.getCurrentPage().sleep(WAIT_LOAD_TIMEOUT_IN_MS);
+        }
+        assertTrue("[ERROR] Scripts were not completed during timeout" + (DEFAULT_TIMEOUT_IN_SECONDS*2) +" seconds",
+                pages.getCurrentPage().isAjaxJQueryCompleted());
+    }
+
+    @Then(value = "wait until all page scripts are completed")
+    public void waitAllScriptsFinish() {
+        pages.getCurrentPage().waitAllScriptsFinish(DEFAULT_TIMEOUT_IN_SECONDS*2);
     }
 
     /**
-     * waits during timeout {@link com.griddynamics.qa.ui.CommonElementMethods#TIME_OUT_IN_SECONDS} while element will be load and clicable
+     * waits during timeout {@link com.griddynamics.qa.ui.CommonElementMethods#DEFAULT_TIMEOUT_IN_SECONDS} while element will be load and clicable
      * Element can absent on page when waiting is started
-     *
+     * @deprecated  use waitElementClickable(String elementName)
      * @param elementName
      */
+    @Deprecated
     @Then("customer waits when element $element will be clickable")
     public void waitWhileElementIsClickable(String elementName) {
+        By loc = pages.getCurrentPage().getElementLocatorByName(elementName, true, false);
         boolean isClickable = pages.getCurrentPage().isElementLoaded(elementName);
         assertTrue("[ERROR] Element was not loaded during timeout: " + elementName, isClickable);
     }
@@ -808,6 +988,66 @@ public class CommonPageSteps {
         int actualHeight = pages.getCurrentPage().getElementByName(elementName).getSize().getHeight();
         assertThat("[ERROR] Element " + elementName + " height should be more than " + sizeValue +
                 "; Actual value " + actualHeight, actualHeight, greaterThan(sizeValue));
+    }
+
+    @When(value = "customer hovers and holds mouse over $elementName1 and then click on $elementName2")
+    public void hoverToElementAndClick(String elementName1, String elementName2) throws InterruptedException {
+        scrollToElement(elementName1);
+        pages.getCurrentPage().hoverOverTheElement(elementName1);
+        Thread.sleep(WAIT_LOAD_TIMEOUT_IN_MS);
+        scrollToElement(elementName2);
+        pages.getCurrentPage().click(elementName2);
+    }
+
+    @When("customer scrolls to the element $elementName")
+    public void scrollToElement(String elementName) {
+        pages.getCurrentPage().scrollToElement(pages.getCurrentPage().getElementByName(elementName));
+    }
+
+    @When("close modal window")
+    public void closeModalWindow() {
+        pages.getCurrentPage().switchTo().alert().accept();
+
+    }
+
+    @Then("modal window contains $text")
+    public void closeModalWindow(String text) {
+        String textFromModal = pages.getCurrentPage().switchTo().alert().getText();
+        assertTrue("Modal Message does not contain expected text.  Expected: '" + text + "'; Got: " + textFromModal,
+                textFromModal.contains(text));
+    }
+
+    @When("customer double clicks $elementName")
+    public void doubleClick(String elementName) {
+        new Actions(this.pages.getCurrentPage().getDriver()).moveToElement(this.pages.getCurrentPage().getElementByName(elementName)).doubleClick().perform();
+    }
+
+    @When("customer right clicks $elementName")
+    public void rightClick(String elementName) {
+        new Actions(this.pages.getCurrentPage().getDriver())
+                .moveToElement(this.pages.getCurrentPage().getElementByName(elementName))
+                .contextClick().build().perform();
+    }
+
+    /*************** Methods waiting for expected conditions **********************/
+
+    @Then("wait until attribute $attrName of element $elementName contains $attrValue")
+    public void waitElementContainsStringInAttribute(String attrName,
+                                                     String elementName,
+                                                     String attrValue) {
+        pages.getCurrentPage().waitForElementAttributeValue(elementName, attrName, attrValue, DEFAULT_TIMEOUT_IN_SECONDS);
+    }
+
+    @Then("wait until element $elementName contains $text")
+    public void waitElementContainsText(String name,
+                                        String text) {
+        pages.getCurrentPage().waitForElementContainsText(name, text, DEFAULT_TIMEOUT_IN_SECONDS);
+
+    }
+
+    @Then("wait until element $elementName is clickable")
+    public void waitElementClickable(String elementName) {
+        pages.getCurrentPage().waitForElementClickable(elementName, DEFAULT_TIMEOUT_IN_SECONDS);
     }
 
 }

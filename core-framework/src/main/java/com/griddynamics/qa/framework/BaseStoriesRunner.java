@@ -112,7 +112,6 @@ public abstract class BaseStoriesRunner extends JUnitStories {
      */
     @Test
     public void run() throws Throwable {
-        beforeSuite();
         String suiteName = this.getClass().getSimpleName();
 
         suiteList = getSuiteList();
@@ -124,6 +123,7 @@ public abstract class BaseStoriesRunner extends JUnitStories {
          */
 
         if (CollectionUtils.isEmpty(suiteList) || suiteList.contains(suiteName)) {
+            beforeSuite();
             List<String> storyPath = storyPaths();
             if (CollectionUtils.isEmpty(storyPath)) {
                 getLogger().info(suiteName + ": empty list of stories for running.");

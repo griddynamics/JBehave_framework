@@ -1,13 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>com.griddynamics.qa</groupId>
     <artifactId>jbehave-framework</artifactId>
     <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.1.1-SNAPSHOT</version>
     <name>JBehave Framework</name>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -44,71 +41,65 @@
         <developerConnection>scm:git:git@github.com:griddynamics/JBehave_framework.git</developerConnection>
         <url>scm:git:git@github.com:griddynamics/JBehave_framework.git</url>
     </scm>
-
     <modules>
-        <module>common-atg-utils</module>
-        <module>common-hybris-utils</module>
+        <module>common-resources-utils</module>
         <module>common-logger</module>
         <module>common-properties-utils</module>
-        <module>common-resources-utils</module>
         <module>common-tools</module>
-        <module>common-ui-utils</module>
         <module>core-framework</module>
+        <module>common-ui-utils</module>
         <module>stubs-soap-common</module>
         <module>stubs-tools</module>
+        <module>common-atg-utils</module>
+        <module>common-hybris-utils</module>
         <module>mobile</module>
     </modules>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <ojdbc.version>11.2.0.3</ojdbc.version>
-
-
-        <jbehave.core.version>3.8</jbehave.core.version>
+        <jbehave.core.version>3.9.4</jbehave.core.version>
         <jbehave.web.version>3.5.5</jbehave.web.version>
         <selenium.version>2.34.0</selenium.version>
         <jbehave.site.version>3.1.1</jbehave.site.version>
         <junit.version>4.11</junit.version>
         <spring.version>3.2.4.RELEASE</spring.version>
         <log4j.version>1.2.17</log4j.version>
+        <doxygen.path>/usr/bin/doxygen</doxygen.path>
         <hamcrest.version>1.3</hamcrest.version>
-
     </properties>
-
     <!--<profiles>
-        <profile>
-            <id>signJars</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-jarsigner-plugin</artifactId>
-                        <version>1.2</version>
-                        <executions>
-                            <execution>
-                                <id>sign</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <storetype>JKS</storetype>
-                            <keystore>${keystore.path}</keystore>
-                            <alias>${keystore.alias}</alias>
-                            <storepass>${keystore.store.password}</storepass>
-                            <keypass>${keystore.key.password}</keypass>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
+    <profile>
+    <id>signJars</id>
+    <activation>
+    <activeByDefault>false</activeByDefault>
+    </activation>
+    <build>
+    <plugins>
+    <plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-jarsigner-plugin</artifactId>
+    <version>1.2</version>
+    <executions>
+    <execution>
+    <id>sign</id>
+    <phase>package</phase>
+    <goals>
+    <goal>sign</goal>
+    </goals>
+    </execution>
+    </executions>
+    <configuration>
+    <storetype>JKS</storetype>
+    <keystore>${keystore.path}</keystore>
+    <alias>${keystore.alias}</alias>
+    <storepass>${keystore.store.password}</storepass>
+    <keypass>${keystore.key.password}</keypass>
+    </configuration>
+    </plugin>
+    </plugins>
+    </build>
+    </profile>
     </profiles>-->
-
     <build>
         <pluginManagement>
             <plugins>
@@ -151,13 +142,13 @@
                 <configuration>
                     <alphabeticalIndex>true</alphabeticalIndex>
                     <generateHtml>true</generateHtml>
-                    <inputDirectory>${project.basedir}</inputDirectory>
-                    <projectNumber>${project.version}</projectNumber>
-                    <outputDirectory>${project.build.directory}</outputDirectory>
-                    <configurationFile>docs/doxygen.config</configurationFile>
+                    <inputDirectory>${basedir}</inputDirectory>
+                    <projectNumber>${version}</projectNumber>
+                    <outputDirectory>${project.build.directory}/doxygen/</outputDirectory>
+                    <configurationFile>doxygen.config</configurationFile>
                     <filePatterns>*.java</filePatterns>
                     <recursive>true</recursive>
-                    <executable>/$(which doxygen)</executable>
+                    <executable>${doxygen.path}</executable>
                 </configuration>
                 <executions>
                     <execution>

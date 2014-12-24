@@ -2,19 +2,25 @@ package com.griddynamics.qa.ui;
 
 
 import com.griddynamics.qa.tools.StringParser;
+import com.griddynamics.qa.ui.utils.CustomExpectedConditions;
+import com.griddynamics.qa.ui.utils.TimeoutConstants;
 import org.codehaus.plexus.util.StringUtils;
 import org.jbehave.web.selenium.WebDriverPage;
 import org.jbehave.web.selenium.WebDriverProvider;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.internal.Locatable;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.*;
 
+import static com.griddynamics.qa.logger.LoggerFactory.getLogger;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
+import static org.openqa.selenium.support.ui.ExpectedConditions.alertIsPresent;
+import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfAllElementsLocatedBy;
 
 /**
  * @author ybaturina
@@ -24,10 +30,7 @@ import static org.junit.Assert.*;
  *         Entity class containing common methods that work with page elements
  */
 
-public class CommonElementMethods extends WebDriverPage {
-    private final static int WAIT_AFTER_HOVER_TIMEOUT = 500;
-    private final static int WAIT_ALERT_DISMISS = 1000;
-    private static final long TIME_OUT_IN_SECONDS = 30;
+public class CommonElementMethods extends WebDriverPage implements TimeoutConstants{
 
     /**
      * blocks is the container of blocks aggregated by block/page
@@ -108,9 +111,9 @@ public class CommonElementMethods extends WebDriverPage {
     /**
      * Get element locator by name
      *
-     * @param name
-     * @param isFound
-     * @param shouldPresent {@value #} // this displays well
+     * @param name name of the element
+     * @param isFound flag indicating whether the element should be found in page classes or not
+     * @param shouldPresent flag indicating whether the element locator should present in page DOM structure or not
      * @return By or null when can't find it
      * @throws RuntimeException when unable to find the element
      */
@@ -378,43 +381,95 @@ public class CommonElementMethods extends WebDriverPage {
 
     public boolean isElementDisplayedOnPage(String name) {
         By loc = getElementLocatorByName(name);
-        return isLocatorPresentOnPage(loc) ? findElementSuppressAlert(loc).isDisplayed() : false;
+        waitForLocatorVisibility(loc, DEFAULT_TIMEOUT_IN_SECONDS);
+        try {
+            return isLocatorPresentOnPage(loc) ? findElementSuppressAlert(loc).isDisplayed() : false;
+        } catch (StaleElementReferenceException e) {
+            waitForLocatorVisibility(loc, DEFAULT_TIMEOUT_IN_SECONDS);
+            return isLocatorPresentOnPage(loc) ? findElementSuppressAlert(loc).isDisplayed() : false;
+        }
     }
 
     public boolean isLocatorPresentOnPage(By loc) {
-        return getElementsSize(loc) > 0;
+        return loc!=null?getElementsSize(loc) > 0:false;
+    }
+
+    public boolean isLocatorDisplayedOnPage(By loc, boolean shouldDisplay, int timeout) {
+        assertNotNull("[ERROR] Locator is null", loc);
+        if (shouldDisplay) {
+            waitForLocatorVisibility(loc,timeout);
+        }
+        try {
+            return isLocatorPresentOnPage(loc) ? findElementSuppressAlert(loc).isDisplayed() : false;
+        } catch (StaleElementReferenceException e) {
+            if (shouldDisplay) {
+                waitForLocatorVisibility(loc, timeout);
+            }
+            else{
+                waitUntilNotStaleElement(loc, timeout);
+            }
+            return isLocatorPresentOnPage(loc) ? findElementSuppressAlert(loc).isDisplayed() : false;
+        }
     }
 
     public boolean isLocatorDisplayedOnPage(By loc) {
-        return isLocatorPresentOnPage(loc) ? findElementSuppressAlert(loc).isDisplayed() : false;
+        return isLocatorDisplayedOnPage(loc, true, DEFAULT_TIMEOUT_IN_SECONDS);
     }
 
 
     /**
-     * Wait {@value #TIME_OUT_IN_SECONDS} seconds while element will be displayed
+     * Wait {@value #DEFAULT_TIMEOUT_IN_SECONDS} seconds while element will be displayed
      *
      * @param name - element name
      * @return
      */
     public boolean isElementLoaded(String name) {
         By loc = getElementLocatorByName(name, false, false);
-        WebDriverWait wait = new WebDriverWait(getDriverProvider().get(), TIME_OUT_IN_SECONDS);
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(loc));
-        return element.isEnabled();
+        WebDriverWait wait = new WebDriverWait(getDriverProvider().get(), DEFAULT_TIMEOUT_IN_SECONDS);
+        WebElement element = wait.until(CustomExpectedConditions.visibilityOfElementLocated(loc));
+        return element.isDisplayed();
     }
 
     /**
-     * Wait {@value #TIME_OUT_IN_SECONDS} seconds while element will be displayed and clicable
+     * Wait {@value #DEFAULT_TIMEOUT_IN_SECONDS} seconds while hidden element will be displayed
+     *
+     * @param loc - elements locator
+     * @return each WebElement.isEnabled
+     */
+    public boolean areElementsLoaded(By loc){
+        WebDriverWait wait = new WebDriverWait(getDriverProvider().get(), DEFAULT_TIMEOUT_IN_SECONDS);
+        List<WebElement> presents = wait.until(presenceOfAllElementsLocatedBy(loc));
+        for (WebElement present : presents){
+            if (!present.isDisplayed()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Wait {@value #DEFAULT_TIMEOUT_IN_SECONDS} seconds while element will be displayed and clickable
      *
      * @param name
      * @return
      */
     public boolean isElementDisplayedAndClickable(String name) {
-        By loc = getElementLocatorByName(name, true, false);
-        WebDriverWait wait = new WebDriverWait(getDriverProvider().get(), TIME_OUT_IN_SECONDS);
-        WebElement element = wait.until(ExpectedConditions.elementToBeClickable(loc));
-        return element.isDisplayed();
+        waitForElementClickable(name, DEFAULT_TIMEOUT_IN_SECONDS);
+        WebElement element = findElementSuppressAlert(getElementLocatorByName(name));
+        return element.isDisplayed() && element.isEnabled();
     }
+    
+    /**
+     * Check that jQuery is defined and ready
+     *
+     * @return true if window.jQuery != undefined && jQuery.isReady == 1
+     */
+    public boolean isAjaxJQueryReady() {
+        JavascriptExecutor js = (JavascriptExecutor) getDriver();
+        Boolean scriptResult = (Boolean) js.executeScript("return window.jQuery != undefined && jQuery.isReady == 1", new Object[0]);
+        return scriptResult.booleanValue();
+    }
+
 
     /**
      * Check that there is no active jQuery session
@@ -423,20 +478,20 @@ public class CommonElementMethods extends WebDriverPage {
      */
     public boolean isAjaxJQueryCompleted() {
         JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        Boolean scriptResult = (Boolean) js.executeScript("return jQuery.active == 0");
-        return scriptResult;
+        Boolean scriptResult = (Boolean) js.executeScript("return jQuery.active == 0", new Object[0]);
+        return scriptResult.booleanValue();
     }
 
 
     /**
-     * Wait {@value #TIME_OUT_IN_SECONDS} seconds while hidden element will be present
+     * Wait {@value #DEFAULT_TIMEOUT_IN_SECONDS} seconds while hidden element will be present
      *
      * @param loc - element locator
      * @return WebElement.isEnabled
      */
     public boolean isHiddenElementLoaded(By loc) {
-        WebDriverWait wait = new WebDriverWait(getDriverProvider().get(), TIME_OUT_IN_SECONDS);
-        WebElement present = wait.until(ExpectedConditions.presenceOfElementLocated(loc));
+        WebDriverWait wait = new WebDriverWait(getDriverProvider().get(), DEFAULT_TIMEOUT_IN_SECONDS);
+        WebElement present = wait.until(CustomExpectedConditions.presenceOfElementLocated(loc));
         return present.isEnabled();
     }
 
@@ -445,6 +500,12 @@ public class CommonElementMethods extends WebDriverPage {
         return findElements(loc).size();
     }
 
+    /**
+     * @deprecated use findElements(By loc) instead
+     * @param loc
+     * @return
+     */
+    @Deprecated
     public List<WebElement> getElementsByLoc(By loc) {
         return findElements(loc);
     }
@@ -460,7 +521,7 @@ public class CommonElementMethods extends WebDriverPage {
         Actions builder = new Actions(getDriver());
         builder.clickAndHold(el1).build().perform();
         try {
-            Thread.sleep(WAIT_AFTER_HOVER_TIMEOUT);
+            Thread.sleep(WAIT_LOAD_TIMEOUT_IN_MS);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             assertTrue("[ERROR] Interrupted exception was thrown during timeout: " + e.getMessage(), false);
@@ -473,6 +534,8 @@ public class CommonElementMethods extends WebDriverPage {
      */
     public boolean isAlertPresent() {
         try {
+            WebDriverWait wait = new WebDriverWait(getDriverProvider().get(), DEFAULT_TIMEOUT_IN_SECONDS);
+            wait.until(alertIsPresent());
             switchTo().alert();
             return true;
         } catch (Exception Ex) {
@@ -595,11 +658,25 @@ public class CommonElementMethods extends WebDriverPage {
     /**
      * Get html source of element with javascript
      *
-     * @param name
+     * @param elementName
      */
-    public String getHTMLSourceOfElement(String name) {
+    public String getHTMLSourceOfElement(String elementName) {
+        return getHTMLSource(elementName, true);
+
+    }
+
+    /**
+     * Get html source of block with javascript
+     *
+     * @param blockName
+     */
+    public String getHTMLSourceOfBlock(String blockName) {
+        return getHTMLSource(blockName, false);
+    }
+
+    private String getHTMLSource(String name, boolean isElement) {
         JavascriptExecutor js = (JavascriptExecutor) getDriver();
-        By loc = getElementLocatorByName(name);
+        By loc = isElement? getElementLocatorByName(name) : getBlockByName(name).getLocator();
         String elementText = null;
         WebElement element = findElementSuppressAlert(loc);
         elementText = ((String) js.executeScript("return arguments[0].innerHTML;", element)).trim();
@@ -679,11 +756,9 @@ public class CommonElementMethods extends WebDriverPage {
         } catch (UnhandledAlertException e) {
             switchTo().alert().dismiss();
             switchTo().defaultContent();
-            try {
-                Thread.sleep(WAIT_ALERT_DISMISS);
-            } catch (InterruptedException e1) {
-                Thread.currentThread().interrupt();
-                assertTrue("[ERROR] Exception in waiting for alert to disappear:" + e1.getMessage(), false);
+            WebDriverWait wait = new WebDriverWait(getDriverProvider().get(), DEFAULT_TIMEOUT_IN_SECONDS);
+            if (!wait.until(ExpectedConditions.not(alertIsPresent()))) {
+                assertTrue("[ERROR] Exception in waiting for alert to disappear:" + switchTo().alert().getText(), false);
             }
             return findElement(loc);
         }
@@ -699,6 +774,7 @@ public class CommonElementMethods extends WebDriverPage {
         Random randomGenerator = new Random();
         return elements.get(randomGenerator.nextInt(size));
     }
+
 
     /**
      * @param loc
@@ -717,4 +793,216 @@ public class CommonElementMethods extends WebDriverPage {
 
     }
 
+    /**
+     * Scroll to the element on page
+     * @param element  - WebElement
+     */
+    public void scrollToElement(WebElement element) {
+        ((Locatable)element).getCoordinates().inViewPort();
+    }
+
+
+
+    /**
+     * Search HTML element by name
+     * Scroll to it on display
+     * And Hover Over The Element
+     *
+     * @param elName HTML element name from a Story
+     */
+    public void hoverOverTheElement(String elName){
+        Actions action = new Actions(getDriverProvider().get());
+
+        WebElement webElement = getElementByName(elName);
+        scrollToElement(webElement);
+        action.moveToElement(webElement).build().perform();
+    }
+
+    /*************** Methods waiting for expected conditions **********************/
+
+    public void waitForLocatorClickable(By loc, int timeout) {
+        WebDriverWait wait = new WebDriverWait(getDriver(), timeout);
+        wait.until(CustomExpectedConditions.locatorToBeClickable(loc));
+    }
+
+    public void waitForElementClickable(WebElement element, int timeout) {
+        WebDriverWait wait = new WebDriverWait(getDriver(), timeout);
+        wait.until(CustomExpectedConditions.elementToBeClickable(element));
+    }
+
+    public void waitForElementClickable(String name, int timeout) {
+        waitForLocatorClickable(getElementLocatorByName(name, true, false), timeout);
+    }
+
+    public void waitForLocatorVisibility(By loc, int timeout) {
+        WebDriverWait wait = new WebDriverWait(getDriverProvider().get(), timeout);
+        try {
+            wait.until(CustomExpectedConditions.visibilityOfElementLocated(loc));
+        } catch (TimeoutException e) {
+            getLogger().info("[INFO] Locator " + loc + " is not present on page");
+        }
+    }
+
+    public void waitAllScriptsFinish(int timeout) {;
+        WebDriverWait waiter = new WebDriverWait(getDriver(), timeout);
+        try {
+            waiter.until(CustomExpectedConditions.isDocumentReady());
+        } catch (TimeoutException e) {
+            getLogger().error("[ERROR] Scripts were not completed during timeout" + timeout + " seconds");
+        }
+    }
+
+    public void waitForLocatorAttributeValue(By loc, String attr, String attrVal, int timeout) {
+        WebDriverWait waiter = new WebDriverWait(getDriver(), timeout);
+        try {
+            waiter.until(CustomExpectedConditions.elementAttributeHasValue(loc, attr, attrVal));
+        } catch (TimeoutException e) {
+            String currentAttrValue = getLocatorAttributeValue(loc, attr);
+            assertThat("[ERROR] Locator " + loc + " has attribute " + attr + " with value "
+                    + currentAttrValue, currentAttrValue, containsString(attrVal));
+        }
+    }
+
+    public void waitForLocatorAttributeNoValue(By loc, String attr, String attrVal, int timeout) {
+        WebDriverWait waiter = new WebDriverWait(getDriver(), timeout);
+        try {
+            waiter.until(CustomExpectedConditions.elementAttributeHasNoValue(loc, attr, attrVal));
+        } catch (TimeoutException e) {
+            String currentAttrValue = getLocatorAttributeValue(loc, attr);
+            assertThat("[ERROR] Locator " + loc + " has attribute " + attr + " with value "
+                    + currentAttrValue, currentAttrValue, not(containsString(attrVal)));
+        }
+    }
+
+    public void waitForElementCssAttributeValue(WebElement element, String attr, String attrVal, int timeout) {
+        WebDriverWait waiter = new WebDriverWait(getDriver(), timeout);
+        try {
+            waiter.until(CustomExpectedConditions.elementCssAttributeHasValue(element, attr, attrVal));
+        } catch (TimeoutException e) {
+            String currentAttrValue = element.getCssValue(attr);
+            assertThat("[ERROR] Element has attribute " + attr + " with value "
+                    + currentAttrValue, currentAttrValue, containsString(attrVal));
+        }
+    }
+
+    public void waitForElementCssAttributeNoValue(WebElement element, String attr, String attrVal, int timeout) {
+        WebDriverWait waiter = new WebDriverWait(getDriver(), timeout);
+        try {
+            waiter.until(CustomExpectedConditions.elementCssAttributeHasNoValue(element, attr, attrVal));
+        } catch (TimeoutException e) {
+            String currentAttrValue = element.getCssValue(attr);
+            assertThat("[ERROR] Element has attribute " + attr + " with value "
+                    + currentAttrValue, currentAttrValue, containsString(attrVal));
+        }
+    }
+
+    public void waitForElementAttributeValue(String name, String attr, String attrVal, int timeout) {
+        waitForLocatorAttributeValue(getElementLocatorByName(name, true, true), attr, attrVal, timeout);
+    }
+
+    public void waitForElementContainsText(String name, String text, int timeout) {
+        WebDriverWait waiter = new WebDriverWait(getDriver(), timeout);
+        try {
+            waiter.until(CustomExpectedConditions.elementContainsText(getElementLocatorByName(name, true, true), text));
+        } catch (TimeoutException e) {
+            String currentText = getElementText(name);
+            assertThat("[ERROR] Element " + name + " has text "
+                    + currentText, currentText, containsString(text));
+        }
+    }
+
+    public void waitForElementContainsNoText(String name, String text, int timeout) {
+        WebDriverWait waiter = new WebDriverWait(getDriver(), timeout);
+        try {
+            waiter.until(CustomExpectedConditions.elementContainsNoText(getElementLocatorByName(name, true, true), text));
+        } catch (TimeoutException e) {
+            String currentText = getElementText(name);
+            assertThat("[ERROR] Element " + name + " has text "
+                    + currentText, currentText, not(containsString(text)));
+        }
+    }
+
+    public void waitForElementContainsValue(String name, String value, int timeout) {
+        WebDriverWait waiter = new WebDriverWait(getDriver(), timeout);
+        waiter.until(CustomExpectedConditions.elementAttributeHasValue(getElementLocatorByName(name, true, true), "value", value));
+    }
+
+    public void mandatoryWaitForElementContainsValue(String name, String value, int timeout) {
+        try {
+            waitForElementContainsValue(name, value, timeout);
+        } catch (TimeoutException e) {
+            String currentValue = getElementValue(name);
+            assertThat("[ERROR] Element " + name + " has value "
+                    + currentValue, currentValue, containsString(value));
+        }
+    }
+
+    public void mandatoryWaitForElementClickable(String name, int timeout) {
+        try {
+            waitForElementClickable(name, timeout);
+        } catch (TimeoutException e) {
+            assertTrue("[ERROR] Element " + name + " is disabled", getElementByName(name).isEnabled());
+        }
+    }
+
+    public void waitForBlockDisplayed(String blockName, int timeout) {
+        ElementBlock block = getBlockByName(blockName);
+        if (block == null) {
+            throw new RuntimeException("Block with name " + blockName
+                    + " was not found in page class");
+        }
+        By loc = block.getLocator();
+        try {
+            waitForLocatorDisplayed(loc, timeout);
+        } catch (TimeoutException e) {
+            assertTrue("[ERROR] Block " + blockName + " was not displayed during timeout - " + timeout, isLocatorDisplayedOnPage(loc));
+        }
+    }
+
+    public void waitForElementDisplayed(String elementName, int timeout) {
+        By loc = getElementLocatorByName(elementName, true, false);
+        WebDriverWait wait = new WebDriverWait(getDriver(), timeout);
+        try {
+            wait.until(CustomExpectedConditions.visibilityOfElementLocated(loc));
+        } catch (TimeoutException e) {
+            assertTrue("[ERROR] Element " + elementName + " was not displayed during timeout - " + timeout, isLocatorDisplayedOnPage(loc));
+        }
+    }
+
+    public void waitForLocatorDisplayed(By loc, int timeout) {
+        WebDriverWait wait = new WebDriverWait(getDriver(), timeout);
+        try {
+            wait.until(CustomExpectedConditions.visibilityOfElementLocated(loc));
+        } catch (TimeoutException e) {
+            assertTrue("[ERROR] Locator " + loc + " is not present on page", isLocatorDisplayedOnPage(loc));
+        }
+    }
+
+    public void waitForElementsCount(By loc, int count, int timeout) {
+        waitForElementsCount(loc, count, true, timeout);
+    }
+
+    public void waitForElementsCount(By loc, int count, boolean isEqual, int timeout) {
+        WebDriverWait waiter = new WebDriverWait(getDriver(), timeout);
+        try {
+            if (isEqual) {
+                waiter.until(CustomExpectedConditions.elementsHasCount(loc, count));
+            } else {
+                waiter.until(CustomExpectedConditions.elementsHasNotCount(loc, count));
+            }
+        } catch (TimeoutException e) {
+            int currentCount = getElementsSize(loc);
+            assertTrue("[ERROR] Locator " + loc + " has count " + currentCount, currentCount == count);
+        }
+    }
+
+    public boolean waitUntilNotStaleElement(By loc, int timeout) {
+        WebDriverWait waiter = new WebDriverWait(getDriver(), timeout);
+        return waiter.until(CustomExpectedConditions.isNotStaleElement(loc));
+    }
+
+    public boolean waitUntilNotStaleElement(String name, int timeout) {
+        WebDriverWait waiter = new WebDriverWait(getDriver(), timeout);
+        return waiter.until(CustomExpectedConditions.isNotStaleElement(getElementLocatorByName(name)));
+    }
 }
