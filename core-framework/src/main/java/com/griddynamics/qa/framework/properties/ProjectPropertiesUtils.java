@@ -56,6 +56,12 @@ public class ProjectPropertiesUtils extends PropertiesUtils {
             throw new IllegalArgumentException("System property '" + ProjectProperties.APPLICATION_CONFIG_FILENAME +"' was not set");
         }
 
+        if (System.getProperty("spring.profiles.active").contains("mobile")){
+            if (ProjectProperties.getMobileConfigFilenameValue() == null) {
+                throw new IllegalArgumentException("System property '" + ProjectProperties.MOBILE_CONFIG_FILENAME +"' was not set");
+            }
+        }
+
         runnerProperties = FilePropertiesUtils.getPropertiesFromFile(ProjectProperties.getJrunnerConfigFilenameValue(),
                 ProjectProperties.getApplicationConfigFilenameValue());
 

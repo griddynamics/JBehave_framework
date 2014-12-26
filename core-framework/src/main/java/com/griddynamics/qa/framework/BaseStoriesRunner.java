@@ -6,7 +6,6 @@ import com.griddynamics.qa.framework.logger.GlobalLoggerOutput;
 import com.griddynamics.qa.framework.properties.ProjectProperties;
 import com.griddynamics.qa.framework.properties.ProjectPropertiesUtils;
 import com.griddynamics.qa.logger.LoggerFactory;
-import io.selendroid.SelendroidLauncher;
 import org.codehaus.plexus.util.StringUtils;
 import org.jbehave.core.configuration.Configuration;
 import org.jbehave.core.configuration.MostUsefulConfiguration;
@@ -61,8 +60,6 @@ public abstract class BaseStoriesRunner extends JUnitStories {
     private StoryReporterBuilder storyReporterBuilder;
     private String applicationContextPath;
     private Embedder embedder;
-
-    private static SelendroidLauncher selendroidServer = null;
 
     public BaseStoriesRunner() {
     }

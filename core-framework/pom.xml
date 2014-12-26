@@ -71,7 +71,7 @@
         </dependency>
 
 
-        <dependency>
+        <!--<dependency>
             <groupId>io.selendroid</groupId>
             <version>0.12.0</version>
             <artifactId>selendroid-standalone</artifactId>
@@ -80,7 +80,7 @@
             <groupId>io.selendroid</groupId>
             <version>0.12.0</version>
             <artifactId>selendroid-client</artifactId>
-        </dependency>
+        </dependency>-->
     </dependencies>
 
     <build>
