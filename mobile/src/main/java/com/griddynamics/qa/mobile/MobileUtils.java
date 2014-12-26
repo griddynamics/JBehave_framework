@@ -30,8 +30,8 @@ public class MobileUtils {
             + PATH_TO_ADB + " uninstall " + ANDROID_BROWSER_PACKAGE + " >/dev/null 2>/dev/null;"
             + PATH_TO_ADB + " uninstall " + ANDROID_SELENDROID_PACKAGE + " >/dev/null 2>/dev/null;"
             + PATH_TO_ADB + " uninstall " + ANDROID_UNLOCK_PACKAGE + " >/dev/null 2>/dev/null;"
-            + PATH_TO_FRUITSTRAP + " uninstall --bundle " + System.getProperty(IOS_APP_BUNDLE) + " >/dev/null 2>/dev/null;"
-            + PATH_TO_FRUITSTRAP + " uninstall --bundle " + IOS_SAFARILAUNCHER_BUNDLE + " >/dev/null 2>/dev/null;";
+            + PATH_TO_FRUITSTRAP + " uninstall --bundle " + System.getProperty(IOS_APP_BUNDLE) + " -t 2 >/dev/null 2>/dev/null;"
+            + PATH_TO_FRUITSTRAP + " uninstall --bundle " + IOS_SAFARILAUNCHER_BUNDLE + " -t 2 >/dev/null 2>/dev/null;";
 
     /**
      * Reads appium log and prints errors to current output stream
