@@ -24,7 +24,7 @@ public class MobileUtils {
     private static final String OUTPUT_APPIUM_ERRORS = "errors=$(grep 'error: \\|Error :\\|STDERR' ./target/appium.log); [ -n \"$errors\" ]"
             + " && echo -e \"\n--------------------------------------- Appium log ---------------------------------------\""
             + " && echo \"$errors\" && echo \"------------------------------------------------------------------------------------------\n\""
-            + " && cat ./target/appium.log >>./target/appium-full.log && echo \"\" >./target/appium.log";
+            + " && cat ./target/server.log >>./target/server-full.log && echo \"\" >./target/server.log";
 
     private static final String UNINSTALL_APPS_COMMAND          = PATH_TO_ADB + " uninstall " + System.getProperty(ANDROID_APP_PACKAGE) + " >/dev/null 2>/dev/null;"
             + PATH_TO_ADB + " uninstall " + ANDROID_BROWSER_PACKAGE + " >/dev/null 2>/dev/null;"

@@ -22,7 +22,7 @@ android_prerequisites () {
   : '(2)' &&   test "$1" == "true" || execute --in_background "player --vm-name \"$vmName\" 1>/dev/null 2>/dev/null &"
   : '(3)' &&   cd $APPIUM_HOME;
                test -z `cat $APPIUM_HOME/.appiumconfig* | grep -o ndroid | head -1` && ./reset.sh --android --selendroid --ios;
-               screen -dmS Appium nohup node ./lib/server/main.js --device-ready-timeout 120 --log-no-colors -g $BUILD_DIR/../../appium.log;
+               screen -dmS Appium nohup node ./lib/server/main.js --device-ready-timeout 120 --log-no-colors -g $BUILD_DIR/../server.log;
 }
 
 
@@ -77,7 +77,7 @@ android_prepare_browser () {
 echo "[INFO] executing android_prepare_browser function...";
                cd $BUILD_DIR;
 : '(1)' &&     kill $(jps -m | grep selendroid-standalone | awk -F " " '{print $1}') 2>/dev/null;
-               execute --in_background "java -jar $APPIUM_HOME/submodules/selendroid/selendroid-standalone/target/selendroid-standalone-0.12.0-with-dependencies.jar" 1>/dev/null 2>/dev/null;
+               execute --in_background "java -jar $APPIUM_HOME/submodules/selendroid/selendroid-standalone/target/selendroid-standalone-0.12.0-with-dependencies.jar 1>$BUILD_DIR/../server.log 2>>$BUILD_DIR/../server.log;" 1>/dev/null 2>/dev/null;
 : '(2)' &&     $ADB_PATH/adb start-server 1>/dev/null 2>/dev/null;
                until [ $($ADB_PATH/adb connect 192.168.56.101 1>/dev/null 2>/dev/null && $ADB_PATH/adb shell dumpsys window | grep mCurrentFocus | grep Keyguard | wc -l || echo -1) -eq 0 ]; do
                  $ADB_PATH/adb install $APPIUM_HOME/submodules/unlock_apk/bin/unlock_apk-debug.apk 1>/dev/null 2>/dev/null;
