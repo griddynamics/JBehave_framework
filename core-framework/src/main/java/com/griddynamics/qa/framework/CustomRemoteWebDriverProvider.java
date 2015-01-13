@@ -162,9 +162,10 @@ public class CustomRemoteWebDriverProvider extends RemoteWebDriverProvider {
 
             case IOS_SAFARI:
                 oldCapabilities.setCapability("app", "safari");
+                oldCapabilities.setCapability("platformName", "iOS");
+                oldCapabilities.setCapability("platformVersion", System.getProperty(IOS_VERSION));
                 oldCapabilities.setCapability("device", "iPhone Simulator");
                 oldCapabilities.setCapability("deviceName", System.getProperty(IOS_SIMULATOR));
-                oldCapabilities.setCapability("version", System.getProperty(IOS_VERSION));
                 oldCapabilities.setCapability(ACCEPT_SSL_CERTS, "true");
                 oldCapabilities.setJavascriptEnabled(true);
                 break;
