@@ -56,7 +56,7 @@ echo "[INFO] executing set_mobile_properties function...";
 
      set_property browser="$mobile";
      set_property REMOTE_WEBDRIVER_URL="http://localhost:4723/wd/hub";
-     set_property spring.profiles.active="mobile,remote";
+     set_property spring.profiles.active="mobile";
 
      if [ $osType == "android" ] && [ $appType == "app" ]; then
            fullApkPath=`find ./../.. -name $(get_property android.app) -print -quit`;

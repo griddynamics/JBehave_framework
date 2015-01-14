@@ -28,7 +28,7 @@ public class ProjectPropertiesUtils extends PropertiesUtils {
             try {
                 isPropertiesLoaded.getAndSet(initAllProperties());
             }
-            catch (Exception e) {
+            catch (IOException e) {
                 assertTrue("Could not import properties from execution/runtime properties file: " + e.getMessage(), false);
             }
         return allProperties;
@@ -56,14 +56,21 @@ public class ProjectPropertiesUtils extends PropertiesUtils {
             throw new IllegalArgumentException("System property '" + ProjectProperties.APPLICATION_CONFIG_FILENAME +"' was not set");
         }
 
-        if (System.getProperty("spring.profiles.active").contains("mobile")){
+        boolean isMobileProfile = System.getProperty("mobile")!=null;
+        if (isMobileProfile){
             if (ProjectProperties.getMobileConfigFilenameValue() == null) {
                 throw new IllegalArgumentException("System property '" + ProjectProperties.MOBILE_CONFIG_FILENAME +"' was not set");
             }
         }
 
-        runnerProperties = FilePropertiesUtils.getPropertiesFromFile(ProjectProperties.getJrunnerConfigFilenameValue(),
-                ProjectProperties.getApplicationConfigFilenameValue());
+        if (isMobileProfile){
+            runnerProperties = FilePropertiesUtils.getPropertiesFromFile(ProjectProperties.getJrunnerConfigFilenameValue(),
+                    ProjectProperties.getApplicationConfigFilenameValue(), ProjectProperties.getMobileConfigFilenameValue());
+        }
+        else {
+            runnerProperties = FilePropertiesUtils.getPropertiesFromFile(ProjectProperties.getJrunnerConfigFilenameValue(),
+                    ProjectProperties.getApplicationConfigFilenameValue());
+        }
 
         setAllProperties(runnerProperties);
         return true;
