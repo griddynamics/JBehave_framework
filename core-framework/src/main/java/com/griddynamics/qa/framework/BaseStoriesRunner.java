@@ -31,6 +31,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.griddynamics.qa.logger.LoggerFactory.getLogger;
+import static com.griddynamics.qa.mobile.MobileUtils.uninstallMobileApps;
 import static java.util.Arrays.asList;
 import static org.jbehave.core.io.CodeLocations.codeLocationFromClass;
 import static org.jbehave.core.reporters.Format.*;
@@ -50,6 +51,7 @@ public abstract class BaseStoriesRunner extends JUnitStories {
     public static List<String> storiesToExcludeList;
 
     protected static final String PROPERTY_DO_DRY_RUN = "doDryRun";
+    protected static final String PROPERTY_MOBILE = "mobile";
     protected ApplicationContext applicationContext;
     protected Configuration configuration;
 
@@ -255,6 +257,9 @@ public abstract class BaseStoriesRunner extends JUnitStories {
 
     protected void afterRun() {
         getLogger().info("Suite: " + this.getClass().getSimpleName() + ". After run.");
+        if (StringUtils.isNotBlank(System.getProperty(PROPERTY_MOBILE))) {
+            uninstallMobileApps();
+        }
     }
 
     protected void beforeSuite() {

@@ -1,0 +1,4 @@
+var namespacecom_1_1griddynamics_1_1qa_1_1stubs_1_1soapcommon_1_1controller =
+[
+    [ "SoapCommonServiceController", "dd/dfd/classcom_1_1griddynamics_1_1qa_1_1stubs_1_1soapcommon_1_1controller_1_1_soap_common_service_controller.html", "dd/dfd/classcom_1_1griddynamics_1_1qa_1_1stubs_1_1soapcommon_1_1controller_1_1_soap_common_service_controller" ]
+];
