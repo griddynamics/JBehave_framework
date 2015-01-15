@@ -1,12 +1,11 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>com.griddynamics.qa</groupId>
     <artifactId>jbehave-framework</artifactId>
     <packaging>pom</packaging>
     <version>1.1.1-SNAPSHOT</version>
     <name>JBehave Framework</name>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -43,7 +42,6 @@
         <developerConnection>scm:git:git@github.com:griddynamics/JBehave_framework.git</developerConnection>
         <url>scm:git:git@github.com:griddynamics/JBehave_framework.git</url>
     </scm>
-
     <modules>
         <module>common-resources-utils</module>
         <module>common-logger</module>
@@ -55,13 +53,11 @@
         <module>stubs-tools</module>
         <module>common-atg-utils</module>
         <module>common-hybris-utils</module>
+        <module>mobile</module>
     </modules>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <ojdbc.version>11.2.0.3</ojdbc.version>
-
-
         <jbehave.core.version>3.9.4</jbehave.core.version>
         <jbehave.web.version>3.5.5</jbehave.web.version>
         <selenium.version>2.34.0</selenium.version>
@@ -71,9 +67,7 @@
         <log4j.version>1.2.17</log4j.version>
         <doxygen.path>/usr/bin/doxygen</doxygen.path>
         <hamcrest.version>1.3</hamcrest.version>
-
     </properties>
-
     <!--<profiles>
         <profile>
             <id>signJars</id>
@@ -107,7 +101,6 @@
             </build>
         </profile>
     </profiles>-->
-
     <build>
         <pluginManagement>
             <plugins>

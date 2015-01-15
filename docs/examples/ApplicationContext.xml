@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+           http://www.springframework.org/schema/util
+           http://www.springframework.org/schema/util/spring-util.xsd"
+        >
+
+    <context:component-scan base-package="com.griddynamics.qa.ui.steps"/>
+    <context:component-scan base-package="com.yourCompany.web.common.steps"/>
+    <context:annotation-config/>
+
+
+    <bean id="placeholderProperties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+          depends-on="environment">
+        <property name="locations">
+            <list>
+                <value>classpath:pages.properties</value>
+                <value>classpath:store.properties</value>
+            </list>
+        </property>
+        <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE"/>
+    </bean>
+
+    <bean id="systemPropertiesLoader"
+          class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetObject" value="#{@systemProperties}" />
+        <property name="targetMethod" value="putAll" />
+        <property name="arguments">
+            <util:properties location="classpath:browser.properties" />
+        </property>
+    </bean>
+
+    <beans profile="mobile">
+        <bean id="systemPropertiesLoader"
+              class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+            <property name="targetObject" value="#{@systemProperties}" />
+            <property name="targetMethod" value="putAll" />
+            <property name="arguments">
+                <util:properties location="classpath:mobile.properties" />
+            </property>
+        </bean>
+    </beans>
+
+
+    <bean id="webDriverProvider" class="com.griddynamics.qa.framework.CustomPerStoryWebDriverSteps" >
+        <constructor-arg ref="driverProvider"/>
+        <property name="pageTimeoutMs">
+            <value>${page.timeout.ms:90000}</value>
+        </property>
+    </bean>
+
+    <bean id="screenshots" class="com.griddynamics.qa.framework.CustomWebDriverScreenshotOnFailure">
+        <constructor-arg ref="driverProvider"/>
+    </bean>
+
+    <bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
+        <property name="scopes">
+            <map>
+                <entry key="thread">
+                    <bean class="org.springbyexample.bean.scope.thread.ThreadScope"/>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+
+    <bean id="homePage" class="com.InsertCompanyNameHere.web.pages.HomePage" parent="commonPage">
+        <constructor-arg name="driverProvider" ref="driverProvider"/>
+        <constructor-arg name="PAGE_TITLE">
+            <value>${homePageTitle}</value>
+        </constructor-arg>
+        <constructor-arg name="PAGE_URL">
+            <value>${homePageUrl}</value>
+        </constructor-arg>
+    </bean>
+
+    <bean id="commonPage" class="com.InsertCompanyNameHere.web.common.pages.CommonPage" abstract="true">
+        <property name="prodIp">
+            <value>${store.prod.ip}</value>
+        </property>
+        <property name="prodHttpsPort">
+            <value>${store.prod.https}</value>
+        </property>
+        <property name="prodHttpPort">
+            <value>${store.prod.http}</value>
+        </property>
+    </bean>
+
+
+    <bean id="pages" class="com.InsertCompanyNameHere.web.Pages" scope="thread">
+        <constructor-arg index="0" ref="driverProvider"/>
+        <constructor-arg index="1" ref="pageMatching"/>
+        <aop:scoped-proxy/>
+    </bean>
+
+
+    <bean id="pageMatching" class="org.springframework.beans.factory.config.MapFactoryBean">
+        <property name="targetMapClass" value="java.util.HashMap"/>
+        <property name="sourceMap">
+            <map>
+                <entry key="Home" value-ref="homePage"/>
+            </map>
+        </property>
+    </bean>
+
+    <beans profile="remote">
+        <bean id="driverProvider" class="com.griddynamics.qa.framework.CustomRemoteWebDriverProvider">
+        </bean>
+    </beans>
+</beans>

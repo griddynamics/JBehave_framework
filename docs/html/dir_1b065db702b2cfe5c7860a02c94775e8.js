@@ -1,0 +1,4 @@
+var dir_1b065db702b2cfe5c7860a02c94775e8 =
+[
+    [ "classcom_1_1griddynamics_1_1qa_1_1framework_1_1_custom_web_driver_screenshot_on_failure.js", "d2/da4/classcom__1__1griddynamics__1__1qa__1__1framework__1__1__custom__web__driver__screenshot__on__failure_8js.html", "d2/da4/classcom__1__1griddynamics__1__1qa__1__1framework__1__1__custom__web__driver__screenshot__on__failure_8js" ]
+];
