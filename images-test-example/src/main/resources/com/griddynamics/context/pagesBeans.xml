@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop-3.1.xsd">
+
+    <bean id="googleHomePage" class="com.griddynamics.web.pages.GoogleHomePage">
+        <constructor-arg name="driverProvider" ref="driverProvider"/>
+        <constructor-arg name="currentPageTitle">
+            <value>${googleHomePageTitle}</value>
+        </constructor-arg>
+        <constructor-arg name="currentPageUri">
+            <value>${googleHomePageUrl}</value>
+        </constructor-arg>
+    </bean>
+
+    <bean id="pages" class="com.griddynamics.web.pages.CustomPages" scope="thread">
+        <constructor-arg index="0" ref="driverProvider"/>
+        <constructor-arg index="1" ref="pageMatching"/>
+        <aop:scoped-proxy/>
+    </bean>
+
+    <bean id="pageMatching" class="org.springframework.beans.factory.config.MapFactoryBean">
+        <property name="targetMapClass" value="java.util.HashMap"/>
+        <property name="sourceMap">
+            <map>
+                <entry key="Google Home" value-ref="googleHomePage"/>
+            </map>
+        </property>
+    </bean>
+</beans>

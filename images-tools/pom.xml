@@ -1,0 +1,94 @@
+<project
+        xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>jbehave-framework</artifactId>
+        <groupId>com.griddynamics.qa</groupId>
+        <version>1.1.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>images-tools</artifactId>
+    <name>Steps for UI tool</name>
+
+    <packaging>jar</packaging>
+    <version>1.1.1-SNAPSHOT</version>
+    <groupId>com.griddynamics.qa</groupId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.griddynamics</groupId>
+            <artifactId>images-db</artifactId>
+            <version>1.1.1-SNAPSHOT</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.griddynamics.qa</groupId>
+            <artifactId>common-properties-utils</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.griddynamics.qa</groupId>
+            <artifactId>common-ui-utils</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.griddynamics.qa</groupId>
+            <artifactId>mobile</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jbehave</groupId>
+            <artifactId>jbehave-spring</artifactId>
+            <version>${jbehave.core.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jbehave.web</groupId>
+            <artifactId>jbehave-web-selenium</artifactId>
+            <version>${jbehave.web.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.seleniumhq.selenium</groupId>
+                    <artifactId>selenium-java</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jbehave</groupId>
+                    <artifactId>jbehave-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-io</groupId>
+                    <artifactId>commons-io</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>${selenium.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-io</groupId>
+                    <artifactId>commons-io</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
