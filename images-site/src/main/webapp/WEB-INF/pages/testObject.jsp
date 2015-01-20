@@ -1,20 +1,12 @@
 <%@ taglib prefix="form"   uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-
 <spring:eval expression="@propertyConfigurer.getProperty('baseline.image.path')"  var="baselineImagePath"/>
-
-
-
 <html>
     <head>
         <title>Test Object</title>
     </head>
-
     <body>
-
-
-
         <table>
             <tr>
                 <td>ID:</td>
@@ -57,16 +49,12 @@
                 <td>${testObject.posY}</td>
             </tr>
         </table>
-
         <br/>
         <br/>
         Baseline image:
         <br/>
         <img src="${baselineImagePath}${testObject.fileName}" alt="Baseline image" >
         <br/>
-
         <br/><br/><br/><a href="/">Home Page</a><br/>
-
     </body>
-
 </html>
