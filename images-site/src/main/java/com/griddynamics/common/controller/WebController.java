@@ -44,28 +44,27 @@ public class WebController {
     FileValidator fileValidator;
 
 
-    @Value( "${baseline.image.path}" )
+    @Value("${baseline.image.path}")
     private String baselineImagePath;
 
-    @Value( "${result.image.path}" )
+    @Value("${result.image.path}")
     private String resultImagePath;
 
-    @Value( "${full.image.name}" )
+    @Value("${full.image.name}")
     private String fullImageName;
 
-    @Value( "${cropped.image.name}" )
+    @Value("${cropped.image.name}")
     private String croppedImageName;
 
-    @Value( "${comparison.image.name}" )
+    @Value("${comparison.image.name}")
     private String comparisonImageName;
 
     @Value("${test.areas.image.path}")
     private String testAreasImagesPath;
 
 
-
-    @RequestMapping(value = "/testResult", method = RequestMethod.GET, params = { "getId" })
-	public ModelAndView showTestResult(@RequestParam int getId, ModelMap model) {
+    @RequestMapping(value = "/testResult", method = RequestMethod.GET, params = {"getId"})
+    public ModelAndView showTestResult(@RequestParam int getId, ModelMap model) {
         ApplicationContext context =
                 new ClassPathXmlApplicationContext("Spring-Module.xml");
 
@@ -82,7 +81,7 @@ public class WebController {
 
         return mv;
 
-	}
+    }
 
     @RequestMapping(value = "/testSessions", method = RequestMethod.GET)
     public ModelAndView showTestSessions() {
@@ -94,7 +93,7 @@ public class WebController {
     }
 
 
-    @RequestMapping(value = "/testCases", method = RequestMethod.GET, params = { "sessionId" })
+    @RequestMapping(value = "/testCases", method = RequestMethod.GET, params = {"sessionId"})
     public ModelAndView showTestCases(@RequestParam String sessionId) {
         ApplicationContext context =
                 new ClassPathXmlApplicationContext("Spring-Module.xml");
@@ -104,12 +103,12 @@ public class WebController {
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String home() throws SQLException{
+    public String home() throws SQLException {
         return "home";
     }
 
-    @RequestMapping(value = "/testResult", method = RequestMethod.POST, params = { "acceptNewBaseline", "getId" })
-    public String acceptNewBaseline (@RequestParam int getId) throws IOException {
+    @RequestMapping(value = "/testResult", method = RequestMethod.POST, params = {"acceptNewBaseline", "getId"})
+    public String acceptNewBaseline(@RequestParam int getId) throws IOException {
         ApplicationContext context = new ClassPathXmlApplicationContext("Spring-Module.xml");
         TestResultDAO testResultDAO = (TestResultDAO) context.getBean("testResultDAO");
         TestResult testResult = testResultDAO.getTestResult(getId);
@@ -134,7 +133,7 @@ public class WebController {
         return new ModelAndView().addObject("testObjectsList", testAreaDAO.getTestAreas());
     }
 
-    @RequestMapping(value = "/testObject", method = RequestMethod.GET, params = { "testObjectId" })
+    @RequestMapping(value = "/testObject", method = RequestMethod.GET, params = {"testObjectId"})
     public ModelAndView showTestObject(@RequestParam String testObjectId) {
         ApplicationContext context = new ClassPathXmlApplicationContext("Spring-Module.xml");
         TestAreaDAO testAreaDAO = (TestAreaDAO) context.getBean("testAreaDAO");
@@ -143,7 +142,7 @@ public class WebController {
     }
 
 
-    @RequestMapping(value = "/testResult", method = RequestMethod.POST, params = { "acceptFailure", "getId" })
+    @RequestMapping(value = "/testResult", method = RequestMethod.POST, params = {"acceptFailure", "getId"})
     public String acceptFailure(@RequestParam int getId) {
         ApplicationContext context = new ClassPathXmlApplicationContext("Spring-Module.xml");
         TestResultDAO testResultDAO = (TestResultDAO) context.getBean("testResultDAO");
@@ -156,7 +155,7 @@ public class WebController {
     public void getDBActions() {
     }
 
-    @RequestMapping(value="/runInitDB", method = RequestMethod.POST)
+    @RequestMapping(value = "/runInitDB", method = RequestMethod.POST)
     public void runInitDB() {
         ApplicationContext context = new ClassPathXmlApplicationContext("Spring-Module.xml");
 
@@ -167,7 +166,7 @@ public class WebController {
         testResultDAO.initTestResultsDB();
     }
 
-    @RequestMapping(value="/dbactions/exportTestAreas", method = RequestMethod.GET)
+    @RequestMapping(value = "/dbactions/exportTestAreas", method = RequestMethod.GET)
     public void exportTestAreas(HttpServletResponse response) throws IOException {
         ApplicationContext context = new ClassPathXmlApplicationContext("Spring-Module.xml");
 
@@ -184,18 +183,18 @@ public class WebController {
         ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(),
                 CsvPreference.STANDARD_PREFERENCE);
 
-        String[] header = { "areaId", "areaName", "fileName", "width", "height", "posX", "posY",
+        String[] header = {"areaId", "areaName", "fileName", "width", "height", "posX", "posY",
                 "browserWidth", "browserHeight", "browserName", "browserVersion"};
         csvWriter.writeHeader(header);
 
-        for (TestArea area: areas) {
+        for (TestArea area : areas) {
             csvWriter.write(area, header);
         }
 
         csvWriter.close();
     }
 
-    @RequestMapping(value="/dbactions/exportTestResults", method = RequestMethod.GET)
+    @RequestMapping(value = "/dbactions/exportTestResults", method = RequestMethod.GET)
     public void exportTestResults(HttpServletResponse response) throws IOException {
         ApplicationContext context = new ClassPathXmlApplicationContext("Spring-Module.xml");
 
@@ -212,11 +211,11 @@ public class WebController {
         ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(),
                 CsvPreference.STANDARD_PREFERENCE);
 
-        String[] header = { "testId", "testAreaId", "testSessionTs", "testRunTs", "testResult",
+        String[] header = {"testId", "testAreaId", "testSessionTs", "testRunTs", "testResult",
                 "numberOfDiffPixels", "isVerified", "testFolderName"};
         csvWriter.writeHeader(header);
 
-        for (TestResult testResult: testResults) {
+        for (TestResult testResult : testResults) {
             csvWriter.write(testResult, header);
         }
 
@@ -228,7 +227,7 @@ public class WebController {
     public void getUploadForm() {
     }
 
-    @RequestMapping(value="/showFile", method = RequestMethod.POST)
+    @RequestMapping(value = "/showFile", method = RequestMethod.POST)
     public ModelAndView fileUploaded(@ModelAttribute("uploadedFile") UploadedFile uploadedFile, BindingResult result) {
         InputStream inputStream;
         OutputStream outputStream;
@@ -263,7 +262,7 @@ public class WebController {
         return new ModelAndView("showFile", "message", fileName);
     }
 
-    @RequestMapping(value="/createTestArea", method = RequestMethod.POST)
+    @RequestMapping(value = "/createTestArea", method = RequestMethod.POST)
     public ModelAndView fileUploaded(@ModelAttribute("imageSelection") ImageSelection imageSelection)
             throws IOException {
         TestArea testArea = new TestArea();
@@ -285,8 +284,8 @@ public class WebController {
         return model;
     }
 
-    @RequestMapping(value="/testAreaCreated", method = RequestMethod.POST)
-    public ModelAndView testAreaCreated(@ModelAttribute("testArea") TestArea testArea){
+    @RequestMapping(value = "/testAreaCreated", method = RequestMethod.POST)
+    public ModelAndView testAreaCreated(@ModelAttribute("testArea") TestArea testArea) {
         // generate area ID and area file name
         String testAreaID = testArea.getBrowserName() + testArea.getBrowserVersion() +
                 "_" + testArea.getBrowserWidth() + "_" + testArea.getAreaName().replaceAll(" ", "");
@@ -319,9 +318,9 @@ public class WebController {
     }
 
 
-    @RequestMapping(value="/dbactions/importTestAreas", method = RequestMethod.POST)
+    @RequestMapping(value = "/dbactions/importTestAreas", method = RequestMethod.POST)
     public ModelAndView importTestAreas(@ModelAttribute("uploadedFile") UploadedFile uploadedFile, BindingResult result)
-    throws IOException {
+            throws IOException {
         ApplicationContext context = new ClassPathXmlApplicationContext("Spring-Module.xml");
         TestAreaDAO testAreaDAO = (TestAreaDAO) context.getBean("testAreaDAO");
 
@@ -342,12 +341,12 @@ public class WebController {
             final CellProcessor[] processors = getTestAreaProcessor();
 
             TestArea testArea;
-            while( (testArea = beanReader.read(TestArea.class, header, processors)) != null ) {
+            while ((testArea = beanReader.read(TestArea.class, header, processors)) != null) {
                 testAreaDAO.addTestArea(testArea);
             }
 
         } finally {
-            if( beanReader != null ) {
+            if (beanReader != null) {
                 beanReader.close();
             }
         }
@@ -357,10 +356,7 @@ public class WebController {
     }
 
 
-
-
-
-    @RequestMapping(value="/dbactions/importTestResults", method = RequestMethod.POST)
+    @RequestMapping(value = "/dbactions/importTestResults", method = RequestMethod.POST)
     public ModelAndView importTestResults(@ModelAttribute("uploadedFile") UploadedFile uploadedFile, BindingResult result)
             throws IOException {
         ApplicationContext context = new ClassPathXmlApplicationContext("Spring-Module.xml");
@@ -383,12 +379,12 @@ public class WebController {
             final CellProcessor[] processors = getTestResultProcessor();
 
             TestResult testResult;
-            while( (testResult = beanReader.read(TestResult.class, header, processors)) != null ) {
+            while ((testResult = beanReader.read(TestResult.class, header, processors)) != null) {
                 testResultDAO.importTestResult(testResult);
             }
 
         } finally {
-            if( beanReader != null ) {
+            if (beanReader != null) {
                 beanReader.close();
             }
         }
@@ -396,9 +392,6 @@ public class WebController {
 
         return new ModelAndView("/dbactions/testResultsImported", "message", fileName);
     }
-
-
-
 
 
 }
