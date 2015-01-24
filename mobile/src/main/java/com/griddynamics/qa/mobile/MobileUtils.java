@@ -34,13 +34,13 @@ public class MobileUtils {
             + PATH_TO_FRUITSTRAP + " uninstall --bundle " + System.getProperty(IOS_APP_BUNDLE) + " -t 2 >/dev/null 2>/dev/null;"
             + PATH_TO_FRUITSTRAP + " uninstall --bundle " + IOS_SAFARILAUNCHER_BUNDLE + " -t 2 >/dev/null 2>/dev/null;";
 
-    private static final String UNINSTALL_IOS_APPS_COMMAND          = PATH_TO_FRUITSTRAP + " uninstall --bundle " + System.getProperty(IOS_APP_BUNDLE) + " -t 2 >/dev/null 2>/dev/null;"
+    private static final String UNINSTALL_IOS_APPS_COMMAND = PATH_TO_FRUITSTRAP + " uninstall --bundle " + System.getProperty(IOS_APP_BUNDLE) + " -t 2 >/dev/null 2>/dev/null;"
             + PATH_TO_FRUITSTRAP + " uninstall --bundle " + IOS_SAFARILAUNCHER_BUNDLE + " -t 2 >/dev/null 2>/dev/null;";
 
-    private static final String UNINSTALL_ANDROID_APPS_COMMAND          = PATH_TO_ADB + " uninstall " + System.getProperty(ANDROID_APP_PACKAGE) + " >/dev/null 2>/dev/null;"
-            + PATH_TO_ADB + " uninstall " + ANDROID_BROWSER_PACKAGE + " >/dev/null 2>/dev/null;"
-            + PATH_TO_ADB + " uninstall " + ANDROID_SELENDROID_PACKAGE + " >/dev/null 2>/dev/null;"
-            + PATH_TO_ADB + " uninstall " + ANDROID_UNLOCK_PACKAGE + " >/dev/null 2>/dev/null;";
+    private static final String UNINSTALL_ANDROID_APPS_COMMAND = PATH_TO_ADB + " uninstall " + System.getProperty(ANDROID_APP_PACKAGE) + ";"
+            + PATH_TO_ADB + " uninstall " + ANDROID_BROWSER_PACKAGE + ";"
+            + PATH_TO_ADB + " uninstall " + ANDROID_SELENDROID_PACKAGE + ";"
+            + PATH_TO_ADB + " uninstall " + ANDROID_UNLOCK_PACKAGE + ";";
     /**
      * Reads appium log and prints errors to current output stream
      */
@@ -70,6 +70,7 @@ public class MobileUtils {
     private static void executeShCommand(String command) {
         try {
             String line;
+            System.out.println("The command 'sh -c " + command +"'");
             Process p = new ProcessBuilder("sh", "-c", command).start();
             BufferedReader input = new BufferedReader (new InputStreamReader(p.getInputStream()));
             while ((line = input.readLine()) != null) {

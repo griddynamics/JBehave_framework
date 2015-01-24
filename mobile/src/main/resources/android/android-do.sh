@@ -32,9 +32,9 @@ android_connect () {
         printf "[INFO] Waiting until device is connected / emulator is started...";
         $ADB_PATH/adb start-server 1>/dev/null 2>/dev/null;
         count=0;
-        until [ $($ADB_PATH/adb wait-for-device && $ADB_PATH/adb shell dumpsys window | grep mCurrentFocus | grep Keyguard | wc -l || echo -1) -eq 1 ]; do
-          printf ".";
-          sleep 1; let count+=1;
+        until [ $($ADB_PATH/adb wait-for-device && $ADB_PATH/adb shell dumpsys window | grep mCurrentFocus | grep Launcher | wc -l || echo -1) -eq 1 ]; do
+          printf "*";
+          sleep 15
           #[ $(expr $count % 40) == "0" ] && android_prerequisites "false";
         done; echo "";
 }
@@ -79,9 +79,11 @@ echo "[INFO] executing android_prepare_browser function...";
 : '(1)' &&     kill $(jps -m | grep selendroid-standalone | awk -F " " '{print $1}') 2>/dev/null;
                execute --in_background "java -jar $APPIUM_HOME/submodules/selendroid/selendroid-standalone/target/selendroid-standalone-0.12.0-with-dependencies.jar 1>$BUILD_DIR/../server.log 2>>$BUILD_DIR/../server.log;" 1>/dev/null 2>/dev/null;
 : '(2)' &&     $ADB_PATH/adb start-server 1>/dev/null 2>/dev/null;
-               until [ $($ADB_PATH/adb connect 192.168.56.101 1>/dev/null 2>/dev/null && $ADB_PATH/adb shell dumpsys window | grep mCurrentFocus | grep Keyguard | wc -l || echo -1) -eq 0 ]; do
-                 $ADB_PATH/adb install $APPIUM_HOME/submodules/unlock_apk/bin/unlock_apk-debug.apk 1>/dev/null 2>/dev/null;
-                 $ADB_PATH/adb shell am start -n io.appium.unlock/.Unlock 1>/dev/null 2>/dev/null;
+               until [ $($ADB_PATH/adb connect 192.168.56.101 1>/dev/null 2>/dev/null && $ADB_PATH/adb shell dumpsys window | grep mCurrentFocus | grep Launcher | wc -l || echo -1) -eq 0 ]; do
+                 #$ADB_PATH/adb install $APPIUM_HOME/submodules/unlock_apk/bin/unlock_apk-debug.apk 1>/dev/null 2>/dev/null;
+                 #$ADB_PATH/adb shell am start -n io.appium.unlock/.Unlock 1>/dev/null 2>/dev/null;
+                 printf '.'
+                 sleep 2
                done;
                set_property REMOTE_WEBDRIVER_URL="http://localhost:4444/wd/hub";
 }
