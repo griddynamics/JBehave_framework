@@ -33,9 +33,13 @@ import static org.junit.Assert.*;
 public class CommonPageSteps implements TimeoutConstants{
 
     @Autowired
-    public Pages pages;
+    private Pages pages;
 
     public CommonPageSteps() { // constructor
+    }
+
+    public void setPages(Pages pages) {
+        this.pages = pages;
     }
 
     @Given("{running|Running} given stories")
