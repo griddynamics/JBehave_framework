@@ -1,3 +1,8 @@
+/*
+ * Copyright 2015, Grid Dynamics International and/or its affiliates. All rights reserved.
+ * Grid Dynamics International PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ */
+ 
 package com.griddynamics.qa.tools.rest;
 
 import com.jayway.restassured.internal.mapper.ObjectMapperType;
