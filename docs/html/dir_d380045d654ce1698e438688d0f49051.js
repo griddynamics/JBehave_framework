@@ -1,4 +1,0 @@
-var dir_d380045d654ce1698e438688d0f49051 =
-[
-    [ "logger", "dir_c287d2979f4c165695917d3ab63fa803.html", "dir_c287d2979f4c165695917d3ab63fa803" ]
-];
