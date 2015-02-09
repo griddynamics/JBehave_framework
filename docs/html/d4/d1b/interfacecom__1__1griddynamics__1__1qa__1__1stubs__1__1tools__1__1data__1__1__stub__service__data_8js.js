@@ -1,4 +1,0 @@
-var interfacecom__1__1griddynamics__1__1qa__1__1stubs__1__1tools__1__1data__1__1__stub__service__data_8js =
-[
-    [ "interfacecom_1_1griddynamics_1_1qa_1_1stubs_1_1tools_1_1data_1_1_stub_service_data", "d4/d1b/interfacecom__1__1griddynamics__1__1qa__1__1stubs__1__1tools__1__1data__1__1__stub__service__data_8js.html#a3ea3317bf9afd217fe39355620ff2832", null ]
-];

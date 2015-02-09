@@ -1,3 +1,8 @@
+/*
+ * Copyright 2015, Grid Dynamics International and/or its affiliates. All rights reserved.
+ * Grid Dynamics International PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ */
+ 
 package com.griddynamics.qa.stubs.tools.data;
 
 import com.griddynamics.qa.stubs.tools.properties.StubsProperties;

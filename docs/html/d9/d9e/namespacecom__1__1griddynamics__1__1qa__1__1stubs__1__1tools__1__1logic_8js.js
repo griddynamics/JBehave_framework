@@ -1,4 +1,0 @@
-var namespacecom__1__1griddynamics__1__1qa__1__1stubs__1__1tools__1__1logic_8js =
-[
-    [ "namespacecom_1_1griddynamics_1_1qa_1_1stubs_1_1tools_1_1logic", "d9/d9e/namespacecom__1__1griddynamics__1__1qa__1__1stubs__1__1tools__1__1logic_8js.html#a98c6c7f0b28a9ae2fc812c85e50e0cc1", null ]
-];

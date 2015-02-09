@@ -1,4 +1,0 @@
-var dir_66449c3a5b0e9b1a07ff9b7967f7f004 =
-[
-    [ "java", "dir_f2755148bb428407786db0f5a7979f40.html", "dir_f2755148bb428407786db0f5a7979f40" ]
-];
