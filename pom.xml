@@ -59,7 +59,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <ojdbc.version>11.2.0.3</ojdbc.version>
         <jbehave.core.version>3.9.4</jbehave.core.version>
-        <!--jbehave.web.version>3.5.5</jbehave.web.version-->
         <selenium.version>2.43.0</selenium.version>
         <jbehave.site.version>3.1.1</jbehave.site.version>
         <junit.version>4.11</junit.version>
@@ -101,6 +100,54 @@
             </build>
         </profile>
     </profiles>-->
+
+    <profiles>
+        <profile>
+            <id>generateDocs</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>net.sf.doodleproject</groupId>
+                        <artifactId>doxygen-maven-plugin</artifactId>
+                        <configuration>
+                            <alphabeticalIndex>true</alphabeticalIndex>
+                            <generateHtml>true</generateHtml>
+                            <inputDirectory>${basedir}</inputDirectory>
+                            <projectNumber>${version}</projectNumber>
+                            <outputDirectory>${project.build.directory}/doxygen/</outputDirectory>
+                            <configurationFile>doxygen.config</configurationFile>
+                            <filePatterns>*.java</filePatterns>
+                            <recursive>true</recursive>
+                            <executable>${doxygen.path}</executable>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>report</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>doodleproject-repo</id>
+                    <name>DoodleProject Maven 2 Repository</name>
+                    <url>http://doodleproject.sourceforge.net/maven2/release</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                </pluginRepository>
+            </pluginRepositories>
+        </profile>
+    </profiles>
+
     <build>
         <pluginManagement>
             <plugins>
@@ -136,27 +183,6 @@
                     <source>1.6</source>
                     <target>1.6</target>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>net.sf.doodleproject</groupId>
-                <artifactId>doxygen-maven-plugin</artifactId>
-                <configuration>
-                    <alphabeticalIndex>true</alphabeticalIndex>
-                    <generateHtml>true</generateHtml>
-                    <inputDirectory>${basedir}</inputDirectory>
-                    <projectNumber>${version}</projectNumber>
-                    <outputDirectory>${project.build.directory}/doxygen/</outputDirectory>
-                    <configurationFile>doxygen.config</configurationFile>
-                    <filePatterns>*.java</filePatterns>
-                    <recursive>true</recursive>
-                    <executable>${doxygen.path}</executable>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals><goal>report</goal></goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
