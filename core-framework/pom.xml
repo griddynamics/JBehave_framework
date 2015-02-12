@@ -38,7 +38,7 @@
             <version>${jbehave.core.version}</version>
         </dependency>
 
-        <dependency>
+        <!--dependency>
             <groupId>org.jbehave.web</groupId>
             <artifactId>jbehave-web-selenium</artifactId>
             <version>${jbehave.web.version}</version>
@@ -56,7 +56,7 @@
                     <artifactId>commons-io</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
+        </dependency-->
 
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
