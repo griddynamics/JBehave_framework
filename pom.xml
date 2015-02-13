@@ -3,7 +3,7 @@
     <groupId>com.griddynamics.qa</groupId>
     <artifactId>jbehave-framework</artifactId>
     <packaging>pom</packaging>
-    <version>1.1.2-SNAPSHOT</version>
+    <version>1.1.2</version>
     <name>JBehave Framework</name>
     <dependencyManagement>
         <dependencies>
