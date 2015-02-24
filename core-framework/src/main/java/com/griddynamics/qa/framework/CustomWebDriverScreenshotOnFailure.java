@@ -11,6 +11,7 @@ import org.jbehave.core.annotations.AfterScenario;
 import org.jbehave.core.annotations.ScenarioType;
 import org.jbehave.core.failures.PendingStepFound;
 import org.jbehave.core.failures.UUIDExceptionWrapper;
+import org.jbehave.core.model.OutcomesTable;
 import org.jbehave.core.reporters.StoryReporterBuilder;
 import org.jbehave.web.selenium.RemoteWebDriverProvider;
 import org.jbehave.web.selenium.WebDriverProvider;
@@ -83,7 +84,14 @@ public class CustomWebDriverScreenshotOnFailure extends WebDriverSteps {
             MobileUtils.outputAppiumErrors();
         }
 
-        String screenshotPath = screenshotPath(uuidWrappedFailure.getUUID());
+        String screenshotPath = "";
+
+        if (uuidWrappedFailure.getCause() instanceof OutcomesTable.OutcomesFailed){
+            screenshotPath = screenshotPath(((OutcomesTable.OutcomesFailed)(uuidWrappedFailure.getCause())).outcomesTable().failureCause().getUUID());
+        }
+        else {
+            screenshotPath = screenshotPath(uuidWrappedFailure.getUUID());
+        }
         String currentUrl = "[unknown page URL]";
         try {
             currentUrl = driverProvider.get().getCurrentUrl();

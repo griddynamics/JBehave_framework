@@ -381,7 +381,7 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
     }
 
     public boolean isElementPresentOnPage(String name) {
-        return findElements(getElementLocatorByName(name)).size() > 0;
+        return findElements(getElementLocatorByName(name, true, false)).size() > 0;
     }
 
     public boolean isElementDisplayedOnPage(String name) {
