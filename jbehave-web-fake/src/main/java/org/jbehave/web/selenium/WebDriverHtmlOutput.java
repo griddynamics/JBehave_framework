@@ -44,7 +44,8 @@ public class WebDriverHtmlOutput extends HtmlOutput {
     private void changeALine() {
         super.overwritePattern("failed",
                 "<div class=\"step failed\">{0} <span class=\"keyword failed\">({1})</span><br/><span class=\"message failed\">{2}</span>" +
-                        "<br/><a color=\"black\" target=\"jb_scn_shot\" href=\"../screenshots/failed-scenario-{3}.png\"><img src=\"images/failing_screenshot.png\" alt=\"failing screenshot\"/></a></div>\n");
+                        "<br/><a color=\"black\" target=\"jb_scn_shot\" href=\"../screenshots/failed-scenario-{3}.png\"><img src=\"../screenshots/failed-scenario-{3}.png\"" +
+                        "height=\"240\" width=\"500\"  alt=\"failing screenshot\"/></a></div>\n");
     }
 
     private static class WebDriverHtmlFormat extends org.jbehave.core.reporters.Format {
