@@ -9,7 +9,6 @@
 
 <spring:eval expression="@propertyConfigurer.getProperty('test.areas.image.path')"  var="testAreasImagesPath"/>
 
-
 <script type="text/javascript">
     $(document).ready(function () {
     $('#lkmvxcvk').imgAreaSelect({handles: true, onSelectEnd: function (img, selection) {
@@ -21,30 +20,45 @@
     });
 </script>
 
-
 <html>
 <head>
-    <title>Uploaded file</title>
-
+  <link rel="stylesheet" href="resources/css/main.css">
+  <link rel="stylesheet" href="resources/css/pure-min.css">
+  <script type="text/javascript" src="jquery-1.2.6.min.js"></script>
+  <title>Add test area</title>
 </head>
-<body>
 
-<h2>Uploaded file</h2>
 
-File name: "<strong>${message}</strong>"<br/>
-Uploaded successfully !<br/><br/>
+<header>
+  <div style="position: absolute; top: 0px; left:-8px;">
+    <span class="aqua header-line header-line-first"/>
+    <span class="aqua header-line"/>
+    <span class="purple header-line"/>
+    <span class="red header-line"/>
+    <span class="green header-line"/>
+  </div>
 
-<img id="lkmvxcvk" src="${testAreasImagesPath}${message}" alt="Uploaded image" >
-<br/><br/>
+  <div class="header-title aqua-text">Create new test area</div><div class="header-icon aqua window-light"/><a class="header-back" href="/"></a>
+</header>
 
+<body class="body">
+
+
+<div class="panel success">File name: "<strong>${message}</strong>"<br/>
+Uploaded successfully.</div>
+<br/>
+<img class="img" id="lkmvxcvk" src="${testAreasImagesPath}${message}" alt="Uploaded image" >
+<br/>
 <form method="post" modelAttribute="imageSelection" action="createTestArea">
     <input type="hidden" name="fileName" value="${message}" />
     <input type="hidden" name="x1" value="" />
     <input type="hidden" name="y1" value="" />
     <input type="hidden" name="x2" value="" />
     <input type="hidden" name="y2" value="" />
-    <input type="submit" name="submit" value="Submit" />
+    <input type="submit" class="pure-button pure-button-primary" name="submit" value="Submit" />
 </form>
+
+
 
 </body>
 </html>

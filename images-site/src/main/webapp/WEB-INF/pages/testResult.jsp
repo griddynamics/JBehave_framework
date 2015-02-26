@@ -5,20 +5,41 @@
 <spring:eval expression="@propertyConfigurer.getProperty('result.image.path')"  var="resultImagePath"/>
 <spring:eval expression="@propertyConfigurer.getProperty('cropped.image.name')"  var="croppedImageName"/>
 <spring:eval expression="@propertyConfigurer.getProperty('comparison.image.name')"  var="comparisonImageName"/>
+
+
 <html>
 <head>
-    <title>Test Result</title>
+  <link rel="stylesheet" href="/resources/css/main.css">
+  <link rel="stylesheet" href="/resources/css/pure-min.css">
+  <script type="text/javascript" src="jquery-1.2.6.min.js"></script>
+  <title>Test Result</title>
 </head>
-<body>
-<c:choose>
+
+
+<header>
+  <div style="position: absolute; top: 0px; left:-8px;">
+    <span class="red header-line header-line-first"/>
+    <span class="red header-line"/>
+    <span class="green header-line"/>
+    <span class="aqua header-line"/>
+    <span class="purple header-line"/>
+  </div>
+
+  <div class="header-title red-text">Test Result</div><div class="header-icon red moon-light"/><a class="header-back" href="/"></a>
+</header>
+
+<body class="body">
+
+<h3><c:choose>
     <c:when test="${testResult.testResult eq 'false'}">
         <font color="red">TEST FAILED!</font>
     </c:when>
     <c:when test="${testResult.testResult eq 'true'}">
         <font color="green">TEST PASSED</font>
     </c:when>
-</c:choose>
-<br/>
+</c:choose></h3>
+
+
 <c:choose>
     <c:when test="${testResult.testResult eq 'false' && testResult.isVerified eq 'false'}">
         <form:form method="POST" action="/testResult?getId=${testResult.testId}">
@@ -65,6 +86,5 @@ Baseline image:
         <br/>
     </c:when>
 </c:choose>
-<br/><br/><br/><a href="/">Home Page</a><br/>
 </body>
 </html>

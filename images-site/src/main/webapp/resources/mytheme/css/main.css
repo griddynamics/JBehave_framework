@@ -1,0 +1,217 @@
+.body {
+  font-family: 'Varela', sans-serif;
+  color: #474747;
+  margin-top: 120px;
+  margin-left: 40px;
+}
+
+.img {
+   padding:1px;
+   border:1px solid rgb(200, 200, 200);
+   background-color:#f6f6f6;
+}
+
+.logo {
+  display: block;
+  margin-bottom: 50px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.next-block {
+  width: 900px;
+  display: inline-block;
+  margin-top: 50px;
+}
+
+.pure-button.success {
+  width: inherit;
+  font-size: inherit;
+  color: #ffffff;
+  background-color: rgb(28, 184, 65);
+  cursor:default;
+}
+
+.content-centered {
+  position:absolute;
+  top:50%;
+  left:50%;
+  height:400px;
+  margin-top:-200px;
+  width:100%;
+  margin-left:-50%;
+  text-align:center;
+}
+
+.category-button {
+	display:inline-block;
+	width: 190px;
+	height: 130px;
+  border-radius: 5px;
+  margin-right: 24px;
+  padding: 20px;
+  text-align: center;
+  text-decoration: none;
+  color: #474747;
+} .category-button:hover {
+  color: #f6f6f6;
+}
+
+.category-button-caption {
+  font-size: 25px;
+  position: relative;
+  top: 62px;
+  margin: auto auto;
+}
+
+.header-line {
+  float:left;
+  display:inline-block;
+  width: 150px;
+  height: 7px;
+  margin: 0 150px;
+} .header-line-first {
+  margin: 0 -8px;
+}
+
+.header-icon {
+  display:block;
+  position: absolute;
+  left: 20px;
+  top: 0px;
+  width: 55px;
+  height: 50px;
+  padding: 5px;
+  border-radius: 5px;
+  background-color: inherit;
+  background-size:50% 50%;
+}
+
+.header-title {
+  display:inline-block;
+  position: absolute;
+  left:95px;
+  top: 15px; 
+  font-size: 32px;
+}
+
+.header-back {
+  background: url('../images/back.png') center 20px no-repeat;
+  display:inline-block;
+  float:left;
+  position: relative;
+  left: -29px;
+  width: 15px;
+  height: 45px;
+  padding: 5px;
+}
+
+.moon {
+  background: url('../images/moon.png') center 20px no-repeat;
+  background-color: inherit;
+} .moon:hover {
+  background: url('../images/moon_light.png') center 20px no-repeat;
+  background-color: inherit;
+} .moon-light {
+  background-image: url('../images/moon_light.png'); 
+  background-position: center 20px;
+  background-repeat: no-repeat;
+}
+
+.cone {
+  background: url('../images/cone.png') center 20px no-repeat;
+  background-color: inherit;
+} .cone:hover {
+  background: url('../images/cone_light.png') center 20px no-repeat;
+  background-color: inherit;
+} .cone-light {
+  background-image: url('../images/cone_light.png'); 
+  background-position: center 20px;
+  background-repeat: no-repeat;
+}
+
+.window {
+  background: url('../images/window.png') center 20px no-repeat;
+  background-color: inherit;
+} .window:hover {
+  background: url('../images/window_light.png') center 20px no-repeat;
+  background-color: inherit;
+} .window-light {
+  background-image: url('../images/window_light.png');
+  background-position: center 20px;
+  background-repeat: no-repeat;
+}
+
+.db {
+  background: url('../images/db.png') center 20px no-repeat;
+  background-color: inherit;
+} .db:hover {
+  background: url('../images/db_light.png') center 20px no-repeat;
+  background-color: inherit;
+} .db-light {
+  background-image: url('../images/db_light.png'); 
+  background-position: center 20px;
+  background-repeat: no-repeat;
+}
+
+.red, .red-link {
+  background-color: #fc6e51;
+} .red-link:hover {
+  background-color: #e9573f;
+} .red-text {
+  color: #e9573f;
+}
+
+.green, .green-link {
+  background-color: #a0d568;
+} .green-link:hover {
+  background-color: #8cc152;
+} .green-text {
+  color: #8cc152;
+}
+
+.aqua, .aqua-link {
+  background-color: #4fc0e9;
+} .aqua-link:hover {
+  background-color: #3bafda;
+} .aqua-text {
+  color: #3bafda;
+}
+
+.purple, .purple-link {
+  background-color: #ac92eb;
+} .purple-link:hover {
+  background-color: #967adc;
+} .purple-text {
+  color: #967adc;
+}
+
+
+.panel {
+  border-style: solid;
+  border-width: 2px;
+  border-color: #f3f9fd;
+  margin-bottom: 1.25rem;
+  padding: 1.25rem;
+  background: #f3f9fd;
+}
+.panel > :first-child {
+  margin-top: 0;
+}
+.panel > :last-child {
+  margin-bottom: 0;
+}
+.panel.success {
+  width: 850px;
+  font-size: 16px;
+  color: #ffffff;
+  background-color: rgb(28, 184, 65);
+  cursor:default;
+}
+
+@font-face {
+  font-family: 'Varela';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Varela'), url(../fonts/main-font.woff2) format('woff2'), url(../fonts/main-font.woff) format('woff');
+}
