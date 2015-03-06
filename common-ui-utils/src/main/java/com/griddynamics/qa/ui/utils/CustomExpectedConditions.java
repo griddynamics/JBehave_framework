@@ -382,6 +382,9 @@ public class CustomExpectedConditions {
         } catch (TimeoutException e) {
             throw new RuntimeException("[ERROR] Locator " + locator + " is not visible");
         }
+        if (element == null){
+            throw new RuntimeException("[ERROR] Locator " + locator + " is not visible");
+        }
         return element;
     }
 
