@@ -563,6 +563,7 @@ public class CommonPageSteps implements TimeoutConstants{
                 + elementName + " is not present on page'", val, isOneOf("present", "not present", "displayed", "not displayed"));
 
         By loc = pages.getCurrentPage().getElementLocatorByName(elementName, false, false);
+        assertNotNull("[ERROR] Element " + elementName + " has nullable locator", loc);
 
         if (val.equals("present")) {
             assertTrue("[ERROR] Element " + elementName + " with locator " + loc + " is not present on page",
