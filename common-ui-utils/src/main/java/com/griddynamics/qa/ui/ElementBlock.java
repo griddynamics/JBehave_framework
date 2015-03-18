@@ -78,7 +78,7 @@ public class ElementBlock extends CommonElementMethods implements Cloneable {
     }
 
     public boolean isBlockNotDisplayed() {
-        return isLocatorDisplayedOnPage(getLocator(), false, DEFAULT_TIMEOUT_IN_SECONDS);
+        return !isLocatorDisplayedOnPage(getLocator(), false, DEFAULT_TIMEOUT_IN_SECONDS);
     }
 
     public boolean isBlockPresent() {
