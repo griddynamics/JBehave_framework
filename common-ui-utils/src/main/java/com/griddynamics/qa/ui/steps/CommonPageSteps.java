@@ -727,14 +727,14 @@ public class CommonPageSteps implements TimeoutConstants{
      */
     @Then("$elementName element is highlighted with $color")
     public void checkColor(String elementName, String color) {
-        HashMap hmColorMap = new HashMap();
+        HashMap<String, String> hmColorMap = new HashMap<String, String>();
 
         // Put more colors to the map if necessary
         hmColorMap.put("Red", "rgba(255, 0, 0, 1)");
         hmColorMap.put("Grey", "rgba(95, 95, 95, 1)");
 
         try {
-            String hColor = hmColorMap.get(color).toString();
+            String hColor = hmColorMap.get(color);
 
             assertTrue("[ERROR] Element " + elementName + " is not displayed on page", pages.getCurrentPage().isElementDisplayedOnPage(elementName));
 

@@ -227,14 +227,14 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
     }
 
     public String getElementAttributeValue(String name, String attr) {
-        String val = getElementByName(name).getAttribute(attr).toString();
+        String val = getElementByName(name).getAttribute(attr);
         return (val == null) ? null : (val.equals("null") ? "" : val);
     }
 
     public String getLocatorAttributeValue(By loc, String attr) {
         if (isLocatorPresentOnPage(loc)) {
-            String val = findElementSuppressAlert(loc).getAttribute(attr).toString();
-            return val.equals("null") ? "" : val;
+            String val = findElementSuppressAlert(loc).getAttribute(attr);
+            return (val == null) ? null : (val.equals("null") ? "" : val);
         } else return "";
     }
 
@@ -255,12 +255,12 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
     }
 
     public String getElementValue(String name) {
-        String val = getElementByName(name).getAttribute("value").toString();
+        String val = getElementByName(name).getAttribute("value");
         return val.equals("null") ? "" : val;
     }
 
     public String getElementText(String name) {
-        String val = getElementByName(name).getText().toString();
+        String val = getElementByName(name).getText();
         return val.equals("null") ? "" : val;
     }
 
@@ -430,7 +430,7 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
      */
     public boolean isElementLoaded(String name) {
         By loc = getElementLocatorByName(name, false, false);
-        WebDriverWait wait = new WebDriverWait(getDriverProvider().get(), DEFAULT_TIMEOUT_IN_SECONDS);
+        WebDriverWait wait = new WebDriverWait(getDriver(), DEFAULT_TIMEOUT_IN_SECONDS);
         WebElement element = wait.until(CustomExpectedConditions.visibilityOfElementLocated(loc));
         return element.isDisplayed();
     }
@@ -442,7 +442,7 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
      * @return each WebElement.isEnabled
      */
     public boolean areElementsLoaded(By loc){
-        WebDriverWait wait = new WebDriverWait(getDriverProvider().get(), DEFAULT_TIMEOUT_IN_SECONDS);
+        WebDriverWait wait = new WebDriverWait(getDriver(), DEFAULT_TIMEOUT_IN_SECONDS);
         List<WebElement> presents = wait.until(presenceOfAllElementsLocatedBy(loc));
         for (WebElement present : presents){
             if (!present.isDisplayed()) {
@@ -495,7 +495,7 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
      * @return WebElement.isEnabled
      */
     public boolean isHiddenElementLoaded(By loc) {
-        WebDriverWait wait = new WebDriverWait(getDriverProvider().get(), DEFAULT_TIMEOUT_IN_SECONDS);
+        WebDriverWait wait = new WebDriverWait(getDriver(), DEFAULT_TIMEOUT_IN_SECONDS);
         WebElement present = wait.until(CustomExpectedConditions.presenceOfElementLocated(loc));
         return present.isEnabled();
     }
@@ -539,7 +539,7 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
      */
     public boolean isAlertPresent() {
         try {
-            WebDriverWait wait = new WebDriverWait(getDriverProvider().get(), DEFAULT_TIMEOUT_IN_SECONDS);
+            WebDriverWait wait = new WebDriverWait(getDriver(), DEFAULT_TIMEOUT_IN_SECONDS);
             wait.until(alertIsPresent());
             switchTo().alert();
             return true;
@@ -745,7 +745,7 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
      * @return
      */
     public String getElementCssAttributeValue(String elementName, String attributeName) {
-        String val = getElementByName(elementName).getCssValue(attributeName).toString();
+        String val = getElementByName(elementName).getCssValue(attributeName);
         return val.equals("null") ? "" : val;
     }
 
@@ -761,7 +761,7 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
         } catch (UnhandledAlertException e) {
             switchTo().alert().dismiss();
             switchTo().defaultContent();
-            WebDriverWait wait = new WebDriverWait(getDriverProvider().get(), DEFAULT_TIMEOUT_IN_SECONDS);
+            WebDriverWait wait = new WebDriverWait(getDriver(), DEFAULT_TIMEOUT_IN_SECONDS);
             if (!wait.until(ExpectedConditions.not(alertIsPresent()))) {
                 assertTrue("[ERROR] Exception in waiting for alert to disappear:" + switchTo().alert().getText(), false);
             }
@@ -816,7 +816,7 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
      * @param elName HTML element name from a Story
      */
     public void hoverOverTheElement(String elName){
-        Actions action = new Actions(getDriverProvider().get());
+        Actions action = new Actions(getDriver());
 
         WebElement webElement = getElementByName(elName);
         scrollToElement(webElement);
@@ -840,7 +840,7 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
     }
 
     public void waitForLocatorVisibility(By loc, int timeout) {
-        WebDriverWait wait = new WebDriverWait(getDriverProvider().get(), timeout);
+        WebDriverWait wait = new WebDriverWait(getDriver(), timeout);
         try {
             wait.until(CustomExpectedConditions.visibilityOfElementLocated(loc));
         } catch (TimeoutException e) {

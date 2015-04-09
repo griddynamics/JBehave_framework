@@ -4,10 +4,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverException;
+import org.apache.commons.lang.StringUtils;
+import org.openqa.selenium.*;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.CommandExecutor;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -76,6 +74,7 @@ public class RemoteWebDriverProvider extends DelegatingWebDriverProvider {
         try {
             url = createRemoteURL();
             remoteWebDriver = new ScreenshootingRemoteWebDriver(wrapCommandExecutor(new HttpCommandExecutor(url)), desiredCapabilities);
+            setBrowserWindowSize(remoteWebDriver);
         } catch (Throwable e) {
             if (verbose) {
                 System.err.println("*********** Remote WebDriver Initialization Failure ************");
