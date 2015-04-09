@@ -5,10 +5,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.apache.commons.io.IOUtils;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverException;
+import org.apache.commons.lang.StringUtils;
+import org.openqa.selenium.*;
 
 /**
  * Delegating abstract implementation that provides {@link WebDriver}s specified
@@ -17,6 +15,8 @@ import org.openqa.selenium.WebDriverException;
 public abstract class DelegatingWebDriverProvider implements WebDriverProvider {
 
     protected ThreadLocal<WebDriver> delegate = new ThreadLocal<WebDriver>();
+    protected final static String BROWSER_WINDOW_HEIGHT = "browser.window.height";
+    protected final static String BROWSER_WINDOW_WIDTH = "browser.window.width";
 
     public WebDriver get() {
         WebDriver webDriver = delegate.get();
@@ -56,6 +56,16 @@ public abstract class DelegatingWebDriverProvider implements WebDriverProvider {
                     + "with the appropriate credentials if using remote access, " +
                     "e.g. to SauceLabs: -DSAUCE_USERNAME=xxxxxx " +
                     "-DSAUCE_ACCESS_KEY=xxx-xxxx-xxxx-xxxx-xxx ");
+        }
+    }
+
+    protected void setBrowserWindowSize(WebDriver driver){
+        String height = System.getProperty(BROWSER_WINDOW_HEIGHT);
+        String width = System.getProperty(BROWSER_WINDOW_WIDTH);
+
+        if (!(StringUtils.isEmpty(height) || StringUtils.isEmpty(width))) {
+            driver.manage().window().setSize(new Dimension(Integer.valueOf(width),
+                    Integer.valueOf(height)));
         }
     }
 }

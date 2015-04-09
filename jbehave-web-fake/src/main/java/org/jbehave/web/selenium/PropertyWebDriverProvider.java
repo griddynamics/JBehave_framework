@@ -45,19 +45,30 @@ public class PropertyWebDriverProvider extends DelegatingWebDriverProvider {
     }
 
     private WebDriver createDriver(Browser browser) {
+        WebDriver driver;
         switch (browser) {
 //        case ANDROID:
 //            return createAndroidDriver();
-        case CHROME:
-            return createChromeDriver();
-        case FIREFOX:
-            return createFirefoxDriver();
-        case HTMLUNIT:
-        default:
-            return createHtmlUnitDriver();
-        case IE:
-            return createInternetExplorerDriver();
+            case CHROME: {
+                driver = createChromeDriver();
+                break;
+            }
+            case FIREFOX: {
+                driver = createFirefoxDriver();
+                break;
+            }
+            case IE: {
+                driver = createInternetExplorerDriver();
+                break;
+            }
+            case HTMLUNIT:
+            default: {
+                driver = createHtmlUnitDriver();
+                break;
+            }
         }
+        setBrowserWindowSize(driver);
+        return driver;
     }
 
 //    protected WebDriver createAndroidDriver() {

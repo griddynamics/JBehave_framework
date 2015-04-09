@@ -266,14 +266,14 @@ public abstract class AbstractPage extends CommonElementMethods {
      * Wait for page is opened {@value #WAIT_FOR_PAGE_LOAD_TIMEOUT_IN_MS} ms
      */
     public void waitForPageToLoad(String oldURL) {
-        String newURL = getDriverProvider().get().getCurrentUrl();
+        String newURL = getDriver().getCurrentUrl();
 
         long currentSleepCount = 0;
         long totalSleepCount = WAIT_FOR_PAGE_LOAD_TIMEOUT_IN_MS / WAIT_PAGE_LOAD_TIMEOUT_IN_MS;
         while (newURL.equals(oldURL) && currentSleepCount < totalSleepCount) {
             currentSleepCount++;
             sleep(WAIT_PAGE_LOAD_TIMEOUT_IN_MS);
-            newURL = getDriverProvider().get().getCurrentUrl();
+            newURL = getDriver().getCurrentUrl();
         }
         assertThat("[ERROR] New page is not opened", newURL, not(oldURL));
     }
