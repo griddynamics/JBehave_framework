@@ -3,8 +3,35 @@
     <groupId>com.griddynamics.qa</groupId>
     <artifactId>jbehave-framework</artifactId>
     <packaging>pom</packaging>
-    <version>1.2.3-SNAPSHOT</version>
+    <version>1.2.4-SNAPSHOT</version>
     <name>JBehave Framework</name>
+    <url>https://github.com/griddynamics/JBehave_framework</url>
+    <description>JBehave_framework - set of methods, steps and utilities to test eCommenrce applications on desktop and mobile devices.</description>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+    <organization>
+        <name>Grid Dynamics, Inc.</name>
+        <url>http://www.griddynamics.com</url>
+    </organization>
+    <developers>
+        <developer>
+            <id>budabum</id>
+            <name>Alexey Lyanguzov</name>
+            <email>budabum@gmail.com</email>
+            <organization>Grid Dynamics, Inc</organization>
+            <organizationUrl>http://www.griddynamics.com</organizationUrl>
+            <roles>
+                <role>curator</role>
+            </roles>
+        </developer>
+    </developers>
+    
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -185,7 +212,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <!--<version>2.2.1</version>-->
+                <version>2.2.1</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -198,12 +225,26 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <!--<version>2.9.1</version>-->
+                <version>2.9.1</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
                         <goals>
                             <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
                         </goals>
                     </execution>
                 </executions>
