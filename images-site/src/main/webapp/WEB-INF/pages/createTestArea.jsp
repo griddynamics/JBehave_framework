@@ -4,45 +4,62 @@
 
 <html>
 <head>
-    <title>Add test area</title>
+  <link rel="stylesheet" href="resources/css/main.css">
+  <link rel="stylesheet" href="resources/css/pure-min.css">
+  <script type="text/javascript" src="jquery-1.2.6.min.js"></script>
+  <title>Add test area</title>
 </head>
-<body>
-<h2>Create test area with properties:</h2>
-<br/><br/>
-<form method="post" modelAttribute="testArea" action="testAreaCreated">
+
+
+<header>
+  <div style="position: absolute; top: 0px; left:-8px;">
+    <span class="aqua header-line header-line-first"/>
+    <span class="aqua header-line"/>
+    <span class="purple header-line"/>
+    <span class="red header-line"/>
+    <span class="green header-line"/>
+  </div>
+
+  <div class="header-title aqua-text">Create new test area</div><div class="header-icon aqua window-light"/><a class="header-back" href="/"></a>
+</header>
+
+<body class="body">
+
+
+<div class="panel">Please set properties for new test area:</div>
+<form class="pure-form pure-form-aligned" method="post" modelAttribute="testArea" action="testAreaCreated">
     <input type="hidden" name="croppedFromFileName" value="${testArea.croppedFromFileName}"/>
-    <table>
-        <tr>
-            <td>posX</td><td><input name="posX" value="${testArea.posX}"/></td>
-        </tr>
-        <tr>
-            <td>posY</td><td><input name="posY" value="${testArea.posY}"</td>
-        </tr>
-        <tr>
-            <td>width</td><td><input name="width" value="${testArea.width}"</td>
-        </tr>
-        <tr>
-            <td>height</td><td><input name="height" value="${testArea.height}"</td>
-        </tr>
-        <tr>
-            <td>browser width</td><td><input name="browserWidth" value="${testArea.browserWidth}"</td>
-        </tr>
-        <tr>
-            <td>browser height</td><td><input name="browserHeight" value="${testArea.browserHeight}"</td>
-        </tr>
-        <tr>
-            <td>browser name</td><td><input name="browserName" value=""/></td>
-        </tr>
-        <tr>
-            <td>browser version</td><td><input name="browserVersion" value=""/></td>
-        </tr>
-        <tr>
-            <td>area name</td><td><input name="areaName" value=""/></td>
-        </tr>
-        <tr>
-            <td><input type="submit" value="Create area" /></td>
-        </tr>
-    </table>
+    <fieldset>
+        <div class="pure-control-group">
+            <label for="posX">posX</label>
+            <input name="posX" value="${testArea.posX}"/>
+        </div>
+        <div class="pure-control-group">
+            <label for="posY">posY</label>
+            <input name="posY" value="${testArea.posY}"/>
+        </div>
+        <div class="pure-control-group">
+            <label for="countFromTop">count from top</label>
+            <input name="countFromTop" value="true"/>
+        </div>
+        <div class="pure-control-group">
+            <label for="width">width</label>
+            <input name="width" value="${testArea.width}"/>
+        </div>
+        <div class="pure-control-group">
+            <label for="height">height</label>
+            <input name="height" value="${testArea.height}"/>
+        </div>
+        <div class="pure-control-group">
+            <label for="areaName">area name</label>
+            <input name="areaName" value=""/>
+        </div>
+        <input type="hidden" name="page.pageID" value="${page.pageID}"/>
+        <div class="pure-control-group">
+            <label for="submit"></label>
+            <input type="submit" class="pure-button pure-button-primary" value="Create area" />
+        </div>
+    <fieldset> 
 </form>
 </body>
 </html>

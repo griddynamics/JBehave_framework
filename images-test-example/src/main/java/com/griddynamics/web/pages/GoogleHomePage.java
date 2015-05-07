@@ -7,7 +7,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * @author lzakharova
  */
-public class GoogleHomePage extends CommonPage {
+public class GoogleHomePage extends CommonGooglePage {
 
     public GoogleHomePage(WebDriverProvider driverProvider, String currentPageUri, String currentPageTitle) {
         super(driverProvider, currentPageUri, currentPageTitle);
@@ -18,5 +18,6 @@ public class GoogleHomePage extends CommonPage {
         super.assertCurrentPage();
         assertTrue(SEARCH_FIELD + " is not displayed", isElementDisplayedOnPage(SEARCH_FIELD));
     }
+
 }
 

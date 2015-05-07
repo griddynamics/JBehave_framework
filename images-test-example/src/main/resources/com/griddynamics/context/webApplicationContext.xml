@@ -9,12 +9,16 @@
 
 
     <bean class="org.springframework.web.context.support.ServletContextPropertyPlaceholderConfigurer">
-        <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
-        <property name="searchContextAttributes" value="true" />
-        <property name="contextOverride" value="true" />
+        <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE"/>
+        <property name="searchContextAttributes" value="true"/>
+        <property name="contextOverride" value="true"/>
         <property name="locations">
             <list>
                 <value>classpath:imagestest.properties</value>
+                <value>classpath:pages.properties</value>
+                <value>classpath:store.properties</value>
+                <value>classpath:browser.properties</value>
+                <value>classpath:jbehave.properties</value>
             </list>
         </property>
     </bean>
@@ -25,17 +29,21 @@
 
     <context:annotation-config/>
 
-    <import resource="classpath*:com/griddynamics/context/uiPropertiesContext.xml"/>
     <import resource="classpath*:com/griddynamics/context/pagesBeans.xml"/>
-    <import resource="classpath*:com/griddynamics/context/database/Spring-Datasource.xml" />
-    <import resource="classpath*:com/griddynamics/context/testresult/Spring-TestObjects.xml" />
 
-    <bean id="webDriverProvider" class="org.jbehave.web.selenium.PerStoryWebDriverSteps" >
+    <bean id="webDriverProvider" class="org.jbehave.web.selenium.PerStoryWebDriverSteps">
         <constructor-arg ref="driverProvider"/>
     </bean>
 
     <bean id="screenshots" class="com.griddynamics.qa.framework.CustomWebDriverScreenshotOnFailure">
         <constructor-arg ref="driverProvider"/>
+    </bean>
+
+    <bean id="testRun" class="com.griddynamics.runtest.RunTestUtil">
+    </bean>
+
+    <bean id="imageMagickWrapper" class="com.griddynamics.imwrapper.ImageMagickWrapper">
+        <property name="imageMagickPath" value="${imagemagick.home}"/>
     </bean>
 
     <bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
@@ -49,10 +57,56 @@
     </bean>
 
 
-    <bean id="googleHost" class="com.griddynamics.web.GoogleHost" >
+    <bean id="googleHost" class="com.griddynamics.web.GoogleHost">
         <property name="siteUrl">
             <value>${site.url}</value>
         </property>
+    </bean>
+
+    <bean id="disneyHost" class="com.griddynamics.web.DisneyHost">
+        <property name="siteUrl">
+            <value>${disney.site.url}</value>
+        </property>
+    </bean>
+
+
+    <!--<bean id="dataSourceMySql"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="${db.mysql.url}" />
+        <property name="username" value="${db.mysql.username}" />
+        <property name="password" value="${db.mysql.password}" />
+    </bean> -->
+
+    <bean id="dataSourceSQLite"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="org.sqlite.JDBC"/>
+        <property name="url" value="jdbc:sqlite:${testimages.db.file.location}"/>
+    </bean>
+
+
+    <bean id="testResultDAO" class="com.griddynamics.data.dao.impl.JdbcTestResultDAO">
+        <property name="dataSource" ref="dataSourceSQLite"/>
+    </bean>
+
+    <bean id="testAreaDAO" class="com.griddynamics.data.dao.impl.JdbcTestAreaDAO">
+        <property name="dataSource" ref="dataSourceSQLite"/>
+    </bean>
+
+    <bean id="testPageDAO" class="com.griddynamics.data.dao.impl.JdbcTestPageDAO">
+        <property name="dataSource" ref="dataSourceSQLite"/>
+    </bean>
+
+
+    <bean id="fileStructure" class="com.griddynamics.data.model.FileStructure">
+        <property name="rootFolderPath" value="${testimages.data.root.folder.path}"/>
+        <property name="resultImageFolderName" value="${result.image.folder.name}"/>
+        <property name="baselineImageFolderName" value="${baseline.image.folder.name}"/>
+        <property name="testPagesFolderName" value="${test.pages.folder.name}"/>
+        <property name="fullPageScreenshotFileName" value="${full.page.screenshot.file.name}"/>
+        <property name="croppedScreenshotFileName" value="${cropped.image.file.name}"/>
+        <property name="comparisonResultFileName" value="${comparison.image.file.name}"/>
     </bean>
 
     <beans profile="remote">

@@ -15,7 +15,7 @@ import static org.junit.Assert.assertTrue;
  * @author lzakharova
  */
 
-public abstract class CommonPage extends AbstractPage {
+public abstract class CommonGooglePage extends AbstractPage {
 
     public static final String SEARCH_FIELD = "Search field";
     public static final By searchFieldLoc = By.xpath("//input[@type='text']");
@@ -28,12 +28,12 @@ public abstract class CommonPage extends AbstractPage {
     private String currentPageUri;
 
 
-    protected CommonPage(WebDriverProvider driverProvider) {
+    protected CommonGooglePage(WebDriverProvider driverProvider) {
         super(driverProvider);
         initElements();
     }
 
-    protected CommonPage(WebDriverProvider driverProvider, String currentPageUri, String currentPageTitle) {
+    protected CommonGooglePage(WebDriverProvider driverProvider, String currentPageUri, String currentPageTitle) {
         this(driverProvider);
         setCurrentPageUri(currentPageUri);
         setCurrentPageTitle(currentPageTitle);
@@ -76,7 +76,7 @@ public abstract class CommonPage extends AbstractPage {
 
     @Override
     public boolean checkCurrentPage() {
-        return checkURL() ;
+        return checkURL();
     }
 
     @Override

@@ -17,6 +17,16 @@
         </constructor-arg>
     </bean>
 
+    <bean id="disneyHomePage" class="com.griddynamics.web.pages.DisneyHomePage">
+        <constructor-arg name="driverProvider" ref="driverProvider"/>
+        <constructor-arg name="currentPageTitle">
+            <value>${disneyHomePageTitle}</value>
+        </constructor-arg>
+        <constructor-arg name="currentPageUri">
+            <value>${disneyHomePageUrl}</value>
+        </constructor-arg>
+    </bean>
+
     <bean id="pages" class="com.griddynamics.web.pages.CustomPages" scope="thread">
         <constructor-arg index="0" ref="driverProvider"/>
         <constructor-arg index="1" ref="pageMatching"/>
@@ -28,6 +38,7 @@
         <property name="sourceMap">
             <map>
                 <entry key="Google Home" value-ref="googleHomePage"/>
+                <entry key="Disney Home" value-ref="disneyHomePage"/>
             </map>
         </property>
     </bean>

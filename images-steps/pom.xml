@@ -11,18 +11,22 @@
         <version>1.1.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>images-tools</artifactId>
+    <artifactId>images-steps</artifactId>
     <name>Steps for UI tool</name>
 
     <packaging>jar</packaging>
     <version>1.1.1-SNAPSHOT</version>
     <groupId>com.griddynamics.qa</groupId>
 
+    <properties>
+        <gdframework.version>1.1.1-SNAPSHOT</gdframework.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.griddynamics</groupId>
-            <artifactId>images-db</artifactId>
-            <version>1.1.1-SNAPSHOT</version>
+            <artifactId>images-utils</artifactId>
+            <version>${gdframework.version}</version>
         </dependency>
 
 

@@ -1,51 +1,58 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <html>
 <head>
-    <script type="text/javascript" src="jquery-1.2.6.min.js"></script>
-    <title>DB Actions</title>
+  <link rel="stylesheet" href="resources/css/main.css">
+  <link rel="stylesheet" href="resources/css/pure-min.css">
+  <script type="text/javascript" src="jquery-1.2.6.min.js"></script>
+  <title>DB Actions</title>
 </head>
-<body>
+
+<header>
+  <div style="position: absolute; top: 0px; left:-8px;">
+    <span class="purple header-line header-line-first"/>
+    <span class="purple header-line"/>
+    <span class="red header-line"/>
+    <span class="green header-line"/>
+    <span class="aqua header-line"/>
+  </div>
+
+  <div class="header-title purple-text">Database actions</div><div class="header-icon purple db-light"/><a class="header-back" href="/"></a>
+</header>
+
+
+
+<body class="body">
+
+
 
 <form:form method="post" enctype="multipart/form-data" action="runInitDB">
-    <table>
-        <tr>
-            <td>Initialize DB:</td>
-            <td><input type="submit" value="Init" /></td>
-        </tr>
-    </table>
+    <input type="submit" class="pure-button pure-button-primary" style="width: 360px; font-size: 20px;" value="Initialize DB"/>
 </form:form>
-<table>
-    <tr>
-        <td>Export Test Areas to CSV:</td>
-        <td>
-            <form action="/dbactions/exportTestAreas">
-                <input type="submit" value="Export Test Areas">
-            </form>
-        </td>
-    </tr>
 
-    <tr>
-        <td>Export Test Results to CSV:</td>
-        <td>
-            <form action="/dbactions/exportTestResults">
-                <input type="submit" value="Export Test Results">
-            </form>
-        </td>
-    </tr>
-    <table>
+<div class="next-block">
+<h2 style="display: inline-block;">- Export to CSV -</h2><br/>
+<form action="/dbactions/exportTestAreas" style="display: inline-block; margin-right: 10px;">
+  <input type="submit" class="pure-button" value="export Test Areas">
+</form>
+<form action="/dbactions/exportTestResults" style="display: inline-block;">
+  <input type="submit" class="pure-button" value="export Test Results">
+</form>
+<form action="/dbactions/exportTestPages" style="display: inline-block;">
+  <input type="submit" class="pure-button" value="export Test Pages">
+</form>
+</div>
 
 
-        <form:form method="post" enctype="multipart/form-data" modelAttribute="uploadedFile" action="dbactions/importTestAreas">
+
+
+<div class="next-block">
+<h2 style="display: inline-block;">- Import from CSV -</h2><br/>
+        <form:form class="pure-form" method="post" enctype="multipart/form-data" modelAttribute="uploadedFile" action="dbactions/importTestAreas">
             <table>
                 <tr>
-                    <td>Import Test Areas from CSV to DB:</td>
                     <td><input type="file" name="file" /></td>
                     <td style="color: red; font-style: italic;"><form:errors path="file" /></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><input type="submit" value="Upload file to import" /></td>
-                    <td></td>
+                    <td><input type="submit" class="pure-button" value="import Test Areas" style="width: 190px;"/></td>
                 </tr>
             </table>
         </form:form>
@@ -53,20 +60,36 @@
         <form:form method="post" enctype="multipart/form-data" modelAttribute="uploadedFile" action="dbactions/importTestResults">
             <table>
                 <tr>
-                    <td>Import Test Results from CSV to DB:</td>
                     <td><input type="file" name="file" /></td>
                     <td style="color: red; font-style: italic;"><form:errors path="file" /></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><input type="submit" value="Upload file to import" /></td>
-                    <td></td>
+                    <td><input type="submit" class="pure-button" value="import Test Results" style="width: 190px;"/></td>
                 </tr>
             </table>
         </form:form>
 
-    </table>
+        <form:form method="post" enctype="multipart/form-data" modelAttribute="uploadedFile" action="dbactions/importTestPages">
+             <table>
+                 <tr>
+                     <td><input type="file" name="file" /></td>
+                     <td style="color: red; font-style: italic;"><form:errors path="file" /></td>
+                     <td><input type="submit" class="pure-button" value="import Test Pages" style="width: 190px;"/></td>
+                 </tr>
+             </table>
+        </form:form>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </body>
 </html>
-

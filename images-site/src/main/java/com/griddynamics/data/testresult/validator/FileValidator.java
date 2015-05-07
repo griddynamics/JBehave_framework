@@ -1,9 +1,10 @@
-package com.griddynamics.testresult.validator;
+package com.griddynamics.data.testresult.validator;
 
 /**
  * @author lzakharova
  */
-import com.griddynamics.testresult.model.UploadedFile;
+
+import com.griddynamics.data.model.UploadedFile;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
@@ -11,7 +12,6 @@ public class FileValidator implements Validator {
 
     @Override
     public boolean supports(Class arg0) {
-        // TODO Auto-generated method stub
         return false;
     }
 
