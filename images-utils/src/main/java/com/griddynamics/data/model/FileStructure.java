@@ -25,8 +25,8 @@ public class FileStructure {
     private String testPagesPath = null;
 
 
-
-    private FileStructure (){}
+    private FileStructure() {
+    }
 
 
     public String getRootFolderPath() {

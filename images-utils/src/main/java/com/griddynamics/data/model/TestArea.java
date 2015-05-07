@@ -24,7 +24,8 @@ public class TestArea {
 
     private String croppedFromFileName;
 
-    public TestArea(){}
+    public TestArea() {
+    }
 
     public TestArea(String pAreaId, String pAreaName, String pFileName) {
         areaId = pAreaId;
@@ -49,7 +50,6 @@ public class TestArea {
     public String toString() {
         return "TestArea: areaId=" + areaId + "; areaName=" + areaName + "; fileName=" + fileName + ".";
     }
-
 
 
     public String getAreaId() {
@@ -139,7 +139,7 @@ public class TestArea {
 
     public static CellProcessor[] getTestAreaProcessor() {
 
-        final CellProcessor[] processors = new CellProcessor[] {
+        final CellProcessor[] processors = new CellProcessor[]{
                 new NotNull(), //areaId
                 new NotNull(), //areaName
                 new NotNull(), //fileName

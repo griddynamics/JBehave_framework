@@ -22,7 +22,8 @@ public class TestResult implements Comparable<TestResult> {
 
     private TestArea testArea;
 
-    public TestResult(){}
+    public TestResult() {
+    }
 
     public TestResult(Integer pTestId, String pTestAreaId, String pTestSessionTs, String pTestRunTs,
                       boolean pTestResult, int pNumberOfDiffPixels, boolean pIsVerified, String pTestFolderName) {
@@ -85,7 +86,7 @@ public class TestResult implements Comparable<TestResult> {
     }
 
     public String getResultFolderName() {
-        return testRunTs.replaceAll("[\\. :-]", "").substring(0,12);
+        return testRunTs.replaceAll("[\\. :-]", "").substring(0, 12);
     }
 
     public void setTestId(int testId) {
@@ -129,8 +130,8 @@ public class TestResult implements Comparable<TestResult> {
 
         if (this == that) return EQUAL;
 
-        Long thisTimestamp = Long.parseLong(this.testRunTs.replaceAll("[\\. :-]", "").substring(0,12));
-        Long thatTimestamp = Long.parseLong(that.testRunTs.replaceAll("[\\. :-]", "").substring(0,12));
+        Long thisTimestamp = Long.parseLong(this.testRunTs.replaceAll("[\\. :-]", "").substring(0, 12));
+        Long thatTimestamp = Long.parseLong(that.testRunTs.replaceAll("[\\. :-]", "").substring(0, 12));
 
         if (thisTimestamp < thatTimestamp) return BEFORE;
         if (thisTimestamp > thatTimestamp) return AFTER;
@@ -141,7 +142,7 @@ public class TestResult implements Comparable<TestResult> {
 
     public static CellProcessor[] getTestResultProcessor() {
 
-        final CellProcessor[] processors = new CellProcessor[] {
+        final CellProcessor[] processors = new CellProcessor[]{
                 new ParseInt(), //testId
                 new NotNull(),  //testAreaId
                 new NotNull(),  //testSessionTs

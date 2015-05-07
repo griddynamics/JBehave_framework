@@ -106,7 +106,7 @@ public class ImageMagickWrapper {
                 output.append(line + "\n");
             }
 
-            while ((line = errReader.readLine())!= null) {
+            while ((line = errReader.readLine()) != null) {
                 output.append(line + "\n");
             }
 

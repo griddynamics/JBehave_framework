@@ -75,7 +75,7 @@ public abstract class CommonDisneyPage extends AbstractPage {
 
     @Override
     public boolean checkCurrentPage() {
-        return checkURL() ;
+        return checkURL();
     }
 
     @Override

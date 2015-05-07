@@ -86,7 +86,8 @@ public class JdbcTestAreaDAO implements TestAreaDAO {
             if (conn != null) {
                 try {
                     conn.close();
-                } catch (SQLException e) {}
+                } catch (SQLException e) {
+                }
             }
         }
     }
@@ -128,7 +129,8 @@ public class JdbcTestAreaDAO implements TestAreaDAO {
             if (conn != null) {
                 try {
                     conn.close();
-                } catch (SQLException e) {}
+                } catch (SQLException e) {
+                }
             }
         }
     }
@@ -136,8 +138,8 @@ public class JdbcTestAreaDAO implements TestAreaDAO {
     public void updateTestArea(TestArea testArea) {
 
         String sql = "update " + TEST_OBJECTS_TABLE_NAME + " set " + AREA_NAME_DB_COL + " = ? , " +
-                PAGE_ID_DB_COL + " = ? , " + WIDTH_DB_COL   + " = ? , " +  HEIGHT_DB_COL + " = ? , " +
-                POS_X_DB_COL   + " = ? , " +  POS_Y_DB_COL + " = ? , " + COUNT_FROM_TOP_COL   + " = ? " +
+                PAGE_ID_DB_COL + " = ? , " + WIDTH_DB_COL + " = ? , " + HEIGHT_DB_COL + " = ? , " +
+                POS_X_DB_COL + " = ? , " + POS_Y_DB_COL + " = ? , " + COUNT_FROM_TOP_COL + " = ? " +
                 "where " + AREA_ID_DB_COL + " = ?";
         Connection conn = null;
 
@@ -160,7 +162,8 @@ public class JdbcTestAreaDAO implements TestAreaDAO {
             if (conn != null) {
                 try {
                     conn.close();
-                } catch (SQLException e) {}
+                } catch (SQLException e) {
+                }
             }
         }
     }
@@ -186,7 +189,8 @@ public class JdbcTestAreaDAO implements TestAreaDAO {
             if (conn != null) {
                 try {
                     conn.close();
-                } catch (SQLException e) {}
+                } catch (SQLException e) {
+                }
             }
         }
     }
@@ -228,7 +232,8 @@ public class JdbcTestAreaDAO implements TestAreaDAO {
             if (conn != null) {
                 try {
                     conn.close();
-                } catch (SQLException e) {}
+                } catch (SQLException e) {
+                }
             }
         }
     }
@@ -238,7 +243,7 @@ public class JdbcTestAreaDAO implements TestAreaDAO {
         List<TestArea> testAreas = getTestAreas();
         Map<String, List<TestArea>> testAreasMap = new HashMap<String, List<TestArea>>();
 
-        for (TestArea testArea: testAreas) {
+        for (TestArea testArea : testAreas) {
             if (!testAreasMap.containsKey(testArea.getPage().getPageID())) {
                 testAreasMap.put(testArea.getPage().getPageID(), new LinkedList<TestArea>());
             }
@@ -287,7 +292,8 @@ public class JdbcTestAreaDAO implements TestAreaDAO {
             if (conn != null) {
                 try {
                     conn.close();
-                } catch (SQLException e) {}
+                } catch (SQLException e) {
+                }
             }
         }
     }
@@ -328,7 +334,6 @@ public class JdbcTestAreaDAO implements TestAreaDAO {
             }
 
 
-
             ps = conn.prepareStatement(sql);
             ps.setString(1, testArea.getAreaId());
             ps.setString(2, testArea.getAreaName());
@@ -348,7 +353,8 @@ public class JdbcTestAreaDAO implements TestAreaDAO {
             if (conn != null) {
                 try {
                     conn.close();
-                } catch (SQLException e) {}
+                } catch (SQLException e) {
+                }
             }
         }
     }

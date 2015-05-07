@@ -18,7 +18,8 @@ public class TestPage {
     private int browserHeight;
     private int imageHeight;
 
-    public TestPage() {}
+    public TestPage() {
+    }
 
     public TestPage(String pPageID, String pPageName, String pFileName,
                     String pBrowserName, String pBrowserVersion, int pBrowserWidth, int pBrowserHeight, int pImageHeight) {
@@ -103,7 +104,7 @@ public class TestPage {
 
     public static CellProcessor[] getTestPageProcessor() {
 
-        final CellProcessor[] processors = new CellProcessor[] {
+        final CellProcessor[] processors = new CellProcessor[]{
                 new NotNull(), //pageID
                 new NotNull(), //pageName
                 new NotNull(), //fileName

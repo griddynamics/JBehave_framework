@@ -43,24 +43,23 @@ public class RunTestUtil {
     public ImageMagickWrapper imageMagickWrapper;
 
 
-
     private static final String TEST_SESSION_TS = getTimestamp();
 
 
     public void runUITestForPage(WebDriver driver, String pageName,
-                          int browserHeightInPix, int browserWidthInPix,
-                          FileStructure fileStructure) {
+                                 int browserHeightInPix, int browserWidthInPix,
+                                 FileStructure fileStructure) {
         List<TestArea> testObjects = getTestObjectsForPage(testAreaDAO.getTestAreas(), pageName,
                 getBrowserName(driver), getBrowserVersion(driver), browserWidthInPix, browserHeightInPix);
-        for (TestArea uiObject: testObjects) {
+        for (TestArea uiObject : testObjects) {
             runUITest(driver, uiObject, fileStructure);
         }
     }
 
 
     public void runUITestForArea(WebDriver driver, String uiAreaName,
-                          int browserHeightInPix, int browserWidthInPix,
-                          FileStructure fileStructure) {
+                                 int browserHeightInPix, int browserWidthInPix,
+                                 FileStructure fileStructure) {
         TestArea uiObject = getTestObjectForArea(testAreaDAO.getTestAreas(), uiAreaName,
                 getBrowserName(driver), getBrowserVersion(driver), browserWidthInPix, browserHeightInPix);
         runUITest(driver, uiObject, fileStructure);
@@ -75,7 +74,7 @@ public class RunTestUtil {
 
         String testFolderName = RandomStringUtils.randomAlphabetic(32).toLowerCase();
         String resultsDirectoryName = fileStructure.getResultImagePath() +
-                testTs.replaceAll("[\\. :-]", "").substring(0,12) + File.separator + testFolderName + File.separator;
+                testTs.replaceAll("[\\. :-]", "").substring(0, 12) + File.separator + testFolderName + File.separator;
         (new File(resultsDirectoryName)).mkdir();
 
         File fullScreenshotFinal = takeScreenshot(driver, resultsDirectoryName + fileStructure.getFullPageScreenshotFileName());
@@ -139,7 +138,7 @@ public class RunTestUtil {
 
     public File takeScreenshot(WebDriver driver, String saveToFullPath) {
 
-        File screenshot = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+        File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
         File fullScreenshotFinal = new File(saveToFullPath);
 
         try {
@@ -164,8 +163,8 @@ public class RunTestUtil {
 
 
     private static List<TestArea> getTestObjectsForPage(List<TestArea> objects, String pPageName,
-                                                 String browser, String browserVersion,
-                                                 int browserWidth, int browserHeight) {
+                                                        String browser, String browserVersion,
+                                                        int browserWidth, int browserHeight) {
         List<TestArea> testAreas;
 
         testAreas = getTestObjectsForPageName(objects, pPageName);
@@ -216,7 +215,7 @@ public class RunTestUtil {
 
     private static List<TestArea> getTestObjectsForPageName(List<TestArea> objects, String pPageName) {
         List<TestArea> testAreas = new LinkedList<TestArea>();
-        for(TestArea obj: objects) {
+        for (TestArea obj : objects) {
             if (obj.getPage().getPageName().equals(pPageName)) {
                 testAreas.add(obj);
             }
@@ -227,7 +226,7 @@ public class RunTestUtil {
 
     private static List<TestArea> getTestObjectsForArea(List<TestArea> objects, String pAreaName) {
         List<TestArea> testAreas = new LinkedList<TestArea>();
-        for(TestArea obj: objects) {
+        for (TestArea obj : objects) {
             if (obj.getAreaName().equals(pAreaName)) {
                 testAreas.add(obj);
             }
@@ -237,7 +236,7 @@ public class RunTestUtil {
 
     private static List<TestArea> getTestObjectsForBrowser(List<TestArea> objects, String browser) {
         List<TestArea> testAreas = new LinkedList<TestArea>();
-        for(TestArea obj: objects) {
+        for (TestArea obj : objects) {
             if (obj.getPage().getBrowserName().equals(browser)) {
                 testAreas.add(obj);
             }
@@ -247,7 +246,7 @@ public class RunTestUtil {
 
     private static List<TestArea> getTestObjectsForBrowserVersion(List<TestArea> objects, String browserVersion) {
         List<TestArea> testAreas = new LinkedList<TestArea>();
-        for(TestArea obj: objects) {
+        for (TestArea obj : objects) {
             if (obj.getPage().getBrowserVersion().equals(browserVersion)) {
                 testAreas.add(obj);
             }
@@ -257,7 +256,7 @@ public class RunTestUtil {
 
     private static List<TestArea> getTestObjectsForBrowserWidth(List<TestArea> objects, int browserWidth) {
         List<TestArea> testAreas = new LinkedList<TestArea>();
-        for(TestArea obj: objects) {
+        for (TestArea obj : objects) {
             if (obj.getPage().getBrowserWidth() == browserWidth) {
                 testAreas.add(obj);
             }
@@ -267,7 +266,7 @@ public class RunTestUtil {
 
     private static List<TestArea> getTestObjectsForBrowserHeight(List<TestArea> objects, int browserHeight) {
         List<TestArea> testAreas = new LinkedList<TestArea>();
-        for(TestArea obj: objects) {
+        for (TestArea obj : objects) {
             if (obj.getPage().getBrowserHeight() == browserHeight) {
                 testAreas.add(obj);
             }
@@ -277,13 +276,13 @@ public class RunTestUtil {
 
 
     private String getBrowserName(WebDriver driver) {
-        String name = ((RemoteWebDriver)driver).getCapabilities().getBrowserName();
+        String name = ((RemoteWebDriver) driver).getCapabilities().getBrowserName();
         getLogger().info("Browser name = " + name);
         return name;
     }
 
     private String getBrowserVersion(WebDriver driver) {
-        String version = ((RemoteWebDriver)driver).getCapabilities().getVersion();
+        String version = ((RemoteWebDriver) driver).getCapabilities().getVersion();
         getLogger().info("Browser full version = " + version);
         version = getMatchString(version, "\\d+");
         getLogger().info("Browser major version = " + version);

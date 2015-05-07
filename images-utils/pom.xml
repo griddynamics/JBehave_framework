@@ -3,30 +3,30 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-	<modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
     <artifactId>images-utils</artifactId>
     <name>Utils for Compare UI tool</name>
 
     <packaging>jar</packaging>
-	<version>1.1.1-SNAPSHOT</version>
+    <version>1.1.1-SNAPSHOT</version>
     <groupId>com.griddynamics</groupId>
 
-	<properties>
-		<spring.version>3.2.4.RELEASE</spring.version>
+    <properties>
+        <spring.version>3.2.4.RELEASE</spring.version>
         <gdframework.version>1.1.1-SNAPSHOT</gdframework.version>
         <selenium.version>2.34.0</selenium.version>
         <mysql.version>5.1.6</mysql.version>
         <sqllite.version>3.7.2</sqllite.version>
         <supercsv.version>2.2.1</supercsv.version>
-	</properties>
+    </properties>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>

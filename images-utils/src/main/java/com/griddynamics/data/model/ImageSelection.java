@@ -11,7 +11,6 @@ public class ImageSelection {
     private String pageId;
 
 
-
     public int getX1() {
         return x1;
     }

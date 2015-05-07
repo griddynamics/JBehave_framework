@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * @author lzakharova
  */
-public class JdbcTestResultDAO implements TestResultDAO{
+public class JdbcTestResultDAO implements TestResultDAO {
 
     public static final String TEST_RESULTS_TABLE_NAME = "test_results";
 
@@ -82,12 +82,13 @@ public class JdbcTestResultDAO implements TestResultDAO{
             if (conn != null) {
                 try {
                     conn.close();
-                } catch (SQLException e) {}
+                } catch (SQLException e) {
+                }
             }
         }
     }
 
-    public TestResult getTestResult(int testId){
+    public TestResult getTestResult(int testId) {
 
         String sql = "SELECT * FROM " + TEST_RESULTS_TABLE_NAME + " WHERE " + TEST_ID_DB_COL + " = ?";
 
@@ -125,13 +126,14 @@ public class JdbcTestResultDAO implements TestResultDAO{
             if (conn != null) {
                 try {
                     conn.close();
-                } catch (SQLException e) {}
+                } catch (SQLException e) {
+                }
             }
         }
     }
 
 
-    public List<TestResult> getAllTestResults(){
+    public List<TestResult> getAllTestResults() {
 
         String sql = "select * from " + TEST_RESULTS_TABLE_NAME;
 
@@ -166,12 +168,13 @@ public class JdbcTestResultDAO implements TestResultDAO{
             if (conn != null) {
                 try {
                     conn.close();
-                } catch (SQLException e) {}
+                } catch (SQLException e) {
+                }
             }
         }
     }
 
-    public List<TestResult> getTestResultsOnePerSession(){
+    public List<TestResult> getTestResultsOnePerSession() {
 
         String sql = "select * from " + TEST_RESULTS_TABLE_NAME + " group by " + TEST_SESSION_TS_DB_COL;
 
@@ -207,7 +210,8 @@ public class JdbcTestResultDAO implements TestResultDAO{
             if (conn != null) {
                 try {
                     conn.close();
-                } catch (SQLException e) {}
+                } catch (SQLException e) {
+                }
             }
         }
     }
@@ -246,7 +250,8 @@ public class JdbcTestResultDAO implements TestResultDAO{
             if (conn != null) {
                 try {
                     conn.close();
-                } catch (SQLException e) {}
+                } catch (SQLException e) {
+                }
             }
         }
     }
@@ -268,7 +273,8 @@ public class JdbcTestResultDAO implements TestResultDAO{
             if (conn != null) {
                 try {
                     conn.close();
-                } catch (SQLException e) {}
+                } catch (SQLException e) {
+                }
             }
         }
     }
@@ -290,14 +296,15 @@ public class JdbcTestResultDAO implements TestResultDAO{
             if (conn != null) {
                 try {
                     conn.close();
-                } catch (SQLException e) {}
+                } catch (SQLException e) {
+                }
             }
         }
     }
 
     public void importTestResult(TestResult testResult) {
 
-        String sql = "INSERT INTO " +  TEST_RESULTS_TABLE_NAME +
+        String sql = "INSERT INTO " + TEST_RESULTS_TABLE_NAME +
                 " (" + AREA_ID_DB_COL + ", " + TEST_SESSION_TS_DB_COL + ", " + TEST_RUN_TS_DB_COL + ", " +
                 TEST_RESULT_DB_COL + ", " + NUMBER_OF_DIFF_PIXELS_DB_COL + ", " + IS_VERIFIED_DB_COL + ", " +
                 TEST_FOLDER_NAME_DB_COL + ") " +
@@ -330,7 +337,6 @@ public class JdbcTestResultDAO implements TestResultDAO{
             }
 
 
-
             ps = conn.prepareStatement(sql);
             ps.setString(1, testResult.getTestAreaId());
             ps.setString(2, testResult.getTestSessionTs());
@@ -348,11 +354,11 @@ public class JdbcTestResultDAO implements TestResultDAO{
             if (conn != null) {
                 try {
                     conn.close();
-                } catch (SQLException e) {}
+                } catch (SQLException e) {
+                }
             }
         }
     }
-
 
 
 }

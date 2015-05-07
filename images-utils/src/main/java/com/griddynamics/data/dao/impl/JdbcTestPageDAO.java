@@ -83,7 +83,8 @@ public class JdbcTestPageDAO implements TestPageDAO {
             if (conn != null) {
                 try {
                     conn.close();
-                } catch (SQLException e) {}
+                } catch (SQLException e) {
+                }
             }
         }
     }
@@ -121,7 +122,8 @@ public class JdbcTestPageDAO implements TestPageDAO {
             if (conn != null) {
                 try {
                     conn.close();
-                } catch (SQLException e) {}
+                } catch (SQLException e) {
+                }
             }
         }
     }
@@ -147,7 +149,8 @@ public class JdbcTestPageDAO implements TestPageDAO {
             if (conn != null) {
                 try {
                     conn.close();
-                } catch (SQLException e) {}
+                } catch (SQLException e) {
+                }
             }
         }
     }
@@ -185,7 +188,8 @@ public class JdbcTestPageDAO implements TestPageDAO {
             if (conn != null) {
                 try {
                     conn.close();
-                } catch (SQLException e) {}
+                } catch (SQLException e) {
+                }
             }
         }
     }
@@ -196,7 +200,7 @@ public class JdbcTestPageDAO implements TestPageDAO {
                 "(" + PAGE_ID_DB_COL + ", " + PAGE_NAME_DB_COL + ", " +
                 PAGE_FILE_NAME_DB_COL + ", " + BROWSER_WIDTH_DB_COL + ", " +
                 BROWSER_HEIGHT_DB_COL + ", " + BROWSER_NAME_DB_COL + ", " +
-                BROWSER_VERSION_DB_COL + ", " + IMAGE_HEIGHT_DB_COL +  ") " +
+                BROWSER_VERSION_DB_COL + ", " + IMAGE_HEIGHT_DB_COL + ") " +
                 "VALUES " +
                 "(?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -227,7 +231,6 @@ public class JdbcTestPageDAO implements TestPageDAO {
             }
 
 
-
             ps = conn.prepareStatement(sql);
             ps.setString(1, testPage.getPageID());
             ps.setString(2, testPage.getPageName());
@@ -246,18 +249,19 @@ public class JdbcTestPageDAO implements TestPageDAO {
             if (conn != null) {
                 try {
                     conn.close();
-                } catch (SQLException e) {}
+                } catch (SQLException e) {
+                }
             }
         }
     }
 
 
-    public Map<String, List<TestPage>> getTestPagesGroupedByPageName () {
+    public Map<String, List<TestPage>> getTestPagesGroupedByPageName() {
         List<TestPage> testPages = getTestPages();
-        Map<String, List<TestPage>> testPagesMap= new HashMap<String, List<TestPage>>();
+        Map<String, List<TestPage>> testPagesMap = new HashMap<String, List<TestPage>>();
 
-        for(TestPage page: testPages) {
-            if(!testPagesMap.containsKey(page.getPageName())) {
+        for (TestPage page : testPages) {
+            if (!testPagesMap.containsKey(page.getPageName())) {
                 testPagesMap.put(page.getPageName(), new LinkedList<TestPage>());
             }
             testPagesMap.get(page.getPageName()).add(page);
