@@ -1,0 +1,39 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+        <property name="locations">
+            <list>
+                <value>classpath:*.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="imageMagickWrapper" class="com.griddynamics.imwrapper.ImageMagickWrapper">
+        <property name="imageMagickPath" value="${imagemagick.home}" />
+    </bean>
+
+
+    <bean id="dataSourceSQLite"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="org.sqlite.JDBC" />
+        <property name="url" value="jdbc:sqlite:${testimages.db.file.location}" />
+    </bean>
+
+    <bean id="testResultDAO" class="com.griddynamics.data.dao.impl.JdbcTestResultDAO">
+        <property name="dataSource" ref="dataSourceSQLite" />
+    </bean>
+
+    <bean id="testAreaDAO" class="com.griddynamics.data.dao.impl.JdbcTestAreaDAO">
+        <property name="dataSource" ref="dataSourceSQLite" />
+    </bean>
+
+    <bean id="testPageDAO" class="com.griddynamics.data.dao.impl.JdbcTestPageDAO">
+        <property name="dataSource" ref="dataSourceSQLite" />
+    </bean>
+
+</beans>
