@@ -49,7 +49,7 @@ public class CustomPerStoryWebDriverSteps extends PerStoryWebDriverSteps {
             driverProvider.initialize();
             getDriverProvider().get().manage().deleteAllCookies();
 
-            if (!System.getProperty("browser").toLowerCase().matches("(chrome)|(ios.*)|(android.*)|(mobile.*)")) {
+            if (!System.getProperty("browser").toLowerCase().matches("(chrome)|(safari)|(ios.*)|(android.*)|(mobile.*)")) {
                 getDriverProvider().get().manage().timeouts().pageLoadTimeout(Integer.valueOf(System.getProperty(WAIT_PAGE_OPEN_TIMEOUT_IN_MS)), TimeUnit.MILLISECONDS);
             }
             pages.setBaseWindowHandle();

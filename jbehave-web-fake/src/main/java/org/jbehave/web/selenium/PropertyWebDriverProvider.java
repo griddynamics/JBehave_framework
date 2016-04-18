@@ -8,8 +8,11 @@ import org.openqa.selenium.WebDriver;
 //import org.openqa.selenium.android.AndroidDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.safari.SafariDriver;
+import org.openqa.selenium.safari.SafariOptions;
 
 import static java.lang.Boolean.parseBoolean;
 
@@ -36,7 +39,7 @@ import static java.lang.Boolean.parseBoolean;
 public class PropertyWebDriverProvider extends DelegatingWebDriverProvider {
 
     public enum Browser {
-        ANDROID, CHROME, FIREFOX, HTMLUNIT, IE
+        ANDROID, CHROME, FIREFOX, HTMLUNIT, IE, SAFARI
     }
 
     public void initialize() {
@@ -61,6 +64,10 @@ public class PropertyWebDriverProvider extends DelegatingWebDriverProvider {
                 driver = createInternetExplorerDriver();
                 break;
             }
+            case SAFARI:{
+                driver = createSafariDriver();
+                break;
+            }
             case HTMLUNIT:
             default: {
                 driver = createHtmlUnitDriver();
@@ -68,6 +75,14 @@ public class PropertyWebDriverProvider extends DelegatingWebDriverProvider {
             }
         }
         setBrowserWindowSize(driver);
+        return driver;
+    }
+
+    private WebDriver createSafariDriver() {
+        System.setProperty("webdriver.safari.noinstall", "true"); //To stop uninstall each time
+        SafariOptions options = new SafariOptions();
+        options.setUseCleanSession(true); //if you wish safari to forget session everytime
+        SafariDriver driver = new SafariDriver(options);
         return driver;
     }
 
@@ -89,7 +104,10 @@ public class PropertyWebDriverProvider extends DelegatingWebDriverProvider {
     }
 
     protected FirefoxDriver createFirefoxDriver() {
-        return new FirefoxDriver();
+        final FirefoxProfile firefoxProfile = new FirefoxProfile();
+        firefoxProfile.setPreference("xpinstall.signatures.required", false);
+        FirefoxDriver driver = new FirefoxDriver(firefoxProfile);
+        return driver;
     }
 
     protected WebDriver createHtmlUnitDriver() {
