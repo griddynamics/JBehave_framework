@@ -48,6 +48,7 @@ public class SoapCommonServiceController implements ServiceData {
      * <p>
      * Home Page
      * </p>
+     * @return Home Page
      */
     @RequestMapping(HOME_PAGE_URL)
     @ResponseBody
@@ -62,8 +63,8 @@ public class SoapCommonServiceController implements ServiceData {
      * @param request - the {@link HttpServletRequest} request
      * @param response - the {@link HttpServletResponse} response
      * @return - the response, which was sending.
-     * @throws IOException
-     * @throws ServiceUnavailableException
+     * @throws IOException if happens
+     * @throws ServiceUnavailableException if happens
      */
     @RequestMapping(value = STUB_SERVICE_URL, method = RequestMethod.POST)
     @ResponseBody
@@ -73,7 +74,7 @@ public class SoapCommonServiceController implements ServiceData {
     }
 
     /**
-     * This method provides working with trigger, which turns on/off availability for the stub. <br/>
+     * This method provides working with trigger, which turns on/off availability for the stub.
      *
      * @param available if that's false: the stub won't be working.
      * @return the string with a status: the stub's available or not.
@@ -101,6 +102,7 @@ public class SoapCommonServiceController implements ServiceData {
 
     /**
      * The method cleans all loaded information for the stub and returns that it's cleared.
+     * @return string
      */
     @RequestMapping(CLEAR_DATA_URL)
     @ResponseBody
@@ -114,7 +116,7 @@ public class SoapCommonServiceController implements ServiceData {
      * Cleans all requests for history and all loaded information for the stub and
      * returns a string with message that it's cleared.
      *
-     * @return
+     * @return string
      */
     @RequestMapping(CLEAR_ALL_URL)
     @ResponseBody
@@ -141,6 +143,7 @@ public class SoapCommonServiceController implements ServiceData {
 
     /**
      * Returns a list with all history responses and requests.
+     * @return list
      */
     @RequestMapping(HISTORY_URL)
     @ResponseBody
@@ -184,7 +187,7 @@ public class SoapCommonServiceController implements ServiceData {
 
     /**
      * Returns stub log file content
-     * @param request
+     * @param request request
      * @return log file content as String
      */
     @RequestMapping(STUB_LOG_URL)

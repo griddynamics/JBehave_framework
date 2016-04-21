@@ -20,12 +20,14 @@ public interface SoapCommonService {
     /**
      * Returns a response by the required request
      * @param request - the required request
-     * @throws ServiceUnavailableException
+     * @return  String
+     * @throws ServiceUnavailableException if happens
      */
     String getCommonResponse(String request) throws ServiceUnavailableException;
 
     /**
      * Returns home page
+     * @return home page
      */
     String getHomePage();
 
@@ -43,8 +45,8 @@ public interface SoapCommonService {
 
     /**
      * Adds request/response pair
-     * @param request
-     * @param response
+     * @param request request
+     * @param response response
      */
     void addPair(String request, String response);
 
@@ -55,12 +57,13 @@ public interface SoapCommonService {
 
     /**
      * Returns a history in a List
+     * @return history in a List
      */
     List history();
 
     /**
      * Sets status available or not for a stub
-     * @param available
+     * @param available available
      */
     void setAvailability(boolean available);
 

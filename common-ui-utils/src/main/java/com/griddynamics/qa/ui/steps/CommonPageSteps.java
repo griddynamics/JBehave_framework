@@ -72,9 +72,6 @@ public class CommonPageSteps implements TimeoutConstants{
     }
 
 
-    /**
-     * @see #click
-     */
     @When(value = "customer clicks on $elementName", priority = 1)
     public void clickOn(String elementName) {
         click(elementName);
@@ -83,9 +80,9 @@ public class CommonPageSteps implements TimeoutConstants{
     /**
      * Check that attribute contains attribute value for displayed element
      *
-     * @param attrName
-     * @param elementName
-     * @param attrValue
+     *@param attrName attrName
+     *@param  elementName elementName
+     *@param attrValue attrValue
      */
     @Then("attribute $attrName of element $elementName contains $attrValue")
     public void thenElementContainsStringInAttribute(String attrName,
@@ -107,8 +104,8 @@ public class CommonPageSteps implements TimeoutConstants{
     /**
      * Check that displayed element doesn't contain attribute
      *
-     * @param elementName
-     * @param attribute
+     *@param elementName elementName
+     *@param attribute attribute
      */
     @Then("element $elementName doesn't contain attribute $attribute")
     public void thenElementDoesNotContainAttribute(String elementName,
@@ -129,9 +126,9 @@ public class CommonPageSteps implements TimeoutConstants{
     /**
      * Check that attribute does not contain attribute value for displayed element
      *
-     * @param attrName
-     * @param elementName
-     * @param attrValue
+     *@param attrName attrName
+     *@param elementName elementName
+     *@param attrValue attrValue
      */
     @Then("attribute $attrName of element $elemName does not contain $attrValue")
     public void thenElementDoesNotContainStringInAttribute(String attrName,
@@ -154,9 +151,9 @@ public class CommonPageSteps implements TimeoutConstants{
     /**
      * Check that block present on page and it locator does not contain attribute with value from story
      *
-     * @param attrName
-     * @param blockName
-     * @param attrValue
+     *@param attrName attrName
+     *@param blockName blockName
+     *@param attrValue attrValue
      * @throws RuntimeException if block was not initialized for page
      */
     @Then("attribute $attrName of block $blockName locator does not contain $attrValue")
@@ -184,9 +181,9 @@ public class CommonPageSteps implements TimeoutConstants{
     /**
      * Check that block present on page and it locator contains attribute with value from story
      *
-     * @param attrName
-     * @param blockName
-     * @param attrValue
+     *@param attrName attrName
+     *@param blockName blockName
+     *@param attrValue attrValue
      * @throws RuntimeException if block was not initialized for page
      */
     @Then("attribute $attrName of block $blockName locator contains $attrValue")
@@ -228,6 +225,7 @@ public class CommonPageSteps implements TimeoutConstants{
      * Find HTML element in the single block on the current page then click on it
      *
      * @param elementName HTML element name from a Story
+     * @param blockName  blockName
      */
     @When(value = "customer clicks on $elementName in the $blockName", priority = 2)
     public void clickOnInTheBlock(String elementName, String blockName) {
@@ -246,6 +244,8 @@ public class CommonPageSteps implements TimeoutConstants{
      * Find HTML element in the single block on the current page then type in it
      *
      * @param elementName HTML element name from a Story
+     * @param blockName blockName
+     * @param text text
      */
     @When(value = "customer types $text in $elementName in the $blockName", priority = 2)
     public void typeInElementInTheBlock(String text, String elementName, String blockName) {
@@ -256,6 +256,8 @@ public class CommonPageSteps implements TimeoutConstants{
      * Find HTML element in the single block on the current page then select element in it
      *
      * @param elementName HTML element name from a Story
+     * @param blockName blockName
+     * @param text text
      */
     @When(value = "customer selects $text in $elementName in the $blockName", priority = 3)
     public void selectInElementInTheBlock(String text, String elementName, String blockName) {
@@ -265,8 +267,8 @@ public class CommonPageSteps implements TimeoutConstants{
     /**
      * Clear field of elementName and type text
      *
-     * @param text
-     * @param elementName
+     *@param text text
+     *@param elementName elementName
      */
     @When("customer types $text in $elementName")
     @Alias("customer writes $text at $elementName")
@@ -283,7 +285,7 @@ public class CommonPageSteps implements TimeoutConstants{
     /**
      * Clear field elementName
      *
-     * @param elementName
+     *@param elementName elementName
      */
     @When("customer clears $elementName")
     public void whenClearField(String elementName) {
@@ -299,7 +301,7 @@ public class CommonPageSteps implements TimeoutConstants{
     /**
      * Click or submit elementName
      *
-     * @param elementName
+     *@param elementName elementName
      */
     @When("customer submits $elementName")
     public void submit(String elementName) {
@@ -364,7 +366,7 @@ public class CommonPageSteps implements TimeoutConstants{
     /**
      * Check that page Url for pageName starts with https
      *
-     * @param pageName
+     *@param pageName pageName
      */
     @Then("$pageName Page has secured url")
     public void thenPageUrlSecured(String pageName) {
@@ -476,8 +478,8 @@ public class CommonPageSteps implements TimeoutConstants{
     /**
      * Check blockName contains quantity elements
      *
-     * @param name
-     * @param quantity
+     *@param name name
+     *@param quantity quantity
      */
     @Then("block $name has $quantity elements")
     public void thenBlockHasElements(String name, int quantity) {
@@ -494,7 +496,7 @@ public class CommonPageSteps implements TimeoutConstants{
     /**
      * Check that elements in block ordered or not ordered  in alphabetical
      *
-     * @param blockName
+     *@param blockName blockName
      * @param order     Possible values: "ordered", "not ordered"
      * @param elements  list of elements divided by comma sign
      */
@@ -522,7 +524,7 @@ public class CommonPageSteps implements TimeoutConstants{
     /**
      * Check that blocks in block ordered or not ordered  in alphabetical
      *
-     * @param blockName
+     *@param blockName blockName
      * @param order     Possible values: "ordered", "not ordered"
      * @param expNames    list of blocks divided by comma sign
      */
@@ -553,7 +555,7 @@ public class CommonPageSteps implements TimeoutConstants{
     /**
      * Check state of element according to val
      *
-     * @param elementName
+     *@param elementName elementName
      * @param val         Possible values: "present", "not present", "displayed", "not displayed"
      */
     @Then("$elementName is $value on page")
@@ -597,9 +599,9 @@ public class CommonPageSteps implements TimeoutConstants{
     /**
      * check response code is equal to expectedCode
      *
-     * @param url
-     * @param expectedCode
-     * @throws Exception
+     *@param url url
+     *@param expectedCode expectedCode
+     * @throws Exception if catch
      */
     @Then("check response code for $url equal to $expectedCode")
     public void anotherCheckResponseCodeForUrl(String url, int expectedCode) throws Exception {
@@ -618,7 +620,7 @@ public class CommonPageSteps implements TimeoutConstants{
      * WebDriver has a known issue: sometimes method click() causes tests to hang.
      * As a workaround, the method uses javascript to click the element.
      *
-     * @param elementName
+     *@param elementName elementName
      */
     @When(value = "customer clicks $elementName with javascript", priority = 2)
     public void whenClickWithJs(String elementName) {
@@ -637,7 +639,7 @@ public class CommonPageSteps implements TimeoutConstants{
      * If element is partially placed under other element, method element.click() may doesn't work.
      * As a workaround the method uses Actions to click the element.
      *
-     * @param elementName
+     *@param elementName elementName
      */
     @When(value = "customer clicks $elementName with actions", priority = 2)
     public void whenClickWithActions(String elementName) {
@@ -722,7 +724,7 @@ public class CommonPageSteps implements TimeoutConstants{
      * Check that element's color is equal to expected from story
      * {@link com.griddynamics.qa.ui.CommonElementMethods#getElementCssAttributeValue    }
      *
-     * @param elementName
+     *@param elementName elementName
      * @param color       Possible values "Red","Grey"
      */
     @Then("$elementName element is highlighted with $color")
@@ -757,7 +759,7 @@ public class CommonPageSteps implements TimeoutConstants{
     /**
      * Check that new page is opened in new Window and then close New Window
      *
-     * @see {@link com.griddynamics.qa.ui.AbstractPage#checkNewWindowOpened}
+     * see {link com.griddynamics.qa.ui.AbstractPage#checkNewWindowOpened}
      */
     @Then("new page is opened in new window")
     public void newPageIsOpenedInNewWindow() {
@@ -789,9 +791,8 @@ public class CommonPageSteps implements TimeoutConstants{
     }
 
     /**
-     * @param elementName
+     *@param elementName elementName
      * @param text        expected label text from story
-     *                    Before comparison replaced symbols: "\n","\t","!--.*--><"
      */
     @Then(value = "label $elementName has text $text", priority = 2)
     public void labelHasText(@Named("elementName") String elementName, @Named("text") String text) {
@@ -865,7 +866,7 @@ public class CommonPageSteps implements TimeoutConstants{
     }
 
     /**
-     * @param blockName
+     *@param blockName blockName
      * @see CommonPageSteps#waitForBlockForTime(java.lang.String, java.lang.Integer)
      *      timeout {@link CommonPageSteps#DEFAULT_TIMEOUT_IN_SECONDS}
      */
@@ -875,7 +876,7 @@ public class CommonPageSteps implements TimeoutConstants{
     }
 
     /**
-     * @param elementName
+     *@param elementName elementName
      * @see com.griddynamics.qa.ui.steps.CommonPageSteps#waitForElement
      *      timeout {@link CommonPageSteps#DEFAULT_TIMEOUT_IN_SECONDS}
      */
@@ -887,7 +888,7 @@ public class CommonPageSteps implements TimeoutConstants{
     /**
      * waits during timeout while block will be displayed
      *
-     * @param blockName
+     *@param blockName blockName
      * @param timeout   in seconds
      */
     @Then("customer waits when block $blockName appears for $timeout second{s|}")
@@ -898,7 +899,7 @@ public class CommonPageSteps implements TimeoutConstants{
     /**
      * waits during timeout while element will be displayed
      *
-     * @param elementName
+     *@param elementName elementName
      * @param timeout     in seconds
      */
     @Then("customer waits when element $element appears for $timeout second{s|}")
@@ -911,7 +912,7 @@ public class CommonPageSteps implements TimeoutConstants{
      * waits during timeout {@link com.griddynamics.qa.ui.CommonElementMethods#DEFAULT_TIMEOUT_IN_SECONDS} while element will be load and displayed
      * Element can absent on page when waiting is started
      *
-     * @param elementName
+     *@param elementName elementName
      */
     @Deprecated
     @Then("customer waits when element $element load and will be displayed")
@@ -922,8 +923,8 @@ public class CommonPageSteps implements TimeoutConstants{
 
     /**
      * @deprecated use waitAllScriptsFinish() instead
-     * waits {@value#WAIT_ELEMENT_LOAD_TIMEOUT_IN_SEC} seconds while Java Scripts will be completed
-     * time steps waiting {@value#WAIT_LOAD_TIMEOUT_IN_MS}
+     * waits {value #WAIT_ELEMENT_LOAD_TIMEOUT_IN_SEC} seconds while Java Scripts will be completed
+     * time steps waiting {value #WAIT_LOAD_TIMEOUT_IN_MS}
      */
     @Deprecated
     @Then("customer waits while all ajax scripts will be completed")
@@ -962,7 +963,7 @@ public class CommonPageSteps implements TimeoutConstants{
      * waits during timeout {@link com.griddynamics.qa.ui.CommonElementMethods#DEFAULT_TIMEOUT_IN_SECONDS} while element will be load and clicable
      * Element can absent on page when waiting is started
      * @deprecated  use waitElementClickable(String elementName)
-     * @param elementName
+     *@param elementName elementName
      */
     @Deprecated
     @Then("customer waits when element $element will be clickable")
@@ -1039,7 +1040,9 @@ public class CommonPageSteps implements TimeoutConstants{
                 .contextClick().build().perform();
     }
 
-    /*************** Methods waiting for expected conditions **********************/
+    /* Methods waiting for expected conditions */
+
+
 
     @Then("wait until attribute $attrName of element $elementName contains $attrValue")
     public void waitElementContainsStringInAttribute(String attrName,

@@ -95,7 +95,7 @@ public abstract class BaseStoriesRunner extends JUnitStories {
      * Method gathers JBehave steps from Spring context and adds catching screenshots functionality
      * in case when {@link #SCREENSHOT_BEAN} is present in the context
      *
-     * @return
+     * @return SpringStepsFactory
      */
     @Override
     public SpringStepsFactory stepsFactory() {
@@ -110,7 +110,7 @@ public abstract class BaseStoriesRunner extends JUnitStories {
 
     /**
      * Method for suite tests execution
-     * @throws Throwable
+     * @throws Throwable Throwable
      */
     @Test
     public void run() throws Throwable {
@@ -204,7 +204,7 @@ public abstract class BaseStoriesRunner extends JUnitStories {
      * Sets list of stories which should be run in suite
      * @param includeStories - stories which must be run
      * @param excludeStories - stories which must not be run
-     * @return
+     * @return List of stories
      */
     protected List<String> storiesForRunning(List<String> includeStories, List<String> excludeStories) {
         if (!CollectionUtils.isEmpty(includeStories)) {

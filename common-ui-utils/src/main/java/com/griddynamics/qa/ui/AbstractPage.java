@@ -20,7 +20,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * @author ybaturina
  * @author aluchin
- *         <p/>
+ *         
  *         This is the abstract class which contains common page methods
  */
 public abstract class AbstractPage extends CommonElementMethods {
@@ -132,8 +132,8 @@ public abstract class AbstractPage extends CommonElementMethods {
     /**
      * Get Url and Title for new hadle and close it.
      *
-     * @param baseWindowHandle
-     * @param handles
+     * @param baseWindowHandle baseWindowHandle
+     * @param  handles handles
      * @return String[]. String[0] - New page title; String[1] - New page url;
      */
     private Map.Entry<String, String> getUrlAndTitleFromWindowHandleAndCloseIt(String baseWindowHandle, Set<String> handles) {
@@ -177,9 +177,9 @@ public abstract class AbstractPage extends CommonElementMethods {
     /**
      * Check that new page is opened in new window. Assert Url and Title
      *
-     * @param baseWindowHandle
-     * @param pageURL
-     * @param pageTitle
+     * @param baseWindowHandle baseWindowHandle
+     * @param pageURL pageURL
+     * @param pageTitle pageTitle
      * @see #getUrlAndTitleFromWindowHandleAndCloseIt
      */
     public void checkNewWindowOpened(String baseWindowHandle, String pageURL, String pageTitle) {
@@ -206,7 +206,7 @@ public abstract class AbstractPage extends CommonElementMethods {
     /**
      * Check that new page is opened in new window. Assert Url
      *
-     * @param baseWindowHandle
+     * @param baseWindowHandle baseWindowHandle
      * @see #getUrlAndTitleFromWindowHandleAndCloseIt
      */
     public void checkNewWindowOpenedUrlOnly(String baseWindowHandle) {
@@ -225,8 +225,8 @@ public abstract class AbstractPage extends CommonElementMethods {
     /**
      * Check that new page is opened in new window and Url contains text.
      *
-     * @param baseWindowHandle
-     * @param text
+     * @param baseWindowHandle baseWindowHandle
+     * @param text text
      * @see #getUrlAndTitleFromWindowHandleAndCloseIt
      */
     public void checkNewWindowUrlContainsText(String baseWindowHandle, String text) {
@@ -264,6 +264,7 @@ public abstract class AbstractPage extends CommonElementMethods {
 
     /**
      * Wait for page is opened {@value #WAIT_FOR_PAGE_LOAD_TIMEOUT_IN_MS} ms
+     * @param oldURL oldURL
      */
     public void waitForPageToLoad(String oldURL) {
         String newURL = getDriver().getCurrentUrl();
@@ -300,7 +301,7 @@ public abstract class AbstractPage extends CommonElementMethods {
     /**
      * Check that all blocks are present on the page
      *
-     * @return
+     * return
      */
 
     public void assertBlocksDisplayed() {
@@ -312,6 +313,7 @@ public abstract class AbstractPage extends CommonElementMethods {
 
     /**
      * Method is used to Switch the focus to Base Window
+     * @param baseWindowHandle baseWindowHandle
      */
     public void switchToBaseWindow(String baseWindowHandle) {
         Set<String> handles = getWindowHandles();
@@ -325,6 +327,7 @@ public abstract class AbstractPage extends CommonElementMethods {
 
     /**
      * Method is to Switch the focus to New Window
+     * @param baseWindowHandle baseWindowHandle
      */
     public void switchToNewWindow(String baseWindowHandle) {
         Set<String> handles = getNewWindowHandles();
@@ -337,6 +340,7 @@ public abstract class AbstractPage extends CommonElementMethods {
 
     /**
      * Method is to check new window is opened
+     * @return boolean
      */
     public boolean isNewWindowOpened() {
         return (getWindowHandles().size() == 1) ? false : true;
@@ -344,6 +348,7 @@ public abstract class AbstractPage extends CommonElementMethods {
 
     /**
      * Method is to close base window and to switch to new window
+     * @param baseWindowHandle baseWindowHandle
      */
 
     public void closeBaseWindow(String baseWindowHandle) {

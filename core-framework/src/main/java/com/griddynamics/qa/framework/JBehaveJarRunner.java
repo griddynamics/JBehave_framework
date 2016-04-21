@@ -54,8 +54,8 @@ public class JBehaveJarRunner {
 
     /**
      * Configures which suites should be run (suites path pattern should be provided in
-     * {@link com.griddynamics.qa.framework.properties.ProjectProperties#STORY_LIST_PROPERTY_NAME})
-     * @return
+     * {link com.griddynamics.qa.framework.properties.ProjectProperties#STORY_LIST_PROPERTY_NAME})
+     * @return List String included Suite list
      */
     protected List<String> getIncludedSuiteList(){
        return Arrays.asList(ProjectProperties.getSuiteAll().split(","));
