@@ -58,7 +58,7 @@ public class SeleniumConfiguration extends Configuration {
     }
 
     /**
-     * Creates default Selenium instance: {@link DefaultSelenium("localhost",
+     * Creates default Selenium instance: {link DefaultSelenium("localhost",
      * 4444, "*firefox", "http://localhost:8080")}
      *
      * @return A Selenium instance
@@ -68,7 +68,7 @@ public class SeleniumConfiguration extends Configuration {
     }
 
     /**
-     * Creates default ConditionRunner: {@link JUnitConditionRunner(selenium,
+     * Creates default ConditionRunner: {link JUnitConditionRunner(selenium,
      * 10, 100, 1000)}.
      *
      * @param selenium

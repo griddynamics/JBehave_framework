@@ -19,7 +19,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * @author ybaturina
  * @author mlykosova
- *         <p/>
+ *         
  *         Base block class containing common block methods
  */
 public class ElementBlock extends CommonElementMethods implements Cloneable {
@@ -68,6 +68,7 @@ public class ElementBlock extends CommonElementMethods implements Cloneable {
 
     /**
      * Returns block's HTML content as String
+     * @return String
      */
     public String getBlockInnerHTML() {
         return isLocatorPresentOnPage(locator) ? findElementSuppressAlert(locator).getAttribute("innerHTML") : "";
@@ -148,8 +149,8 @@ public class ElementBlock extends CommonElementMethods implements Cloneable {
     /**
      * Check that block not empty and does contain other blocks
      *
-     * @param elementBlock
-     * @return
+     * @param elementBlock elementBlock
+     * @return result
      */
     public static boolean isEmptyBlock(ElementBlock elementBlock) {
         return (elementBlock == null || elementBlock.getBlockList().size() == 0) ? true: false;

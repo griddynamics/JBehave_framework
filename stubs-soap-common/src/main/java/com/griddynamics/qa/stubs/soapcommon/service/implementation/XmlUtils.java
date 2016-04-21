@@ -69,8 +69,8 @@ public class XmlUtils {
 
     /**
      * Method checks whether XML Node has other child nodes besides text nodes
-     * @param node
-     * @return
+     * @param node node
+     * @return boolean
      */
     public static boolean hasNotTextChildren(Node node){
         NodeList nodeList = node.getChildNodes();

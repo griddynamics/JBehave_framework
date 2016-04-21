@@ -16,7 +16,7 @@ public class ResponseData {
 
     /**
      * Creates instance with {@link ResponseData}
-     * @param response
+     * @param response response
      */
     public ResponseData(String response) {
         responseData = response;
@@ -24,6 +24,7 @@ public class ResponseData {
 
     /**
      * Returns the response data
+     * @return ResponseData
      */
     public String getResponseData() {
         return responseData;

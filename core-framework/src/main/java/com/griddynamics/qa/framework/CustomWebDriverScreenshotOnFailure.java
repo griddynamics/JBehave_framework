@@ -66,8 +66,8 @@ public class CustomWebDriverScreenshotOnFailure extends WebDriverSteps {
      *   1) the screenshot of current browser page is made
      *   2) appium's error message is printed to Maven's output [for mobile testing ONLY]
      *
-     * @param uuidWrappedFailure
-     * @throws Exception
+     * @param uuidWrappedFailure uuidWrappedFailure
+     * @throws Exception if happened
      */
     @AfterScenario(uponType = ScenarioType.EXAMPLE, uponOutcome = AfterScenario.Outcome.FAILURE)
     public void afterScenarioWithExamplesFailure(UUIDExceptionWrapper uuidWrappedFailure) throws Exception {

@@ -143,7 +143,7 @@ public class CustomExpectedConditions {
     /**
      * An expectation for element with specified css attribute value
      *
-     * @param element
+     * @param element element
      * @param attribute      name of css attribute to be checked
      * @param attributeValue expected value of css attribute
      * @return true if attribute contains expected value, false otherwise
@@ -308,7 +308,7 @@ public class CustomExpectedConditions {
      * An expectation for checking an element is visible and enabled so that you
      * can click it.
      *
-     * @param element
+     * @param element element
      * @return true if the element is clickable, false otherwise
      */
     public static ExpectedCondition<Boolean> elementToBeClickable(
@@ -348,6 +348,7 @@ public class CustomExpectedConditions {
     }
 
     /**
+     * @param element element
      * @return the given element if it is visible and has non-zero size, otherwise
      * null.
      */

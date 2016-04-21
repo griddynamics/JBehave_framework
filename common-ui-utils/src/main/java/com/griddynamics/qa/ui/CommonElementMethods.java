@@ -31,7 +31,7 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfAllEle
  * @author ybaturina
  * @author mlykosova
  * @author aluchin
- *         <p/>
+ *         
  *         Entity class containing common methods that work with page elements
  */
 
@@ -78,7 +78,7 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
     /**
      * Recursively search a block by its name
      *
-     * @param blockName
+     * @param blockName blockName
      * @return block with blockName or null if it doesn't exist
      */
     public ElementBlock getBlockByName(String blockName) {
@@ -99,7 +99,7 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
     /**
      * Searches web element by its name
      *
-     * @param name
+     * @param name name
      * @return webElement
      * @throws RuntimeException when unable to find the element
      */
@@ -134,8 +134,8 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
     /**
      * Get Element locator by name for element which present on page or it blocks
      *
-     * @param name
-     * @return
+     * @param name name
+     * @return ElementLocator
      * @see CommonElementMethods#getElementLocatorByName(java.lang.String, boolean, boolean)
      */
     public By getElementLocatorByName(String name) {
@@ -146,7 +146,7 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
      * At first perform search Web Element on current page and if success return locator
      * Else recursively search in all blocks on current page while first elementName will be found and returns it locator
      *
-     * @param elementName
+     * @param elementName elementName
      * @return locator
      */
     public By getLocatorByName(String elementName) {
@@ -169,9 +169,9 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
     /**
      * Searches for element name by the pattern
      *
-     * @param nameMatch
-     * @param resultMap
-     * @return
+     * @param  nameMatch nameMatch
+     * @param resultMap resultMap
+     * @return Elements
      */
     public Map<String, By> getElementsByNameMatch(String nameMatch, Map<String, By> resultMap) {
         Map<String, By> result = new HashMap<String, By>();
@@ -191,8 +191,8 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
     /**
      * Get element locator and type by its name then initialize element
      *
-     * @param name
-     * @return
+     * @param name name
+     * @return Element
      */
     public WebElement initElement(String name) {
         By locator = getElementLocatorByName(name);
@@ -202,8 +202,8 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
     /**
      * Checks if dropdown has the first option selected
      *
-     * @param name
-     * @return
+     * @param name name
+     * @return check result
      */
     public boolean isFirstElementSelected(String name) {
         Select sel = new Select(getElementByName(name));
@@ -295,8 +295,8 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
     }
 
     /**
-     * @param name
-     * @param text
+     * @param name name
+     * @param text text
      */
     public void typeText(String name, String text) {
         clearField(name);
@@ -370,8 +370,8 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
     /**
      * Check element isSelected and if it not equal to val then click on it
      *
-     * @param elementName
-     * @param val
+     * @param elementName elementName
+     * @param val val
      */
     public void setCheckbox(String elementName, boolean val) {
         WebElement el = getElementByName(elementName);
@@ -423,10 +423,10 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
 
 
     /**
-     * Wait {@value #DEFAULT_TIMEOUT_IN_SECONDS} seconds while element will be displayed
+     * Wait {value #DEFAULT_TIMEOUT_IN_SECONDS} seconds while element will be displayed
      *
      * @param name - element name
-     * @return
+     * @return check result
      */
     public boolean isElementLoaded(String name) {
         By loc = getElementLocatorByName(name, false, false);
@@ -436,7 +436,7 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
     }
 
     /**
-     * Wait {@value #DEFAULT_TIMEOUT_IN_SECONDS} seconds while hidden element will be displayed
+     * Wait {value #DEFAULT_TIMEOUT_IN_SECONDS} seconds while hidden element will be displayed
      *
      * @param loc - elements locator
      * @return each WebElement.isEnabled
@@ -453,10 +453,10 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
     }
 
     /**
-     * Wait {@value #DEFAULT_TIMEOUT_IN_SECONDS} seconds while element will be displayed and clickable
+     * Wait {value #DEFAULT_TIMEOUT_IN_SECONDS} seconds while element will be displayed and clickable
      *
-     * @param name
-     * @return
+     * @param name name
+     * @return check result
      */
     public boolean isElementDisplayedAndClickable(String name) {
         waitForElementClickable(name, DEFAULT_TIMEOUT_IN_SECONDS);
@@ -467,7 +467,7 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
     /**
      * Check that jQuery is defined and ready
      *
-     * @return true if window.jQuery != undefined && jQuery.isReady == 1
+     * @return true/false
      */
     public boolean isAjaxJQueryReady() {
         JavascriptExecutor js = (JavascriptExecutor) getDriver();
@@ -489,7 +489,7 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
 
 
     /**
-     * Wait {@value #DEFAULT_TIMEOUT_IN_SECONDS} seconds while hidden element will be present
+     * Wait {value #DEFAULT_TIMEOUT_IN_SECONDS} seconds while hidden element will be present
      *
      * @param loc - element locator
      * @return WebElement.isEnabled
@@ -507,8 +507,8 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
 
     /**
      * @deprecated use findElements(By loc) instead
-     * @param loc
-     * @return
+     * @param loc loc
+     * @return list of elements
      */
     @Deprecated
     public List<WebElement> getElementsByLoc(By loc) {
@@ -517,8 +517,9 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
 
 
     /**
-     * <p/>
+     * 
      * Method used to Click and Hold the Element
+     * @param name1 name1
      */
     public void hoverOverHold(String name1) {
         By loc = getElementLocatorByName(name1);
@@ -534,8 +535,9 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
     }
 
     /**
-     * <p/>
+     *
      * Method used to switch the focus to Alert Box
+     * @return boolean
      */
     public boolean isAlertPresent() {
         try {
@@ -554,10 +556,10 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
 
     /**
      * Method is used to get the data from HTML table
-     * @param name
-     * @param rowNum
-     * @param columnNum
-     * @return
+     * @param name name
+     * @param rowNum rowNum
+     * @param columnNum columnNum
+     * @return data
      */
     public String getTableData(String name, int rowNum, int columnNum) {
         WebElement table = getElementByName(name);
@@ -585,7 +587,7 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
     /**
      * Clicks on element with javascript
      *
-     * @param name
+     * @param name name
      */
     public void clickElementWithScript(String name) {
         By loc = getElementLocatorByName(name);
@@ -596,7 +598,7 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
     /**
      * Clicks on element by locator with javascript
      *
-     * @param loc
+     * @param loc loc
      */
     public void clickElementWithScriptByLoc(By loc) {
         JavascriptExecutor js = (JavascriptExecutor) getDriver();
@@ -610,7 +612,8 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
     /**
      * Get text of hidden element with javascript
      *
-     * @param name
+     * @param name name
+     * @return String
      */
     public String getTextOfHiddenElement(String name) {
         return runJavaScriptForElement(name, "innerHTML");
@@ -621,7 +624,9 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
      * Get attribute value of hidden element (or element that cannot be initialized
      * using WebElement) with javascript
      *
-     * @param name
+     * @param name name
+     * @param attribute attribute
+     * @return String
      */
     public String getAttrValueOfHiddenElement(String name, String attribute) {
         return runJavaScriptForElement(name, "getAttribute(\"" + attribute + "\")");
@@ -647,6 +652,8 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
 
     /**
      * Get text of hidden element with javascript
+     * @param loc loc
+     * @return String
      */
     public String getTextOfHiddenElementByLoc(By loc) {
         JavascriptExecutor js = (JavascriptExecutor) getDriver();
@@ -663,7 +670,8 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
     /**
      * Get html source of element with javascript
      *
-     * @param elementName
+     * @param elementName elementName
+     * @return String
      */
     public String getHTMLSourceOfElement(String elementName) {
         return getHTMLSource(elementName, true);
@@ -673,7 +681,8 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
     /**
      * Get html source of block with javascript
      *
-     * @param blockName
+     * @param blockName blockName
+     * @return String
      */
     public String getHTMLSourceOfBlock(String blockName) {
         return getHTMLSource(blockName, false);
@@ -704,7 +713,7 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
      * Search a block containing HTML element
      *
      * @param elName HTML element name from a Story
-     * @return
+     * @return block
      */
     public ElementBlock findBlockWithElement(String elName) {
         for (ElementBlock block : getBlockList()) {
@@ -723,7 +732,7 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
      * @param blockName -  fragment of the page where HTML element will be looked up
      * @param elName    - HTML element name from a Story
      * @return WebElement if element with elName was found on the page
-     * @throws throws RuntimeException when HTML element or block may not be found
+     * @throws RuntimeException when HTML element or block may not be found
      */
     public WebElement findElementInBlock(String blockName, String elName) {
         ElementBlock elBlock = getBlockByName(blockName);
@@ -740,9 +749,9 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
     }
 
     /**
-     * @param elementName
-     * @param attributeName
-     * @return
+     * @param elementName elementName
+     * @param attributeName attributeName
+     * @return attribute value
      */
     public String getElementCssAttributeValue(String elementName, String attributeName) {
         String val = getElementByName(elementName).getCssValue(attributeName);
@@ -752,8 +761,8 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
     /**
      * Suppresses alert pop up if it throws exception
      *
-     * @param loc
-     * @return
+     * @param loc loc
+     * @return WebElement
      */
     protected WebElement findElementSuppressAlert(By loc) {
         try {
@@ -782,7 +791,7 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
 
 
     /**
-     * @param loc
+     * @param loc loc
      */
     public void switchToIframeWithLoc(By loc) {
         try {
@@ -823,7 +832,7 @@ public class CommonElementMethods extends WebDriverPage implements TimeoutConsta
         action.moveToElement(webElement).build().perform();
     }
 
-    /*************** Methods waiting for expected conditions **********************/
+    /* Methods waiting for expected conditions */
 
     public void waitForLocatorClickable(By loc, int timeout) {
         WebDriverWait wait = new WebDriverWait(getDriver(), timeout);

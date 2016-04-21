@@ -39,6 +39,7 @@ public class RequestData {
      * Returns true if element contains required node value from the request.
      *
      * @param element - root element of incoming Request XML
+     * @return boolean
      */
     public boolean match(Element element) {
         return matchXml(requestData, element);
