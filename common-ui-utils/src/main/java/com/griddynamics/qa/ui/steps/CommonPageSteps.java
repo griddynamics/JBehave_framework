@@ -214,7 +214,7 @@ public class CommonPageSteps implements TimeoutConstants{
      */
     @Then("the links $links are displayed on page")
     public void isLinksDisplayed(String elements) {
-        String[] splits = elements.split(",");
+        String[] splits = elements.split("\\s*,\\s*");
         for (String element : splits) {
             assertTrue("[ERROR] Element " + element + " is not displayed",
                     pages.getCurrentPage().isElementDisplayedOnPage(element));
