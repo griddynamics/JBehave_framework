@@ -2,7 +2,7 @@
  * Copyright 2015, Grid Dynamics International and/or its affiliates. All rights reserved.
  * Grid Dynamics International PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
- 
+
 package com.griddynamics.qa.framework;
 
 import com.griddynamics.qa.framework.converters.SpecialStringValuesConverter;
@@ -16,11 +16,11 @@ import org.jbehave.core.configuration.Configuration;
 import org.jbehave.core.configuration.MostUsefulConfiguration;
 import org.jbehave.core.embedder.Embedder;
 import org.jbehave.core.failures.FailingUponPendingStep;
-import org.jbehave.core.i18n.LocalizedKeywords;
 import org.jbehave.core.io.LoadFromClasspath;
 import org.jbehave.core.io.StoryFinder;
 import org.jbehave.core.junit.JUnitStories;
 import org.jbehave.core.model.ExamplesTableFactory;
+import org.jbehave.core.model.TableTransformers;
 import org.jbehave.core.parsers.RegexStoryParser;
 import org.jbehave.core.reporters.StoryReporterBuilder;
 import org.jbehave.core.steps.ParameterControls;
@@ -110,6 +110,7 @@ public abstract class BaseStoriesRunner extends JUnitStories {
 
     /**
      * Method for suite tests execution
+     *
      * @throws Throwable Throwable
      */
     @Test
@@ -202,6 +203,7 @@ public abstract class BaseStoriesRunner extends JUnitStories {
 
     /**
      * Sets list of stories which should be run in suite
+     *
      * @param includeStories - stories which must be run
      * @param excludeStories - stories which must not be run
      * @return List of stories
@@ -226,8 +228,8 @@ public abstract class BaseStoriesRunner extends JUnitStories {
     protected Configuration getConfiguration() {
         if (configuration == null) {
             ParameterConverters parameterConverters = new ParameterConverters();
-            ExamplesTableFactory examplesTableFactory = new ExamplesTableFactory(new LocalizedKeywords(),
-                    new LoadFromClasspath(this.getClass()), parameterConverters);
+            ExamplesTableFactory examplesTableFactory = new ExamplesTableFactory(new LoadFromClasspath(this.getClass()),
+                    parameterConverters, new ParameterControls(), new TableTransformers());
 
             parameterConverters.addConverters(new SpecialStringValuesConverter());
             parameterConverters.addConverters(new ParameterConverters.StringListConverter());
@@ -297,6 +299,7 @@ public abstract class BaseStoriesRunner extends JUnitStories {
 
     /**
      * Method constructs story paths pattern from story names
+     *
      * @param paths
      * @return
      */
