@@ -73,7 +73,7 @@ public class CustomRemoteWebDriverProvider extends RemoteWebDriverProvider {
     /**
      * Returns Selenium's default browser-specific capabilities, depending on
      * — {@link com.griddynamics.qa.framework.CustomRemoteWebDriverProvider#BROWSER} property for desktop browsers;
-     * – or {@link com.griddynamics.qa.framework.CustomRemoteWebDriverProvider#MOBILE} property for mobile browsers & apps.
+     * – or {@link com.griddynamics.qa.framework.CustomRemoteWebDriverProvider#MOBILE} property for mobile browsers &amp; apps.
      *
      * Note: By default {@link com.griddynamics.qa.framework.CustomRemoteWebDriverProvider#BROWSER_DEFAULT} browser is used
      * (if {@link com.griddynamics.qa.framework.CustomRemoteWebDriverProvider#BROWSER} property is not set)
@@ -108,7 +108,7 @@ public class CustomRemoteWebDriverProvider extends RemoteWebDriverProvider {
     /**
      * Returns additional browser capabilities, depending on
      * — {@link com.griddynamics.qa.framework.CustomRemoteWebDriverProvider#BROWSER} property for desktop browsers;
-     * – or {@link com.griddynamics.qa.framework.CustomRemoteWebDriverProvider#MOBILE} property for mobile browsers & apps.
+     * – or {@link com.griddynamics.qa.framework.CustomRemoteWebDriverProvider#MOBILE} property for mobile browsers &amp; apps.
      *
      * Note: By default {@link com.griddynamics.qa.framework.CustomRemoteWebDriverProvider#BROWSER_DEFAULT} browser is used
      * (if {@link com.griddynamics.qa.framework.CustomRemoteWebDriverProvider#BROWSER} property is not set)

@@ -2,13 +2,14 @@
  * Copyright 2015, Grid Dynamics International and/or its affiliates. All rights reserved.
  * Grid Dynamics International PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
- 
+
 package com.griddynamics.qa.framework.logger;
 
 import org.jbehave.core.embedder.PrintStreamEmbedderMonitor;
 
 import java.io.File;
 import java.io.PrintStream;
+import java.util.Arrays;
 
 import static com.griddynamics.qa.framework.converters.StackTraceConverter.getStringFromStackTrace;
 import static com.griddynamics.qa.logger.LoggerFactory.addThreadLogger;
@@ -30,8 +31,9 @@ public class CustomPrintStreamEmbedderMonitor extends PrintStreamEmbedderMonitor
      * This method was overridden to log jbehave suite-specific logs
      */
     @Override
-    public void print(String message) {
-        getLogger().info(message);
+    public void print(String message, Object... args) {
+        getLogger().info(message + " " + Arrays.toString(args));
+        super.print(message, args);
     }
 
     /**
