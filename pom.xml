@@ -3,7 +3,7 @@
     <groupId>com.griddynamics.qa</groupId>
     <artifactId>jbehave-framework</artifactId>
     <packaging>pom</packaging>
-    <version>1.2.5-SNAPSHOT</version>
+    <version>1.2.7-SNAPSHOT</version>
     <name>JBehave Framework</name>
     <url>https://github.com/griddynamics/JBehave_framework</url>
     <description>JBehave_framework - set of methods, steps and utilities to test eCommenrce applications on desktop and mobile devices.</description>

@@ -4,7 +4,7 @@
     <parent>
         <artifactId>jbehave-framework</artifactId>
         <groupId>com.griddynamics.qa</groupId>
-        <version>1.2.5-SNAPSHOT</version>
+        <version>1.2.7-SNAPSHOT</version>
     </parent>
 
     <artifactId>common-properties-utils</artifactId>
